@@ -28,11 +28,11 @@ var PortFolio = React.createClass({
 				<div id="flex1" className="flexslider">
 					<ul className="slides">
 
-						<li><div className="picture"> <img src="img/slider/slider1.jpg" alt="" /></div></li>
+						<li><div className="picture"> <img src="img/IMG_01.PNG" alt="" /></div></li>
 
-						<li><div className="picture"><img src="img/slider/slider2.jpg" alt="" /></div></li>
+						<li><div className="picture"><img src="img/IMG_02.PNG" alt="" /></div></li>
 
-						<li><div className="picture"><img src="img/slider/slider3.jpg" alt="" /></div></li>
+						<li><div className="picture"><img src="img/IMG_03.JPG" alt="" /></div></li>
 
 					</ul>
 				</div>

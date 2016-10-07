@@ -37,7 +37,7 @@ var Team = React.createClass({
 			
 				<div className="span3">
 					<div className="avatar">
-						<img className="img-circle" src="img/team_member.jpg" alt="team member"></img>
+						<img className="img-circle" src="img/Minesh.jpg" width="70px" alt="team member"></img>
 					</div>	
 					<div className="team-name">Minesh Patel</div>
 					<div className="position">Co-Founder, CEO</div>
@@ -54,12 +54,11 @@ var Team = React.createClass({
 					</div>	
 				</div>
 			
-				
-				<hr className="clean visible-phone"></hr>
+
 
 				<div className="span3">
 					<div className="avatar">
-						<img className="img-circle" src="img/team_member.jpg" alt="team member"></img>
+						<img className="img-circle" src="img/Minesh.jpg" width="70px" alt="team member"></img>
 					</div>	
 					<div className="team-name">Minesh Patel</div>
 					<div className="position">Co-Founder, CEO</div>
@@ -76,13 +75,12 @@ var Team = React.createClass({
 					</div>	
 				</div>
 			
-				
-				<hr className="clean visible-phone"></hr>
+
 				
 				
 				<div className="span3">
 					<div className="avatar">
-						<img className="img-circle" src="img/team_member.jpg" alt="team member"></img>
+						<img className="img-circle" src="img/Minesh.jpg" width="70px" alt="team member"></img>
 					</div>	
 					<div className="team-name">Minesh Patel</div>
 					<div className="position">Co-Founder, CEO</div>
@@ -100,12 +98,12 @@ var Team = React.createClass({
 				</div>
 		
 				
-				<hr className="clean visible-phone"></hr>
+
 
 			
 				<div className="span3">
 					<div className="avatar">
-						<img className="img-circle" src="img/team_member.jpg" alt="team member"></img>
+						<img className="img-circle" src="img/Minesh.jpg" width="70px" alt="team member"></img>
 					</div>	
 					<div className="team-name">Minesh Patel</div>
 					<div className="position">Co-Founder, CEO</div>
@@ -123,7 +121,7 @@ var Team = React.createClass({
 				</div>
 				
 				
-				<hr className="clean visible-phone"></hr>
+
 		
 			</div>
 		

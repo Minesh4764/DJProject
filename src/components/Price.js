@@ -14,7 +14,7 @@ var Pricing = React.createClass({
 	
 			<div className="wrapper span12">
 
-						
+
 			<div id="page-title">
 
 				<div id="page-title-inner">

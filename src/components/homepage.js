@@ -1,9 +1,9 @@
 var React = require('react');
 
-var Homepage = React.createClass({
+var Home = React.createClass({
   render : function() {
 
-   return ( 
+   return (
 
 
 <div id="services" className="color black">
@@ -18,7 +18,7 @@ var Homepage = React.createClass({
 
 				<div id="p age-title-inner">
 
-					<h2><span>Services</span></h2>
+					<h2><span>Servicessss</span></h2>
 
 				</div>	
 
@@ -99,7 +99,7 @@ var Homepage = React.createClass({
 			
 			
 			<div className="clearfix"></div>
-			     <hr className="clean">	</hr>				
+						
 			</div>
 		
 		
@@ -107,7 +107,6 @@ var Homepage = React.createClass({
 
 		
 	</div>
-
 
 
    	);
@@ -120,4 +119,4 @@ var Homepage = React.createClass({
 }) ;
 
 
-module.exports = Homepage;
+module.exports = Home;

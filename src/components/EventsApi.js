@@ -48,7 +48,7 @@ PostEvent :function(data) {
 console.log(id);
 
 console.log(data)
-    return Axios.put('http://localhost:5000/events/'+id,data)
+    return Axios.patch('http://localhost:5000/events/'+id,data)
 
     },
     DeleteEvents :function(ID) {

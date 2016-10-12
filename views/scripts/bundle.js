@@ -52705,9 +52705,17 @@ var Edit = React.createClass({displayName: "Edit",
     },
     saveEvent :function(event) {
         event.preventDefault();
-        console.log(this.state.EventData);
+       // console.log(this.state.EventData);
       var Id = this.state.EventData._id;
-        EventsApi.EditEvents([Id,this.state.EventData]);
+      /*  var data = {
+         "Typeofevent" :this.state.Typeofevent,
+         "AverageCost" :this.state.AverageCost,
+         "Place" : this.state.Place
+         };
+
+        */
+
+        EventsApi.EditEvents(Id,this.state.EventData);
 
 
     },
@@ -52955,7 +52963,7 @@ PostEvent :function(data) {
 console.log(id);
 
 console.log(data)
-    return Axios.put('http://localhost:5000/events/'+id,data)
+    return Axios.patch('http://localhost:5000/events/'+id,data)
 
     },
     DeleteEvents :function(ID) {

@@ -46,9 +46,17 @@ var Edit = React.createClass({
     },
     saveEvent :function(event) {
         event.preventDefault();
-        console.log(this.state.EventData);
+       // console.log(this.state.EventData);
       var Id = this.state.EventData._id;
-        EventsApi.EditEvents([Id,this.state.EventData]);
+      /*  var data = {
+         "Typeofevent" :this.state.Typeofevent,
+         "AverageCost" :this.state.AverageCost,
+         "Place" : this.state.Place
+         };
+
+        */
+
+        EventsApi.EditEvents(Id,this.state.EventData);
 
 
     },

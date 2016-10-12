@@ -21,7 +21,7 @@ var config = {
            mainJs :'./src/main.js'
 
 	}
-}
+};
 //start a local 
 
 gulp.task('connect',function() {
@@ -67,14 +67,14 @@ gulp.task('js',function(){
 	.pipe(gulp.dest(config.paths.bundle ))
 	.pipe(connect.reload());
 
-})
+});
 gulp.task('css',function() {
     
      gulp.src(config.paths.css)
      .pipe(concat('bundle.css'))
      .pipe(gulp.dest(config.paths.views + '/css'))
 
-})
+});
 
 
 

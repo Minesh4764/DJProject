@@ -3,63 +3,73 @@ var Header = require('./Header');
 var Home = require('./Price');
 var EventsApi = require('./EventsApi');
 var EventDisplay = require('./EventList');
-var Axios = require('axios');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var Events = React.createClass({
 
 
+    getInitialState: function () {
+        return {
+            // api call to database
+            EventsData: []
 
-      getInitialState: function() {
-          return {
-              // api call to database
-              EventsData: []
-          };
+        };
 
-      },
+    },
+    editEvetn:function() {
 
-      componentDidMount :function(){
-          /*console.log("Component did mounted");
-          Axios.get('http://localhost:5000/events').then(function(result)
-          {
-              // console.log(result);
-
-              this.setState({EventList:JSON.parse(JSON.stringify(result.data))});
-                console.log(this.state.EventList);
-
-          }.bind(this));
-   */
-           EventsApi.getAllEvents().then(function(result){
-                 console.log(result.data);
-               this.setState({EventsData:result.data});
-                console.log(this.state.EventsData);
+        EventsApi.PostEvent().then(function(result){
+            console.log(result);
 
 
-           }.bind(this))
+        });
+
+    },
+
+    DeleteEvent:function(event){
+      console.log(event.target.value);
+      EventsApi.DeleteEvents(event.target.value).then(function (result) {
+          console.log(result);
+
+      });
 
 
-      },
+    },
 
-     render : function() {
-          return (
+    componentDidMount: function () {
 
-         <div >
-
-          <h1> EvetnList </h1>
-       <p></p>
-         
-          <EventDisplay EventsData={this.state.EventsData}/>
-
-     </div>
-          );
+        EventsApi.getAllEvents().then(function (result) {
+            console.log(result.data);
+            this.setState({EventsData: result.data});
+            console.log(this.state.EventsData);
 
 
+        }.bind(this))
 
 
+    },
 
-  }	
+    render: function () {
+        return (
+
+            <div >
+
+                <h1> EventList </h1>
+                <p></p>
+                <Link to = "EditEvent">EditEvent</Link>
+
+                <button className="btn btn-default" type="button" onClick={this.editEvetn}> Edit</button>
+
+                <EventDisplay EventsData={this.state.EventsData} onDelete={this.DeleteEvent}/>
+
+            </div>
+        );
 
 
+    }
 
-}) ;
+
+});
 
 module.exports = Events;

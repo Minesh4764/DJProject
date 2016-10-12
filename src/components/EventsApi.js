@@ -3,7 +3,7 @@
 $ = jQuery = require('jquery');
 var Axios = require('axios');
 
-var EventsData = require('./EventData').EventsData;
+
 var _ = require('lodash');
 
 var _clone = function (item) {
@@ -23,7 +23,41 @@ var EventsApi = {
         return Axios.get('http://localhost:5000/events');
 
 
-    }
+    },
+
+
+
+
+getEventsByID:function (ID) {
+
+        return Axios.get('http://localhost:5000/events/'+ID);
+
+    },
+PostEvent :function(data) {
+
+  /* var data = {
+       "Typeofevent" :"Adding with Vincent",
+       "AverageCost" :600,
+       "Place" :"Community Hall"
+   };*/
+    return Axios.post('http://localhost:5000/events',data)
+
+
+},
+    EditEvents : function(id,data){
+console.log(id);
+
+console.log(data)
+    return Axios.put('http://localhost:5000/events/'+id,data)
+
+    },
+    DeleteEvents :function(ID) {
+
+        return Axios.delete('http://localhost:5000/events/'+ID);
+
+}
+
+
 
 
 };

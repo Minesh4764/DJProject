@@ -64,10 +64,8 @@ eventRouter.route('/:eventId')
     })
    .put(function(req,res){
      //
-       // Book.findById(req.params.bookId,function(err,event){                                //query database
-         //   if(err)
-           //      //console.log(err);
-             //  res.status(500).send(err);
+
+
             //else 
                 req.event.Typeofevent =req.body.Typeofevent;
                 req.event.EventDate =req.body.EventDate;

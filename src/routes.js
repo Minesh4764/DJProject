@@ -13,9 +13,11 @@ var routes = (
       <Route name ="header" handler={require('./components/Header')}/>
       <Route name ="Home" handler={require('./components/homepage')}/>
        <Route name ="Price" handler={require('./components/Price')}/>
-           <Route path="EventsData/:EventId" name ="EventsData" handler ={require('./components/EventsData')}/>
+       <Route path="EventsData/:EventId" name ="EventsData" handler ={require('./components/EventsData')}/>
        <Route name ="PortFolio" handler={require('./components/PortFolio')}/>
       <Route name ="AboutUs" handler={require('./components/bout')}/>
+      <Route name ="EditEvent" handler={require('./components/EditEvent')}/>
+      <Route name ="Edit/:EventId" handler={require('./components/Edit')}/>
       <Route name ="Team" handler={require('./components/team')}/>
       <Route name ="Contact" handler={require('./components/out')}/>
       <Route name ="Events" handler={require('./components/events')}/>

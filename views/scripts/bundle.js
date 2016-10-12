@@ -52281,28 +52281,551 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 module.exports = require('./lib/React');
 
 },{"./lib/React":94}],238:[function(require,module,exports){
-module.exports = {
-    EventsData:
-        [
-            {
-                id: '157b289abb78b49c704c173dd"',
-                EventName: 'Sw16',
-                Cost: 1500
-            },
-            {
-                id: '257b289e7b78b49c704c173de',
-                EventName: 'Reception',
-                Cost: 2500
-            },
-            {
-                id: '333b289e7b78b49c704c173de',
-                EventName: 'Garba',
-                Cost: 500
-            }
-        ]
-};
+/*
+ * Toastr
+ * Copyright 2012-2014 
+ * Authors: John Papa, Hans Fjällemark, and Tim Ferrell.
+ * All Rights Reserved.
+ * Use, reproduction, distribution, and modification of this code is subject to the terms and
+ * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
+ *
+ * ARIA Support: Greta Krafsig
+ *
+ * Project: https://github.com/CodeSeven/toastr
+ */
+; (function (define) {
+    define(['jquery'], function ($) {
+        return (function () {
+            var $container;
+            var listener;
+            var toastId = 0;
+            var toastType = {
+                error: 'error',
+                info: 'info',
+                success: 'success',
+                warning: 'warning'
+            };
 
-},{}],239:[function(require,module,exports){
+            var toastr = {
+                clear: clear,
+                remove: remove,
+                error: error,
+                getContainer: getContainer,
+                info: info,
+                options: {},
+                subscribe: subscribe,
+                success: success,
+                version: '2.1.0',
+                warning: warning
+            };
+
+            var previousToast;
+
+            return toastr;
+
+            //#region Accessible Methods
+            function error(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.error,
+                    iconClass: getOptions().iconClasses.error,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function getContainer(options, create) {
+                if (!options) { options = getOptions(); }
+                $container = $('#' + options.containerId);
+                if ($container.length) {
+                    return $container;
+                }
+                if (create) {
+                    $container = createContainer(options);
+                }
+                return $container;
+            }
+
+            function info(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.info,
+                    iconClass: getOptions().iconClasses.info,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function subscribe(callback) {
+                listener = callback;
+            }
+
+            function success(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.success,
+                    iconClass: getOptions().iconClasses.success,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function warning(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.warning,
+                    iconClass: getOptions().iconClasses.warning,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function clear($toastElement) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if (!clearToast($toastElement, options)) {
+                    clearContainer(options);
+                }
+            }
+
+            function remove($toastElement) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if ($toastElement && $(':focus', $toastElement).length === 0) {
+                    removeToast($toastElement);
+                    return;
+                }
+                if ($container.children().length) {
+                    $container.remove();
+                }
+            }
+            //#endregion
+
+            //#region Internal Methods
+
+            function clearContainer (options) {
+                var toastsToClear = $container.children();
+                for (var i = toastsToClear.length - 1; i >= 0; i--) {
+                    clearToast($(toastsToClear[i]), options);
+                }
+            }
+
+            function clearToast ($toastElement, options) {
+                if ($toastElement && $(':focus', $toastElement).length === 0) {
+                    $toastElement[options.hideMethod]({
+                        duration: options.hideDuration,
+                        easing: options.hideEasing,
+                        complete: function () { removeToast($toastElement); }
+                    });
+                    return true;
+                }
+                return false;
+            }
+
+            function createContainer(options) {
+                $container = $('<div/>')
+                    .attr('id', options.containerId)
+                    .addClass(options.positionClass)
+                    .attr('aria-live', 'polite')
+                    .attr('role', 'alert');
+
+                $container.appendTo($(options.target));
+                return $container;
+            }
+
+            function getDefaults() {
+                return {
+                    tapToDismiss: true,
+                    toastClass: 'toast',
+                    containerId: 'toast-container',
+                    debug: false,
+
+                    showMethod: 'fadeIn', //fadeIn, slideDown, and show are built into jQuery
+                    showDuration: 300,
+                    showEasing: 'swing', //swing and linear are built into jQuery
+                    onShown: undefined,
+                    hideMethod: 'fadeOut',
+                    hideDuration: 1000,
+                    hideEasing: 'swing',
+                    onHidden: undefined,
+
+                    extendedTimeOut: 1000,
+                    iconClasses: {
+                        error: 'toast-error',
+                        info: 'toast-info',
+                        success: 'toast-success',
+                        warning: 'toast-warning'
+                    },
+                    iconClass: 'toast-info',
+                    positionClass: 'toast-top-right',
+                    timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
+                    titleClass: 'toast-title',
+                    messageClass: 'toast-message',
+                    target: 'body',
+                    closeHtml: '<button>&times;</button>',
+                    newestOnTop: true,
+                    preventDuplicates: false,
+                    progressBar: false
+                };
+            }
+
+            function publish(args) {
+                if (!listener) { return; }
+                listener(args);
+            }
+
+            function notify(map) {
+                var options = getOptions(),
+                    iconClass = map.iconClass || options.iconClass;
+
+                if (options.preventDuplicates) {
+                    if (map.message === previousToast) {
+                        return;
+                    } else {
+                        previousToast = map.message;
+                    }
+                }
+
+                if (typeof (map.optionsOverride) !== 'undefined') {
+                    options = $.extend(options, map.optionsOverride);
+                    iconClass = map.optionsOverride.iconClass || iconClass;
+                }
+
+                toastId++;
+
+                $container = getContainer(options, true);
+                var intervalId = null,
+                    $toastElement = $('<div/>'),
+                    $titleElement = $('<div/>'),
+                    $messageElement = $('<div/>'),
+                    $progressElement = $('<div/>'),
+                    $closeElement = $(options.closeHtml),
+                    progressBar = {
+                        intervalId: null,
+                        hideEta: null,
+                        maxHideTime: null
+                    },
+                    response = {
+                        toastId: toastId,
+                        state: 'visible',
+                        startTime: new Date(),
+                        options: options,
+                        map: map
+                    };
+
+                if (map.iconClass) {
+                    $toastElement.addClass(options.toastClass).addClass(iconClass);
+                }
+
+                if (map.title) {
+                    $titleElement.append(map.title).addClass(options.titleClass);
+                    $toastElement.append($titleElement);
+                }
+
+                if (map.message) {
+                    $messageElement.append(map.message).addClass(options.messageClass);
+                    $toastElement.append($messageElement);
+                }
+
+                if (options.closeButton) {
+                    $closeElement.addClass('toast-close-button').attr('role', 'button');
+                    $toastElement.prepend($closeElement);
+                }
+
+                if (options.progressBar) {
+                    $progressElement.addClass('toast-progress');
+                    $toastElement.prepend($progressElement);
+                }
+
+                $toastElement.hide();
+                if (options.newestOnTop) {
+                    $container.prepend($toastElement);
+                } else {
+                    $container.append($toastElement);
+                }
+                $toastElement[options.showMethod](
+                    {duration: options.showDuration, easing: options.showEasing, complete: options.onShown}
+                );
+
+                if (options.timeOut > 0) {
+                    intervalId = setTimeout(hideToast, options.timeOut);
+                    progressBar.maxHideTime = parseFloat(options.timeOut);
+                    progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                    if (options.progressBar) {
+                        progressBar.intervalId = setInterval(updateProgress, 10);
+                    }
+                }
+
+                $toastElement.hover(stickAround, delayedHideToast);
+                if (!options.onclick && options.tapToDismiss) {
+                    $toastElement.click(hideToast);
+                }
+
+                if (options.closeButton && $closeElement) {
+                    $closeElement.click(function (event) {
+                        if (event.stopPropagation) {
+                            event.stopPropagation();
+                        } else if (event.cancelBubble !== undefined && event.cancelBubble !== true) {
+                            event.cancelBubble = true;
+                        }
+                        hideToast(true);
+                    });
+                }
+
+                if (options.onclick) {
+                    $toastElement.click(function () {
+                        options.onclick();
+                        hideToast();
+                    });
+                }
+
+                publish(response);
+
+                if (options.debug && console) {
+                    console.log(response);
+                }
+
+                return $toastElement;
+
+                function hideToast(override) {
+                    if ($(':focus', $toastElement).length && !override) {
+                        return;
+                    }
+                    clearTimeout(progressBar.intervalId);
+                    return $toastElement[options.hideMethod]({
+                        duration: options.hideDuration,
+                        easing: options.hideEasing,
+                        complete: function () {
+                            removeToast($toastElement);
+                            if (options.onHidden && response.state !== 'hidden') {
+                                options.onHidden();
+                            }
+                            response.state = 'hidden';
+                            response.endTime = new Date();
+                            publish(response);
+                        }
+                    });
+                }
+
+                function delayedHideToast() {
+                    if (options.timeOut > 0 || options.extendedTimeOut > 0) {
+                        intervalId = setTimeout(hideToast, options.extendedTimeOut);
+                        progressBar.maxHideTime = parseFloat(options.extendedTimeOut);
+                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                    }
+                }
+
+                function stickAround() {
+                    clearTimeout(intervalId);
+                    progressBar.hideEta = 0;
+                    $toastElement.stop(true, true)[options.showMethod](
+                        {duration: options.showDuration, easing: options.showEasing}
+                    );
+                }
+
+                function updateProgress() {
+                    var percentage = ((progressBar.hideEta - (new Date().getTime())) / progressBar.maxHideTime) * 100;
+                    $progressElement.width(percentage + '%');
+                }
+            }
+
+            function getOptions() {
+                return $.extend({}, getDefaults(), toastr.options);
+            }
+
+            function removeToast($toastElement) {
+                if (!$container) { $container = getContainer(); }
+                if ($toastElement.is(':visible')) {
+                    return;
+                }
+                $toastElement.remove();
+                $toastElement = null;
+                if ($container.children().length === 0) {
+                    $container.remove();
+                }
+            }
+            //#endregion
+
+        })();
+    });
+}(typeof define === 'function' && define.amd ? define : function (deps, factory) {
+    if (typeof module !== 'undefined' && module.exports) { //Node
+        module.exports = factory(require('jquery'));
+    } else {
+        window['toastr'] = factory(window['jQuery']);
+    }
+}));
+
+},{"jquery":25}],239:[function(require,module,exports){
+
+var React = require('react');
+var EditForm=require('./EditForm');
+var EventsApi = require('./EventsApi');
+var Edit = React.createClass({displayName: "Edit",
+
+
+    getInitialState: function () {
+        return {
+            // api call to database
+            EventData:{}
+        };
+
+    },
+
+
+    componentDidMount: function () {
+
+        EventsApi.getEventsByID(this.props.params.EventId).then(function (result) {
+            // console.log(result.data);
+            this.setState({EventData: result.data});
+             console.log(this.state.EventData);
+            // this.setState.EventData.push(href='EditEvent');
+
+        }.bind(this))
+
+
+    },
+
+
+
+
+
+
+
+
+
+
+
+    setEventStateData:function(event){
+        var field = event.target.name;
+        var value=event.target.value;
+        this.state.EventData[field] =value;
+        return this.setState({EventData: this.state.EventData});
+
+    },
+    saveEvent :function(event) {
+        event.preventDefault();
+        console.log(this.state.EventData);
+      var Id = this.state.EventData._id;
+        EventsApi.EditEvents([Id,this.state.EventData]);
+
+
+    },
+
+    render:function() {
+
+        return (
+            React.createElement(EditForm, {
+
+                EventData: this.state.EventData, 
+                onChange: this.setEventStateData, 
+                onSave: this.saveEvent})
+        );
+
+
+    }
+
+
+});
+module.exports=Edit;
+
+},{"./EditForm":241,"./EventsApi":243,"react":237}],240:[function(require,module,exports){
+
+var React = require('react');
+var EditForm=require('./EditForm');
+var Router = require('react-router');
+var EventApi = require('./EventsApi');
+var toastr = require('toastr');
+var EditEvent = React.createClass({displayName: "EditEvent",
+
+    mixins:[
+      Router.Navigation
+    ],
+
+   getInitialState:function () {
+       return{
+
+         EventData:{Typeofevent:'', Place:'',AverageCost:''}
+
+       };
+   },
+    setEventStateData:function(event){
+      var field = event.target.name;
+        var value=event.target.value;
+       this.state.EventData[field] =value;
+         return this.setState({EventData: this.state.EventData});
+
+    },
+    saveEvent :function(event) {
+        event.preventDefault();
+        console.log(this.state.EventData);
+        EventApi.PostEvent(this.state.EventData);
+       toastr.success('Event Saved');
+        this.transitionTo('Events');
+
+
+    },
+
+    render:function() {
+
+        return (
+                React.createElement(EditForm, {
+                EventData: this.state.EventData, 
+                onChange: this.setEventStateData, 
+                onSave: this.saveEvent})
+        );
+
+
+    }
+
+
+});
+module.exports=EditEvent;
+
+},{"./EditForm":241,"./EventsApi":243,"react":237,"react-router":59,"toastr":238}],241:[function(require,module,exports){
+var React = require('react');
+
+var EditForm =React.createClass({displayName: "EditForm",
+    render: function () {
+
+        return (
+
+            React.createElement("form", null, 
+                React.createElement("h1", null, "Edits Event"), 
+                React.createElement("h2", null, this.props.Typeofevent), 
+
+                React.createElement("label", {htmlFor: "Typeofevent"}, "TypeOfEvent"), 
+                React.createElement("input", {type: "text", 
+                       name: "Typeofevent", 
+                       className: "form-control", 
+                       placeholder: this.props.EventData.Typeofevent, 
+                       ref: "Typeofevent", 
+                       onChange: this.props.onChange, 
+                       value: this.props.EventData.Typeofevent}), 
+                React.createElement("label", {htmlFor: "Place"}, "Place"), 
+                React.createElement("input", {type: "text", 
+                       name: "Place", 
+                       className: "form-control", 
+                       placeholder: this.props.EventData.Place, 
+                       ref: "Place", 
+                       onChange: this.props.onChange, 
+                       value: this.props.EventData.Place}), 
+                React.createElement("label", {htmlFor: "Cost"}, "Cost"), 
+                React.createElement("input", {type: "text", 
+                       name: "AverageCost", 
+                       className: "form-control", 
+                       placeholder: this.props.EventData.AverageCost, 
+                       ref: "Cost", 
+                       onChange: this.props.onChange, 
+                       value: this.props.EventData.AverageCost}), 
+                React.createElement("input", {type: "submit", value: "Save", className: "btn btn-default", onClick: this.props.onSave})
+            )
+        );
+    }
+});
+module.exports=EditForm;
+
+},{"react":237}],242:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -52319,12 +52842,28 @@ var EventList= React.createClass({displayName: "EventList",
                 React.createElement("tr", {key: Event._id}, 
                     React.createElement("td", null, " ", React.createElement(Link, {to: "/EventsData/" + Event._id}, Event._id)), 
                     React.createElement("td", null, Event.Place, "  "), 
-                    React.createElement("td", null, " ", Event.AverageCost, " ")
+                    React.createElement("td", null, " ", Event.AverageCost, " "), 
+                    React.createElement("td", null, React.createElement(Link, {to: "/Edit/" + Event._id}, 
+                        React.createElement("button", {className: "btn btn-default", type: "button"}, " Edit"))), 
+                    React.createElement("td", null, 
+                        React.createElement("button", {className: "btn btn-default", type: "button", value: Event._id, onClick: this.props.onDelete}, " Delete"))
+
+
                 )
             );
 
 
         };
+
+/*
+        var SingleEventRow =      (<tr key = {this.props.EventData._id}>
+            <td> <Link to ={"/EditEvent/" + this.props.EventData._id}>{this.props.EventData._id}</Link></td>
+            <td>{this.props.EventData.Place}  </td>
+            <td> {this.props.EventData.AverageCost} </td>
+        </tr>)
+*/
+
+
         return(
             React.createElement("div", null, 
 
@@ -52332,13 +52871,17 @@ var EventList= React.createClass({displayName: "EventList",
                 React.createElement("table", {className: "table"}, 
 
                     React.createElement("thead", null, 
+
                     React.createElement("th", null, "ID "), 
                     React.createElement("th", null, "Events"), 
-                    React.createElement("th", null, "Cost")
+                    React.createElement("th", null, "Cost"), 
+                    React.createElement("th", null, "Edit")
                     ), 
                     React.createElement("tbody", null, 
 
                     this.props.EventsData.map(createEventRow,this)
+
+
                     )
 
 
@@ -52361,75 +52904,140 @@ var EventList= React.createClass({displayName: "EventList",
 });
 module.exports = EventList;
 
-},{"react":237,"react-router":59}],240:[function(require,module,exports){
+},{"react":237,"react-router":59}],243:[function(require,module,exports){
 // over here  i be using the api method to get the data
 
 $ = jQuery = require('jquery');
 var Axios = require('axios');
 
-var EventsData = require('./EventData').EventsData;
+
 var _ = require('lodash');
 
-var _clone =function(item) {
-   return JSON.parse(JSON.stringify(item));
-  };
-
-
+var _clone = function (item) {
+    return JSON.parse(JSON.stringify(item));
+};
 
 
 var EventsApi = {
 
-     getAllEvents :function() {
-       /* return _clone(EventsData)
+    getAllEvents: function () {
+        /* return _clone(EventsData)
 
-     } */ // ends there
+         } */ // ends there
 
-    //  Axios.ajax({url:'http://localhost:5000/events', method:'get',dataType:'json'}).done (function (data ){
+        //  Axios.ajax({url:'http://localhost:5000/events', method:'get',dataType:'json'}).done (function (data ){
 
-   return Axios.get('http://localhost:5000/events');
+        return Axios.get('http://localhost:5000/events');
 
 
-   }
+    },
+
+
+
+
+getEventsByID:function (ID) {
+
+        return Axios.get('http://localhost:5000/events/'+ID);
+
+    },
+PostEvent :function(data) {
+
+  /* var data = {
+       "Typeofevent" :"Adding with Vincent",
+       "AverageCost" :600,
+       "Place" :"Community Hall"
+   };*/
+    return Axios.post('http://localhost:5000/events',data)
+
+
+},
+    EditEvents : function(id,data){
+console.log(id);
+
+console.log(data)
+    return Axios.put('http://localhost:5000/events/'+id,data)
+
+    },
+    DeleteEvents :function(ID) {
+
+        return Axios.delete('http://localhost:5000/events/'+ID);
+
+}
+
+
 
 
 };
 module.exports = EventsApi;
 
-},{"./EventData":238,"axios":1,"jquery":25,"lodash":26}],241:[function(require,module,exports){
+},{"axios":1,"jquery":25,"lodash":26}],244:[function(require,module,exports){
 var React = require('react');
-
-
-
+var Router = require('react-router');
+var Link = Router.Link;
+var EventsApi = require('./EventsApi');
+var EventDisplay = require('./EventList');
 var EventsData = React.createClass({displayName: "EventsData",
 
 
 
+    getInitialState: function () {
+        return {
+            // api call to database
+            EventData: []
+        };
 
-    render:function() {
+    },
 
-        return(
+
+    componentDidMount: function () {
+
+        EventsApi.getEventsByID(this.props.params.EventId).then(function (result) {
+         //  console.log(result.data);
+            this.setState({EventData: [result.data]});
+          //  console.log(this.state.EventData);
+          // this.setState.EventData.push(href='EditEvent');
+
+        }.bind(this))
+
+
+    },
+
+    render: function () {
+        return (
+
             React.createElement("div", null, 
-                React.createElement("h1", null, " SingleEvent"), 
-           React.createElement("p", null, this.props.params.EventId)
+
+                React.createElement("h1", null, " EvetnList "), 
+
+
+                React.createElement("table", {className: "table"}, 
+
+                    React.createElement("thead", null, 
+                    React.createElement("th", null, "ID "), 
+                    React.createElement("th", null, "Events"), 
+                    React.createElement("th", null, "Cost")
+                    ), 
+                    React.createElement("tbody", null, 
+                    React.createElement(EventDisplay, {EventsData: this.state.EventData})
+
+                    )
+
+
+
+                )
 
             )
-
-
-
         );
-
-
 
 
     }
 
 
-
-
 });
+
 module.exports = EventsData;
 
-},{"react":237}],242:[function(require,module,exports){
+},{"./EventList":242,"./EventsApi":243,"react":237,"react-router":59}],245:[function(require,module,exports){
 
 var React = require('react');
 var Router = require('react-router');
@@ -52459,7 +53067,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"react":237,"react-router":59}],243:[function(require,module,exports){
+},{"react":237,"react-router":59}],246:[function(require,module,exports){
 var React = require('react');
 
 var PortFolio = React.createClass({displayName: "PortFolio",
@@ -52616,7 +53224,7 @@ React.createElement("div", {id: "portfolio", className: "color white"},
 
 module.exports = PortFolio;
 
-},{"react":237}],244:[function(require,module,exports){
+},{"react":237}],247:[function(require,module,exports){
 var React = require('react');
 
 var Pricing = React.createClass({displayName: "Pricing",
@@ -52761,7 +53369,7 @@ React.createElement("div", {id: "pricing", className: "color blue"},
 
 module.exports = Pricing;
 
-},{"react":237}],245:[function(require,module,exports){
+},{"react":237}],248:[function(require,module,exports){
 var React = require('react');
 var Home = require('../components/homepage');
 
@@ -52797,7 +53405,7 @@ var App = React.createClass({displayName: "App",
 });
 module.exports =App;
 
-},{"../components/Header":242,"../components/Price":244,"../components/homepage":248,"jquery":25,"react":237,"react-router":59}],246:[function(require,module,exports){
+},{"../components/Header":245,"../components/Price":247,"../components/homepage":251,"jquery":25,"react":237,"react-router":59}],249:[function(require,module,exports){
 var React = require('react');
 
 var Ana = React.createClass({displayName: "Ana",
@@ -52931,74 +53539,84 @@ React.createElement("div", {id: "about", className: "color yellow"},
 
 module.exports = Ana;
 
-},{"react":237}],247:[function(require,module,exports){
+},{"react":237}],250:[function(require,module,exports){
 var React = require('react');
 var Header = require('./Header');
 var Home = require('./Price');
 var EventsApi = require('./EventsApi');
 var EventDisplay = require('./EventList');
-var Axios = require('axios');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var Events = React.createClass({displayName: "Events",
 
 
+    getInitialState: function () {
+        return {
+            // api call to database
+            EventsData: []
 
-      getInitialState: function() {
-          return {
-              // api call to database
-              EventsData: []
-          };
+        };
 
-      },
+    },
+    editEvetn:function() {
 
-      componentDidMount :function(){
-          /*console.log("Component did mounted");
-          Axios.get('http://localhost:5000/events').then(function(result)
-          {
-              // console.log(result);
-
-              this.setState({EventList:JSON.parse(JSON.stringify(result.data))});
-                console.log(this.state.EventList);
-
-          }.bind(this));
-   */
-           EventsApi.getAllEvents().then(function(result){
-                 console.log(result.data);
-               this.setState({EventsData:result.data});
-                console.log(this.state.EventsData);
+        EventsApi.PostEvent().then(function(result){
+            console.log(result);
 
 
-           }.bind(this))
+        });
+
+    },
+
+    DeleteEvent:function(event){
+      console.log(event.target.value);
+      EventsApi.DeleteEvents(event.target.value).then(function (result) {
+          console.log(result);
+
+      });
 
 
-      },
+    },
 
-     render : function() {
-          return (
+    componentDidMount: function () {
 
-         React.createElement("div", null, 
-
-          React.createElement("h1", null, " EvetnList "), 
-       React.createElement("p", null), 
-         
-          React.createElement(EventDisplay, {EventsData: this.state.EventsData})
-
-     )
-          );
+        EventsApi.getAllEvents().then(function (result) {
+            console.log(result.data);
+            this.setState({EventsData: result.data});
+            console.log(this.state.EventsData);
 
 
+        }.bind(this))
 
 
+    },
 
-  }	
+    render: function () {
+        return (
+
+            React.createElement("div", null, 
+
+                React.createElement("h1", null, " EventList "), 
+                React.createElement("p", null), 
+                React.createElement(Link, {to: "EditEvent"}, "EditEvent"), 
+
+                React.createElement("button", {className: "btn btn-default", type: "button", onClick: this.editEvetn}, " Edit"), 
+
+                React.createElement(EventDisplay, {EventsData: this.state.EventsData, onDelete: this.DeleteEvent})
+
+            )
+        );
 
 
+    }
 
-}) ;
+
+});
 
 module.exports = Events;
 
-},{"./EventList":239,"./EventsApi":240,"./Header":242,"./Price":244,"axios":1,"react":237}],248:[function(require,module,exports){
+},{"./EventList":242,"./EventsApi":243,"./Header":245,"./Price":247,"react":237,"react-router":59}],251:[function(require,module,exports){
 var React = require('react');
 
 var Home = React.createClass({displayName: "Home",
@@ -53122,130 +53740,129 @@ React.createElement("div", {id: "services", className: "color black"},
 
 module.exports = Home;
 
-},{"react":237}],249:[function(require,module,exports){
+},{"react":237}],252:[function(require,module,exports){
 var React = require('react');
 
 var Contact = React.createClass({displayName: "Contact",
-  render : function() {
+    render: function () {
 
-   return ( 
-  React.createElement("div", null, 	
+        return (
+            React.createElement("div", null, 
 
- React.createElement("div", {id: "mapBg"}), 
-	React.createElement("div", {id: "contact", className: "color blue transparent"}, 
-		
-	
-		React.createElement("div", {className: "container"}, 
-
-	
-			React.createElement("div", {className: "wrapper span12"}, 
-
-				
-	
-			
-			React.createElement("div", {id: "page-title"}, 
-
-				React.createElement("div", {id: "page-title-inner"}, 
-
-						React.createElement("h2", null, React.createElement("span", null, "Contact"))
-
-				)	
-
-			), 
-			
-			
-			
-			React.createElement("div", {className: "row-fluid"}, 		
-				
-				React.createElement("div", {className: "span12"}, 
-					
-			
-					React.createElement("b", null, "creativeLabs"), " •" + ' ' +
-					"25349 Damascus Park Terrace" + ' ' +
-					"Damascus, MD 20872, USA •" + ' ' +
-					"Phone: (240) 644-8412 •" + ' ' +
-					"Email: MineshPatel2002@Gmail.com •" + ' ' +
-					"Web: DJJBEntertainment.Com"	
-					
-				
-				)	
-			
-			), 
-
-			
-
-			
-
-			React.createElement("div", {className: "row-fluid"}, 		
-			
-			
-				React.createElement("div", {className: "span6"}, 
-			
-					React.createElement("div", {id: "contact-form"}, 
-
-						React.createElement("form", {method: "post", action: ""}, 
-							
-							React.createElement("fieldset", null, 
-								
-								React.createElement("input", {tabindex: "4", id: "name", name: "name", type: "text", value: "", className: "span12", placeholder: "Name: ..."}), 
-								React.createElement("input", {tabindex: "2", id: "email", name: "email", type: "text", value: "", className: "span12", placeholder: "Email: ..."}), 
-								React.createElement("input", {tabindex: "3", id: "www", name: "www", type: "text", value: "", className: "span12", placeholder: "WWW: ..."}), 
-								React.createElement("textarea", {tabindex: "3", className: "input-xlarge span12", id: "message", name: "body", rows: "7", placeholder: "Message: ..."}), 
-
-								React.createElement("div", {className: "actions"}, 
-									React.createElement("button", {tabindex: "3", type: "submit", className: "btn btn-succes btn-large"}, "Send message")
-								)
-								
-							)
-
-						)
-
-					)
-		
-					
-
-				), 
-			
-				
-				React.createElement("div", {className: "span6"}, 
-					
-					
-					React.createElement("script", {src: "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"}), 
-					React.createElement("div", {id: "googlemaps"}, 
-						React.createElement("div", {id: "map", className: "google-map google-map-full"})
-					), 
-					React.createElement("script", {src: "http://maps.google.com/maps/api/js?sensor=true"}), 
-					React.createElement("script", {src: "js/jquery.gmap.min.js"})
-							
-				
-				)	
-			
-			)
+                React.createElement("div", {id: "mapBg"}), 
+                React.createElement("div", {id: "contact", className: "color blue transparent"}, 
 
 
-			)
-		
-		
-		)
-		
-		
-	)
-
-)
-
-   	);
+                    React.createElement("div", {className: "container"}, 
 
 
-  }	
+                        React.createElement("div", {className: "wrapper span12"}, 
 
 
+                            React.createElement("div", {id: "page-title"}, 
 
-}) ;
+                                React.createElement("div", {id: "page-title-inner"}, 
+
+                                    React.createElement("h2", null, React.createElement("span", null, "Contact"))
+
+                                )
+
+                            ), 
+
+
+                            React.createElement("div", {className: "row-fluid"}, 
+
+                                React.createElement("div", {className: "span12"}, 
+
+
+                                    React.createElement("b", null, "creativeLabs"), " •" + ' ' +
+                                    "25349 Damascus Park Terrace" + ' ' +
+                                    "Damascus, MD 20872, USA •" + ' ' +
+                                    "Phone: (240) 644-8412 •" + ' ' +
+                                    "Email: MineshPatel2002@Gmail.com •" + ' ' +
+                                    "Web: DJJBEntertainment.Com"
+
+
+                                )
+
+                            ), 
+
+
+                            React.createElement("div", {className: "row-fluid"}, 
+
+
+                                React.createElement("div", {className: "span6"}, 
+
+                                    React.createElement("div", {id: "contact-form"}, 
+
+                                        React.createElement("form", {method: "post", action: ""}, 
+
+                                            React.createElement("fieldset", null, 
+
+                                                React.createElement("input", {tabindex: "4", id: "name", name: "name", type: "text", value: "", 
+                                                       className: "span12", placeholder: "Name: ..."}), 
+                                                React.createElement("input", {tabindex: "2", id: "email", name: "email", type: "text", value: "", 
+                                                       className: "span12", placeholder: "Email: ..."}), 
+                                                React.createElement("input", {tabindex: "3", id: "www", name: "www", type: "text", value: "", 
+                                                       className: "span12", placeholder: "WWW: ..."}), 
+                                                React.createElement("textarea", {tabindex: "3", className: "input-xlarge span12", id: "message", 
+                                                          name: "body", rows: "7", placeholder: "Message: ..."}), 
+
+                                                React.createElement("div", {className: "actions"}, 
+                                                    React.createElement("button", {tabindex: "3", type: "submit", 
+                                                            className: "btn btn-succes btn-large"}, "Send message"
+                                                    )
+                                                )
+
+                                            )
+
+                                        )
+
+                                    )
+
+
+                                ), 
+
+
+                                React.createElement("div", {className: "span6"}, 
+
+
+                                    React.createElement("script", {
+                                        src: "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"}), 
+                                    React.createElement("div", {id: "googlemaps"}, 
+                                        React.createElement("div", {id: "map", className: "google-map google-map-full"})
+                                    ), 
+                                    React.createElement("script", {src: "http://maps.google.com/maps/api/js?sensor=true"}), 
+                                    React.createElement("script", {src: "js/jquery.gmap.min.js"})
+
+
+                                )
+
+                            )
+
+
+                        )
+
+
+                    )
+
+
+                )
+
+            )
+
+        );
+
+
+    }
+
+
+});
 
 
 module.exports = Contact;
 
-},{"react":237}],250:[function(require,module,exports){
+},{"react":237}],253:[function(require,module,exports){
 var React = require('react');
 
 var Team = React.createClass({displayName: "Team",
@@ -53402,7 +54019,7 @@ React.createElement("div", {className: "row-fluid"},
 
 module.exports = Team;
 
-},{"react":237}],251:[function(require,module,exports){
+},{"react":237}],254:[function(require,module,exports){
 
 $ = require('jquery');
 //alert("testing linting")
@@ -53450,7 +54067,7 @@ Reactdom.render(<Abouts/>,document.getElementById('AboutusDiv'));
 Reactdom.render(<Team/>,document.getElementById('Team'));
 Reactdom.render(<Contact/>,document.getElementById('DjContact')); */
 
-},{"./components/PortFolio":243,"./components/Price":244,"./components/app":245,"./components/bout":246,"./components/events":247,"./components/homepage":248,"./components/out":249,"./components/team":250,"./routes":252,"jquery":25,"react":237,"react-dom":34,"react-router":59}],252:[function(require,module,exports){
+},{"./components/PortFolio":246,"./components/Price":247,"./components/app":248,"./components/bout":249,"./components/events":250,"./components/homepage":251,"./components/out":252,"./components/team":253,"./routes":255,"jquery":25,"react":237,"react-dom":34,"react-router":59}],255:[function(require,module,exports){
 var  React = require('react');
 var Router = require('react-router');
 
@@ -53466,9 +54083,11 @@ var routes = (
       React.createElement(Route, {name: "header", handler: require('./components/Header')}), 
       React.createElement(Route, {name: "Home", handler: require('./components/homepage')}), 
        React.createElement(Route, {name: "Price", handler: require('./components/Price')}), 
-           React.createElement(Route, {path: "EventsData/:EventId", name: "EventsData", handler: require('./components/EventsData')}), 
+       React.createElement(Route, {path: "EventsData/:EventId", name: "EventsData", handler: require('./components/EventsData')}), 
        React.createElement(Route, {name: "PortFolio", handler: require('./components/PortFolio')}), 
       React.createElement(Route, {name: "AboutUs", handler: require('./components/bout')}), 
+      React.createElement(Route, {name: "EditEvent", handler: require('./components/EditEvent')}), 
+      React.createElement(Route, {name: "Edit/:EventId", handler: require('./components/Edit')}), 
       React.createElement(Route, {name: "Team", handler: require('./components/team')}), 
       React.createElement(Route, {name: "Contact", handler: require('./components/out')}), 
       React.createElement(Route, {name: "Events", handler: require('./components/events')})
@@ -53478,4 +54097,4 @@ var routes = (
 );
 module.exports =routes;
 
-},{"./components/EventsData":241,"./components/Header":242,"./components/PortFolio":243,"./components/Price":244,"./components/app":245,"./components/bout":246,"./components/events":247,"./components/homepage":248,"./components/out":249,"./components/team":250,"react":237,"react-router":59}]},{},[251]);
+},{"./components/Edit":239,"./components/EditEvent":240,"./components/EventsData":244,"./components/Header":245,"./components/PortFolio":246,"./components/Price":247,"./components/app":248,"./components/bout":249,"./components/events":250,"./components/homepage":251,"./components/out":252,"./components/team":253,"react":237,"react-router":59}]},{},[254]);

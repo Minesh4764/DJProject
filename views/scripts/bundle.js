@@ -52657,6 +52657,81 @@ module.exports = require('./lib/React');
 }));
 
 },{"jquery":25}],239:[function(require,module,exports){
+var React = require('react');
+
+var Router = require('react-router');
+var Link = Router.Link;
+
+var Admin = React.createClass({displayName: "Admin",
+
+
+    getInitialState: function () {
+        return {
+            // api call to database
+           // EventsData: []
+
+        };
+
+    },
+    editEvetn:function() {
+
+        EventsApi.PostEvent().then(function(result){
+            console.log(result);
+
+
+        });
+
+    },
+
+    DeleteEvent:function(event){
+        console.log(event.target.value);
+        EventsApi.DeleteEvents(event.target.value).then(function (result) {
+            console.log(result);
+
+        });
+
+
+    },
+
+    componentDidMount: function () {
+
+        EventsApi.getAllEvents().then(function (result) {
+            console.log(result.data);
+            this.setState({EventsData: result.data});
+            console.log(this.state.EventsData);
+
+
+        }.bind(this))
+
+
+    },
+
+    render: function () {
+        return (
+
+            React.createElement("div", null, 
+
+                React.createElement("h1", null, " EventList "), 
+                React.createElement("p", null), 
+
+                React.createElement(Link, {to: "EditEvent"}, "EditEvent"), 
+
+                React.createElement("button", {className: "btn btn-default", type: "button"}, React.createElement("a", {href: "http://www.localhost:5000/auth/google"}, " Log in as Admin"))
+
+
+
+            )
+        );
+
+
+    }
+
+
+});
+
+module.exports = Admin;
+
+},{"react":237,"react-router":59}],240:[function(require,module,exports){
 
 var React = require('react');
 var EditForm=require('./EditForm');
@@ -52737,7 +52812,7 @@ var Edit = React.createClass({displayName: "Edit",
 });
 module.exports=Edit;
 
-},{"./EditForm":241,"./EventsApi":243,"react":237}],240:[function(require,module,exports){
+},{"./EditForm":242,"./EventsApi":244,"react":237}],241:[function(require,module,exports){
 
 var React = require('react');
 var EditForm=require('./EditForm');
@@ -52790,7 +52865,7 @@ var EditEvent = React.createClass({displayName: "EditEvent",
 });
 module.exports=EditEvent;
 
-},{"./EditForm":241,"./EventsApi":243,"react":237,"react-router":59,"toastr":238}],241:[function(require,module,exports){
+},{"./EditForm":242,"./EventsApi":244,"react":237,"react-router":59,"toastr":238}],242:[function(require,module,exports){
 var React = require('react');
 
 var EditForm =React.createClass({displayName: "EditForm",
@@ -52833,28 +52908,30 @@ var EditForm =React.createClass({displayName: "EditForm",
 });
 module.exports=EditForm;
 
-},{"react":237}],242:[function(require,module,exports){
+},{"react":237}],243:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
-var EventList= React.createClass({displayName: "EventList",
+var EventList = React.createClass({displayName: "EventList",
 
 
+    render: function () {
 
-
-    render:function() {
-
-        var createEventRow=function(Event) {
+        var createEventRow = function (Event) {
 
             return (
                 React.createElement("tr", {key: Event._id}, 
-                    React.createElement("td", null, " ", React.createElement(Link, {to: "/EventsData/" + Event._id}, Event._id)), 
+                    React.createElement("td", null, React.createElement(Link, {to: "/EventsData/" + Event._id}, Event._id)), 
                     React.createElement("td", null, Event.Place, "  "), 
                     React.createElement("td", null, " ", Event.AverageCost, " "), 
                     React.createElement("td", null, React.createElement(Link, {to: "/Edit/" + Event._id}, 
-                        React.createElement("button", {className: "btn btn-default", type: "button"}, " Edit"))), 
+                        React.createElement("button", {className: "btn btn-default", type: "button"}, " Edit")
+                    )), 
                     React.createElement("td", null, 
-                        React.createElement("button", {className: "btn btn-default", type: "button", value: Event._id, onClick: this.props.onDelete}, " Delete"))
+                        React.createElement("button", {className: "btn btn-default", type: "button", value: Event._id, 
+                                onClick: this.props.onDelete}, " Delete"
+                        )
+                    )
 
 
                 )
@@ -52863,16 +52940,16 @@ var EventList= React.createClass({displayName: "EventList",
 
         };
 
-/*
-        var SingleEventRow =      (<tr key = {this.props.EventData._id}>
-            <td> <Link to ={"/EditEvent/" + this.props.EventData._id}>{this.props.EventData._id}</Link></td>
-            <td>{this.props.EventData.Place}  </td>
-            <td> {this.props.EventData.AverageCost} </td>
-        </tr>)
-*/
+        /*
+         var SingleEventRow =      (<tr key = {this.props.EventData._id}>
+         <td> <Link to ={"/EditEvent/" + this.props.EventData._id}>{this.props.EventData._id}</Link></td>
+         <td>{this.props.EventData.Place}  </td>
+         <td> {this.props.EventData.AverageCost} </td>
+         </tr>)
+         */
 
 
-        return(
+        return (
             React.createElement("div", null, 
 
 
@@ -52880,18 +52957,17 @@ var EventList= React.createClass({displayName: "EventList",
 
                     React.createElement("thead", null, 
 
-                    React.createElement("th", null, "ID "), 
+                    React.createElement("th", null, "ID"), 
                     React.createElement("th", null, "Events"), 
                     React.createElement("th", null, "Cost"), 
                     React.createElement("th", null, "Edit")
                     ), 
                     React.createElement("tbody", null, 
 
-                    this.props.EventsData.map(createEventRow,this)
+                    this.props.EventsData.map(createEventRow, this)
 
 
                     )
-
 
 
                 )
@@ -52902,17 +52978,13 @@ var EventList= React.createClass({displayName: "EventList",
         );
 
 
-
-
     }
-
-
 
 
 });
 module.exports = EventList;
 
-},{"react":237,"react-router":59}],243:[function(require,module,exports){
+},{"react":237,"react-router":59}],244:[function(require,module,exports){
 // over here  i be using the api method to get the data
 
 $ = jQuery = require('jquery');
@@ -52978,7 +53050,7 @@ console.log(data)
 };
 module.exports = EventsApi;
 
-},{"axios":1,"jquery":25,"lodash":26}],244:[function(require,module,exports){
+},{"axios":1,"jquery":25,"lodash":26}],245:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53045,7 +53117,7 @@ var EventsData = React.createClass({displayName: "EventsData",
 
 module.exports = EventsData;
 
-},{"./EventList":242,"./EventsApi":243,"react":237,"react-router":59}],245:[function(require,module,exports){
+},{"./EventList":243,"./EventsApi":244,"react":237,"react-router":59}],246:[function(require,module,exports){
 
 var React = require('react');
 var Router = require('react-router');
@@ -53062,10 +53134,11 @@ var Header = React.createClass({displayName: "Header",
                         React.createElement("li", null, React.createElement(Link, {to: "AboutUs"}, "About-us")), 
                         React.createElement("li", null, React.createElement(Link, {to: "Price"})), 
                         React.createElement("li", null, React.createElement(Link, {to: "PortFolio"}, "Portfolio")), 
-
                         React.createElement("li", null, React.createElement(Link, {to: "Contact"}, "Contact")), 
                         React.createElement("li", null, React.createElement(Link, {to: "Team"}, "Team")), 
-                        React.createElement("li", null, React.createElement(Link, {to: "Events"}, "Events"))
+
+                        React.createElement("li", null, React.createElement(Link, {to: "Events"}, "Events")), 
+                        React.createElement("li", null, React.createElement(Link, {to: "Auth"}, "Auth"))
                     )
                 )
             )
@@ -53075,7 +53148,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"react":237,"react-router":59}],246:[function(require,module,exports){
+},{"react":237,"react-router":59}],247:[function(require,module,exports){
 var React = require('react');
 
 var PortFolio = React.createClass({displayName: "PortFolio",
@@ -53232,7 +53305,7 @@ React.createElement("div", {id: "portfolio", className: "color white"},
 
 module.exports = PortFolio;
 
-},{"react":237}],247:[function(require,module,exports){
+},{"react":237}],248:[function(require,module,exports){
 var React = require('react');
 
 var Pricing = React.createClass({displayName: "Pricing",
@@ -53377,7 +53450,7 @@ React.createElement("div", {id: "pricing", className: "color blue"},
 
 module.exports = Pricing;
 
-},{"react":237}],248:[function(require,module,exports){
+},{"react":237}],249:[function(require,module,exports){
 var React = require('react');
 var Home = require('../components/homepage');
 
@@ -53413,7 +53486,7 @@ var App = React.createClass({displayName: "App",
 });
 module.exports =App;
 
-},{"../components/Header":245,"../components/Price":247,"../components/homepage":251,"jquery":25,"react":237,"react-router":59}],249:[function(require,module,exports){
+},{"../components/Header":246,"../components/Price":248,"../components/homepage":252,"jquery":25,"react":237,"react-router":59}],250:[function(require,module,exports){
 var React = require('react');
 
 var Ana = React.createClass({displayName: "Ana",
@@ -53547,7 +53620,7 @@ React.createElement("div", {id: "about", className: "color yellow"},
 
 module.exports = Ana;
 
-},{"react":237}],250:[function(require,module,exports){
+},{"react":237}],251:[function(require,module,exports){
 var React = require('react');
 var Header = require('./Header');
 var Home = require('./Price');
@@ -53607,6 +53680,7 @@ var Events = React.createClass({displayName: "Events",
 
                 React.createElement("h1", null, " EventList "), 
                 React.createElement("p", null), 
+                React.createElement(Link, {to: "auth"}, "auth"), 
                 React.createElement(Link, {to: "EditEvent"}, "EditEvent"), 
 
                 React.createElement("button", {className: "btn btn-default", type: "button", onClick: this.editEvetn}, " Edit"), 
@@ -53624,7 +53698,7 @@ var Events = React.createClass({displayName: "Events",
 
 module.exports = Events;
 
-},{"./EventList":242,"./EventsApi":243,"./Header":245,"./Price":247,"react":237,"react-router":59}],251:[function(require,module,exports){
+},{"./EventList":243,"./EventsApi":244,"./Header":246,"./Price":248,"react":237,"react-router":59}],252:[function(require,module,exports){
 var React = require('react');
 
 var Home = React.createClass({displayName: "Home",
@@ -53748,7 +53822,7 @@ React.createElement("div", {id: "services", className: "color black"},
 
 module.exports = Home;
 
-},{"react":237}],252:[function(require,module,exports){
+},{"react":237}],253:[function(require,module,exports){
 var React = require('react');
 
 var Contact = React.createClass({displayName: "Contact",
@@ -53870,7 +53944,7 @@ var Contact = React.createClass({displayName: "Contact",
 
 module.exports = Contact;
 
-},{"react":237}],253:[function(require,module,exports){
+},{"react":237}],254:[function(require,module,exports){
 var React = require('react');
 
 var Team = React.createClass({displayName: "Team",
@@ -54027,7 +54101,7 @@ React.createElement("div", {className: "row-fluid"},
 
 module.exports = Team;
 
-},{"react":237}],254:[function(require,module,exports){
+},{"react":237}],255:[function(require,module,exports){
 
 $ = require('jquery');
 //alert("testing linting")
@@ -54054,7 +54128,7 @@ var Team = require('./components/team'); // this is for the team page
 
 var Contact = require('./components/out');
 
-
+var Auth = require('./components/Admin');
 
 	
 Router.run(routes,Router.HistoryLocation,function(Handler){
@@ -54075,7 +54149,7 @@ Reactdom.render(<Abouts/>,document.getElementById('AboutusDiv'));
 Reactdom.render(<Team/>,document.getElementById('Team'));
 Reactdom.render(<Contact/>,document.getElementById('DjContact')); */
 
-},{"./components/PortFolio":246,"./components/Price":247,"./components/app":248,"./components/bout":249,"./components/events":250,"./components/homepage":251,"./components/out":252,"./components/team":253,"./routes":255,"jquery":25,"react":237,"react-dom":34,"react-router":59}],255:[function(require,module,exports){
+},{"./components/Admin":239,"./components/PortFolio":247,"./components/Price":248,"./components/app":249,"./components/bout":250,"./components/events":251,"./components/homepage":252,"./components/out":253,"./components/team":254,"./routes":256,"jquery":25,"react":237,"react-dom":34,"react-router":59}],256:[function(require,module,exports){
 var  React = require('react');
 var Router = require('react-router');
 
@@ -54098,11 +54172,14 @@ var routes = (
       React.createElement(Route, {name: "Edit/:EventId", handler: require('./components/Edit')}), 
       React.createElement(Route, {name: "Team", handler: require('./components/team')}), 
       React.createElement(Route, {name: "Contact", handler: require('./components/out')}), 
-      React.createElement(Route, {name: "Events", handler: require('./components/events')})
+      React.createElement(Route, {name: "Events", handler: require('./components/events')}), 
+
+      React.createElement(Route, {name: "Auth", handler: require('./components/Admin')})
+
   )
 
 
 );
 module.exports =routes;
 
-},{"./components/Edit":239,"./components/EditEvent":240,"./components/EventsData":244,"./components/Header":245,"./components/PortFolio":246,"./components/Price":247,"./components/app":248,"./components/bout":249,"./components/events":250,"./components/homepage":251,"./components/out":252,"./components/team":253,"react":237,"react-router":59}]},{},[254]);
+},{"./components/Admin":239,"./components/Edit":240,"./components/EditEvent":241,"./components/EventsData":245,"./components/Header":246,"./components/PortFolio":247,"./components/Price":248,"./components/app":249,"./components/bout":250,"./components/events":251,"./components/homepage":252,"./components/out":253,"./components/team":254,"react":237,"react-router":59}]},{},[255]);

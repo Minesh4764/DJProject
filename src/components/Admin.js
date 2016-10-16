@@ -1,18 +1,15 @@
 var React = require('react');
-var Header = require('./Header');
-var Home = require('./Price');
-var EventsApi = require('./EventsApi');
-var EventDisplay = require('./EventList');
+
 var Router = require('react-router');
 var Link = Router.Link;
 
-var Events = React.createClass({
+var Admin = React.createClass({
 
 
     getInitialState: function () {
         return {
             // api call to database
-            EventsData: []
+           // EventsData: []
 
         };
 
@@ -28,11 +25,11 @@ var Events = React.createClass({
     },
 
     DeleteEvent:function(event){
-      console.log(event.target.value);
-      EventsApi.DeleteEvents(event.target.value).then(function (result) {
-          console.log(result);
+        console.log(event.target.value);
+        EventsApi.DeleteEvents(event.target.value).then(function (result) {
+            console.log(result);
 
-      });
+        });
 
 
     },
@@ -57,12 +54,12 @@ var Events = React.createClass({
 
                 <h1> EventList </h1>
                 <p></p>
-                <Link to = "auth">auth</Link>
+
                 <Link to = "EditEvent">EditEvent</Link>
 
-                <button className="btn btn-default" type="button" onClick={this.editEvetn}> Edit</button>
+                <button className="btn btn-default" type="button" ><a href="http://www.localhost:5000/auth/google"> Log in as Admin</a></button>
 
-                <EventDisplay EventsData={this.state.EventsData} onDelete={this.DeleteEvent}/>
+
 
             </div>
         );
@@ -73,4 +70,4 @@ var Events = React.createClass({
 
 });
 
-module.exports = Events;
+module.exports = Admin;

@@ -24,7 +24,7 @@ var Team = require('./components/team'); // this is for the team page
 
 var Contact = require('./components/out');
 
-
+var Auth = require('./components/Admin');
 
 	
 Router.run(routes,Router.HistoryLocation,function(Handler){

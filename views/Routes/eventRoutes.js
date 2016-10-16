@@ -1,6 +1,7 @@
 var express = require('express');
 var djEventRouter = express.Router();
-
+//Authentication require
+//Error Handling
 
 var express = require('express');
 

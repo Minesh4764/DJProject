@@ -14,10 +14,11 @@ var Header = React.createClass({
                         <li><Link to="AboutUs">About-us</Link></li>
                         <li><Link to="Price"></Link></li>
                         <li><Link to="PortFolio">Portfolio</Link></li>
-
                         <li><Link to="Contact">Contact</Link></li>
                         <li><Link to="Team">Team</Link></li>
+
                         <li><Link to="Events">Events</Link></li>
+                        <li><Link to="Auth">Auth</Link></li>
                     </ul>
                 </div>
             </nav>

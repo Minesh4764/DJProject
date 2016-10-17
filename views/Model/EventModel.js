@@ -9,3 +9,5 @@ var EventModel = new Schema({  //defining a schema and assigning a model prototy
 });
 
 module.exports= mongoose.model('Event', EventModel);
+
+

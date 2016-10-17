@@ -66,7 +66,6 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 
 app.use(session({secret:'anything'}));
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -81,6 +80,8 @@ passport.deserializeUser(function(user,done){
     done(null,user)
 
 });
+
+
 
 
  var djEventRouter=express.Router();

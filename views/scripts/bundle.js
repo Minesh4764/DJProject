@@ -52661,7 +52661,7 @@ var React = require('react');
 
 var Router = require('react-router');
 var Link = Router.Link;
-
+EventsApi = require('./EventsApi');
 var Admin = React.createClass({displayName: "Admin",
 
 
@@ -52714,7 +52714,7 @@ var Admin = React.createClass({displayName: "Admin",
                 React.createElement("h1", null, " EventList "), 
                 React.createElement("p", null), 
 
-                React.createElement(Link, {to: "EditEvent"}, "EditEvent"), 
+
 
                 React.createElement("button", {className: "btn btn-default", type: "button"}, React.createElement("a", {href: "http://www.localhost:5000/auth/google"}, " Log in as Admin"))
 
@@ -52731,7 +52731,7 @@ var Admin = React.createClass({displayName: "Admin",
 
 module.exports = Admin;
 
-},{"react":237,"react-router":59}],240:[function(require,module,exports){
+},{"./EventsApi":244,"react":237,"react-router":59}],240:[function(require,module,exports){
 
 var React = require('react');
 var EditForm=require('./EditForm');
@@ -52920,18 +52920,83 @@ var EventList = React.createClass({displayName: "EventList",
         var createEventRow = function (Event) {
 
             return (
+
+
                 React.createElement("tr", {key: Event._id}, 
                     React.createElement("td", null, React.createElement(Link, {to: "/EventsData/" + Event._id}, Event._id)), 
                     React.createElement("td", null, Event.Place, "  "), 
                     React.createElement("td", null, " ", Event.AverageCost, " "), 
-                    React.createElement("td", null, React.createElement(Link, {to: "/Edit/" + Event._id}, 
-                        React.createElement("button", {className: "btn btn-default", type: "button"}, " Edit")
-                    )), 
-                    React.createElement("td", null, 
-                        React.createElement("button", {className: "btn btn-default", type: "button", value: Event._id, 
-                                onClick: this.props.onDelete}, " Delete"
-                        )
-                    )
+
+                    (function(p)
+                        {
+                            if (p.props.Admin==true) {
+
+                                return(
+
+                                    React.createElement("td", null, React.createElement(Link, {to: "/Edit/" + Event._id}, 
+                                        React.createElement("button", {className: "btn btn-default", type: "button"}, " Edit")
+                                    ))
+
+
+                                )
+
+
+
+                            }
+                            else{
+                                return(
+
+                                    React.createElement("td", null)
+
+
+                                )
+
+
+                            }
+
+                        }
+
+                    )(this), 
+
+
+
+                    (function(p)
+                        {
+                            if (p.props.Admin==true) {
+
+                                return(
+
+
+                                    React.createElement("td", null, 
+                                        React.createElement("button", {className: "btn btn-default", type: "button", value: Event._id, 
+                                                onClick: p.props.onDelete}, " Delete"
+                                        )
+                                    )
+
+
+                                )
+
+
+
+                            }
+                            else{
+                                return(
+
+                                    React.createElement("td", null)
+
+
+                                )
+
+
+                            }
+
+                        }
+
+                    )(this)
+
+
+
+
 
 
                 )
@@ -52956,11 +53021,11 @@ var EventList = React.createClass({displayName: "EventList",
                 React.createElement("table", {className: "table"}, 
 
                     React.createElement("thead", null, 
-
+                 React.createElement("tr", null, 
                     React.createElement("th", null, "ID"), 
                     React.createElement("th", null, "Events"), 
                     React.createElement("th", null, "Cost"), 
-                    React.createElement("th", null, "Edit")
+                    React.createElement("th", null, "Edit"))
                     ), 
                     React.createElement("tbody", null, 
 
@@ -53137,8 +53202,8 @@ var Header = React.createClass({displayName: "Header",
                         React.createElement("li", null, React.createElement(Link, {to: "Contact"}, "Contact")), 
                         React.createElement("li", null, React.createElement(Link, {to: "Team"}, "Team")), 
 
-                        React.createElement("li", null, React.createElement(Link, {to: "Events"}, "Events")), 
-                        React.createElement("li", null, React.createElement(Link, {to: "Auth"}, "Auth"))
+                        React.createElement("li", null, React.createElement(Link, {to: "Events"}, "Events"))
+
                     )
                 )
             )
@@ -53628,6 +53693,8 @@ var EventsApi = require('./EventsApi');
 var EventDisplay = require('./EventList');
 var Router = require('react-router');
 var Link = Router.Link;
+var Admin = require('./Admin')
+
 
 var Events = React.createClass({displayName: "Events",
 
@@ -53635,11 +53702,13 @@ var Events = React.createClass({displayName: "Events",
     getInitialState: function () {
         return {
             // api call to database
-            EventsData: []
+            EventsData: [],
+            User :true /// onl if data found in mongo db
 
-        };
 
-    },
+
+
+    }},
     editEvetn:function() {
 
         EventsApi.PostEvent().then(function(result){
@@ -53674,18 +53743,23 @@ var Events = React.createClass({displayName: "Events",
     },
 
     render: function () {
+
         return (
 
             React.createElement("div", null, 
 
                 React.createElement("h1", null, " EventList "), 
-                React.createElement("p", null), 
-                React.createElement(Link, {to: "auth"}, "auth"), 
-                React.createElement(Link, {to: "EditEvent"}, "EditEvent"), 
 
-                React.createElement("button", {className: "btn btn-default", type: "button", onClick: this.editEvetn}, " Edit"), 
 
-                React.createElement(EventDisplay, {EventsData: this.state.EventsData, onDelete: this.DeleteEvent})
+                React.createElement(Link, {to: "EditEvent"}, "Add Event"), 
+                React.createElement(Admin, null), 
+
+
+
+                       React.createElement(EventDisplay, {Admin: this.state.User, EventsData: this.state.EventsData, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
+
+
+
 
             )
         );
@@ -53698,7 +53772,7 @@ var Events = React.createClass({displayName: "Events",
 
 module.exports = Events;
 
-},{"./EventList":243,"./EventsApi":244,"./Header":246,"./Price":248,"react":237,"react-router":59}],252:[function(require,module,exports){
+},{"./Admin":239,"./EventList":243,"./EventsApi":244,"./Header":246,"./Price":248,"react":237,"react-router":59}],252:[function(require,module,exports){
 var React = require('react');
 
 var Home = React.createClass({displayName: "Home",

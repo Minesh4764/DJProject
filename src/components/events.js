@@ -5,6 +5,8 @@ var EventsApi = require('./EventsApi');
 var EventDisplay = require('./EventList');
 var Router = require('react-router');
 var Link = Router.Link;
+var Admin = require('./Admin')
+
 
 var Events = React.createClass({
 
@@ -12,11 +14,13 @@ var Events = React.createClass({
     getInitialState: function () {
         return {
             // api call to database
-            EventsData: []
+            EventsData: [],
+            User :true /// onl if data found in mongo db
 
-        };
 
-    },
+
+
+    }},
     editEvetn:function() {
 
         EventsApi.PostEvent().then(function(result){
@@ -51,18 +55,23 @@ var Events = React.createClass({
     },
 
     render: function () {
+
         return (
 
             <div >
 
                 <h1> EventList </h1>
-                <p></p>
-                <Link to = "auth">auth</Link>
-                <Link to = "EditEvent">EditEvent</Link>
 
-                <button className="btn btn-default" type="button" onClick={this.editEvetn}> Edit</button>
 
-                <EventDisplay EventsData={this.state.EventsData} onDelete={this.DeleteEvent}/>
+                <Link to = "EditEvent">Add Event</Link>
+                <Admin/>
+
+
+
+                       <EventDisplay  Admin ={this.state.User} EventsData={this.state.EventsData} onEdit={this.editEvetn} onDelete={this.DeleteEvent}/>
+
+
+
 
             </div>
         );

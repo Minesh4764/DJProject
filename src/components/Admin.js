@@ -2,7 +2,7 @@ var React = require('react');
 
 var Router = require('react-router');
 var Link = Router.Link;
-
+EventsApi = require('./EventsApi');
 var Admin = React.createClass({
 
 
@@ -55,7 +55,7 @@ var Admin = React.createClass({
                 <h1> EventList </h1>
                 <p></p>
 
-                <Link to = "EditEvent">EditEvent</Link>
+
 
                 <button className="btn btn-default" type="button" ><a href="http://www.localhost:5000/auth/google"> Log in as Admin</a></button>
 

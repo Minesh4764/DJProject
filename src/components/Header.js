@@ -18,7 +18,7 @@ var Header = React.createClass({
                         <li><Link to="Team">Team</Link></li>
 
                         <li><Link to="Events">Events</Link></li>
-                        <li><Link to="Auth">Auth</Link></li>
+
                     </ul>
                 </div>
             </nav>

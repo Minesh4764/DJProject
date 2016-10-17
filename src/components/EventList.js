@@ -9,18 +9,83 @@ var EventList = React.createClass({
         var createEventRow = function (Event) {
 
             return (
+
+
                 <tr key={Event._id}>
                     <td><Link to={"/EventsData/" + Event._id}>{Event._id}</Link></td>
                     <td>{Event.Place}  </td>
                     <td> {Event.AverageCost} </td>
-                    <td><Link to={"/Edit/" + Event._id}>
-                        <button className="btn btn-default" type="button"> Edit</button>
-                    </Link></td>
-                    <td>
-                        <button className="btn btn-default" type="button" value={Event._id}
-                                onClick={this.props.onDelete}> Delete
-                        </button>
-                    </td>
+
+                    {(function(p)
+                        {
+                            if (p.props.Admin==true) {
+
+                                return(
+
+                                    <td><Link to={"/Edit/" + Event._id}>
+                                        <button className="btn btn-default" type="button"> Edit</button>
+                                    </Link></td>
+
+
+                                )
+
+
+
+                            }
+                            else{
+                                return(
+
+                                    <td></td>
+
+
+                                )
+
+
+                            }
+
+                        }
+
+                    )(this)}
+
+
+
+                    {(function(p)
+                        {
+                            if (p.props.Admin==true) {
+
+                                return(
+
+
+                                    <td>
+                                        <button className="btn btn-default" type="button" value={Event._id}
+                                                onClick={p.props.onDelete}> Delete
+                                        </button>
+                                    </td>
+
+
+                                )
+
+
+
+                            }
+                            else{
+                                return(
+
+                                    <td></td>
+
+
+                                )
+
+
+                            }
+
+                        }
+
+                    )(this)}
+
+
+
+
 
 
                 </tr>
@@ -45,11 +110,11 @@ var EventList = React.createClass({
                 <table className="table">
 
                     <thead>
-
+                 <tr>
                     <th>ID</th>
                     <th>Events</th>
                     <th>Cost</th>
-                    <th>Edit</th>
+                    <th>Edit</th></tr>
                     </thead>
                     <tbody>
 

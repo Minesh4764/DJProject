@@ -5,8 +5,8 @@ var router = express.Router();
 router.get('/',function(req,res){
 
    // res.send('respond with a resource');
-      var name = req.user.displayName;
-    res.send(name);
+    res.json({user:{name:req.user.displayName,
+                            image:req.user.image}});
 
 
 });

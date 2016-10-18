@@ -10,22 +10,6 @@ var Cors = require('cors');
 
 var passport = require('passport');
 var session = require('express-session');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-passport.use(new GoogleStrategy({
-
-    clientID :'738561098335-1b45labdu6puk09i2o7td4p93utbb3fb.apps.googleusercontent.com',
-    clientSecret:'2jqUw8YLuy-eLcp71GLwSArF',
-    callbackURL: 'http://localhost:5000/auth/google/callback'},
-    function(req,accesssToken,refreshToken,profile,done) {
-        done(null,profile);
-
-        //
-
-    }
-
-
-    ));
-
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -35,6 +19,8 @@ app.use(Cors());
 
 
 var db = mongoose.connect('mongodb://localhost/DJJB');  //connecting to DJJB database
+
+
 
 var Events = require('./views//model/EventModel');
 
@@ -66,20 +52,9 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 
 app.use(session({secret:'anything'}));
-app.use(passport.initialize());
-app.use(passport.session());
 
-passport.serializeUser(function(user,done){
-    done(null,user)
+require('./config/passport')(app);
 
-
-});
-
-passport.deserializeUser(function(user,done){
-//user.findbyid(id);
-    done(null,user)
-
-});
 
 
 

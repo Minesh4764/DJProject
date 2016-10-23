@@ -37,7 +37,7 @@ module.exports = function() {
                 admin.google.id=profile.id;
                 admin.google.token=accesssToken;
 
-                   admin.save();
+                       admin.save();
 
                 done(null, admin);
 

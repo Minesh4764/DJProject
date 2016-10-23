@@ -8,6 +8,8 @@ var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 var concat = require('gulp-concat'); // to join file
 var lint = require('gulp-eslint');
+var liveServer = require('gulp-live-server');
+
 var config = { 
 
 	port: 7000,
@@ -22,7 +24,12 @@ var config = {
 
 	}
 };
-//start a local 
+//start a local
+
+/*gulp.task('liveserver',function () {
+    var server = new liveServer('Server.js');
+    server.start();
+});*/
 
 gulp.task('connect',function() {
 
@@ -42,7 +49,7 @@ gulp.task('lint',function() {
 	    .pipe(lint.format());
 });
 
-gulp.task('open',['connect'],function() {
+gulp.task('open',['connect','js'],function() {
 	 console.log("Its loading from here");
   gulp.src('views/index.html')
 

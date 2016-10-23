@@ -7,7 +7,7 @@ var EventList = React.createClass({
     render: function () {
 
         var createEventRow = function (Event) {
-
+            console.log(this.props.Admin);
             return (
 
 
@@ -16,77 +16,17 @@ var EventList = React.createClass({
                     <td>{Event.Place}  </td>
                     <td> {Event.AverageCost} </td>
 
-                    {(function(p)
-                        {
-                            if (p.props.Admin==true) {
 
-                                return(
-
-                                    <td><Link to={"/Edit/" + Event._id}>
-                                        <button className="btn btn-default" type="button"> Edit</button>
-                                    </Link></td>
+                    <td className={this.props.Admin ? "" : "hidden"}><Link to={"/Edit/" + Event._id}>
+                        <button className="btn btn-primary" type="button"> Edit</button>
+                    </Link></td>
 
 
-                                )
-
-
-
-                            }
-                            else{
-                                return(
-
-                                    <td></td>
-
-
-                                )
-
-
-                            }
-
-                        }
-
-                    )(this)}
-
-
-
-                    {(function(p)
-                        {
-                            if (p.props.Admin==true) {
-
-                                return(
-
-
-                                    <td>
-                                        <button className="btn btn-default" type="button" value={Event._id}
-                                                onClick={p.props.onDelete}> Delete
-                                        </button>
-                                    </td>
-
-
-                                )
-
-
-
-                            }
-                            else{
-                                return(
-
-                                    <td></td>
-
-
-                                )
-
-
-                            }
-
-                        }
-
-                    )(this)}
-
-
-
-
-
+                    <td className={this.props.Admin ? "" : "hidden"}>
+                        <button className="btn btn-warning" type="button" value={Event._id}
+                                onClick={this.props.onDelete}> Delete
+                        </button>
+                    </td>
 
                 </tr>
             );
@@ -107,14 +47,15 @@ var EventList = React.createClass({
             <div>
 
 
-                <table className="table">
+                <table className="table table-striped">
 
                     <thead>
-                 <tr>
-                    <th>ID</th>
-                    <th>Events</th>
-                    <th>Cost</th>
-                    <th>Edit</th></tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Events</th>
+                        <th>Cost</th>
+                        <th className={this.props.Admin ? "" : "hidden"}>Edit</th>
+                    </tr>
                     </thead>
                     <tbody>
 

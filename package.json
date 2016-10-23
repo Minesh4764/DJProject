@@ -16,6 +16,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-connect": "^2.2.0",
     "gulp-eslint": "^3.0.1",
+    "gulp-live-server": "0.0.30",
     "gulp-open": "^1.0.0",
     "history": "^1.17.0",
     "jquery": "^3.1.0",

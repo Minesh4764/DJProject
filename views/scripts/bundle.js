@@ -52918,7 +52918,7 @@ var EventList = React.createClass({displayName: "EventList",
     render: function () {
 
         var createEventRow = function (Event) {
-
+            console.log(this.props.Admin);
             return (
 
 
@@ -52927,77 +52927,17 @@ var EventList = React.createClass({displayName: "EventList",
                     React.createElement("td", null, Event.Place, "  "), 
                     React.createElement("td", null, " ", Event.AverageCost, " "), 
 
-                    (function(p)
-                        {
-                            if (p.props.Admin==true) {
 
-                                return(
-
-                                    React.createElement("td", null, React.createElement(Link, {to: "/Edit/" + Event._id}, 
-                                        React.createElement("button", {className: "btn btn-default", type: "button"}, " Edit")
-                                    ))
+                    React.createElement("td", {className: this.props.Admin ? "" : "hidden"}, React.createElement(Link, {to: "/Edit/" + Event._id}, 
+                        React.createElement("button", {className: "btn btn-primary", type: "button"}, " Edit")
+                    )), 
 
 
-                                )
-
-
-
-                            }
-                            else{
-                                return(
-
-                                    React.createElement("td", null)
-
-
-                                )
-
-
-                            }
-
-                        }
-
-                    )(this), 
-
-
-
-                    (function(p)
-                        {
-                            if (p.props.Admin==true) {
-
-                                return(
-
-
-                                    React.createElement("td", null, 
-                                        React.createElement("button", {className: "btn btn-default", type: "button", value: Event._id, 
-                                                onClick: p.props.onDelete}, " Delete"
-                                        )
-                                    )
-
-
-                                )
-
-
-
-                            }
-                            else{
-                                return(
-
-                                    React.createElement("td", null)
-
-
-                                )
-
-
-                            }
-
-                        }
-
-                    )(this)
-
-
-
-
-
+                    React.createElement("td", {className: this.props.Admin ? "" : "hidden"}, 
+                        React.createElement("button", {className: "btn btn-warning", type: "button", value: Event._id, 
+                                onClick: this.props.onDelete}, " Delete"
+                        )
+                    )
 
                 )
             );
@@ -53018,14 +52958,15 @@ var EventList = React.createClass({displayName: "EventList",
             React.createElement("div", null, 
 
 
-                React.createElement("table", {className: "table"}, 
+                React.createElement("table", {className: "table table-striped"}, 
 
                     React.createElement("thead", null, 
-                 React.createElement("tr", null, 
-                    React.createElement("th", null, "ID"), 
-                    React.createElement("th", null, "Events"), 
-                    React.createElement("th", null, "Cost"), 
-                    React.createElement("th", null, "Edit"))
+                    React.createElement("tr", null, 
+                        React.createElement("th", null, "ID"), 
+                        React.createElement("th", null, "Events"), 
+                        React.createElement("th", null, "Cost"), 
+                        React.createElement("th", {className: this.props.Admin ? "" : "hidden"}, "Edit")
+                    )
                     ), 
                     React.createElement("tbody", null, 
 
@@ -53183,30 +53124,53 @@ var EventsData = React.createClass({displayName: "EventsData",
 module.exports = EventsData;
 
 },{"./EventList":243,"./EventsApi":244,"react":237,"react-router":59}],246:[function(require,module,exports){
-
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 
 var Header = React.createClass({displayName: "Header",
-    render: function() {
+    render: function () {
         return (
-            React.createElement("nav", {color: "blue", className: "navbar navbar-default"}, 
-                React.createElement("div", {className: "container-fluid"}, 
 
-                    React.createElement("ul", {className: "nav navbar-nav"}, 
-                        React.createElement("li", null, React.createElement(Link, {to: "Home"}, "Home")), 
-                        React.createElement("li", null, React.createElement(Link, {to: "AboutUs"}, "About-us")), 
-                        React.createElement("li", null, React.createElement(Link, {to: "Price"})), 
-                        React.createElement("li", null, React.createElement(Link, {to: "PortFolio"}, "Portfolio")), 
-                        React.createElement("li", null, React.createElement(Link, {to: "Contact"}, "Contact")), 
-                        React.createElement("li", null, React.createElement(Link, {to: "Team"}, "Team")), 
+            React.createElement("div", {className: "container"}, 
 
-                        React.createElement("li", null, React.createElement(Link, {to: "Events"}, "Events"))
+
+                React.createElement("div", {className: "row-fluid"}, 
+
+                    React.createElement("div", {className: "navigation"}, 
+
+                        React.createElement("div", {className: "navbar navbar-fixed-top"}, 
+                            React.createElement("div", {className: "navbar-inner"}, 
+                                React.createElement("a", {className: "btn btn-navbar btnOverlay", "data-toggle": "collapse", 
+                                   "data-target": ".nav-collapse"}, 
+                                    "menu"
+                                ), 
+                                React.createElement("div", {className: "nav-collapse collapse"}, 
+                                    React.createElement("ul", {className: "nav"}, 
+
+                                        React.createElement("li", null, React.createElement(Link, {to: "Home"}, "Home")), 
+                                        React.createElement("li", null, React.createElement(Link, {to: "AboutUs"}, "About-us")), 
+                                        React.createElement("li", null, React.createElement(Link, {to: "Price"}, "Price")), 
+                                        React.createElement("li", null, React.createElement(Link, {to: "PortFolio"}, "Portfolio")), 
+                                        React.createElement("li", null, React.createElement(Link, {to: "Contact"}, "Contact")), 
+                                        React.createElement("li", null, React.createElement(Link, {to: "Team"}, "Team")), 
+
+                                        React.createElement("li", null, React.createElement(Link, {to: "Events"}, "Eventss")), 
+                                        React.createElement("li", null, React.createElement(Link, {to: "Search"}, "Search"))
+                                    )
+                                )
+                            )
+                        )
+
 
                     )
+
+
                 )
+
+
             )
+
         );
     }
 });
@@ -53217,155 +53181,204 @@ module.exports = Header;
 var React = require('react');
 
 var PortFolio = React.createClass({displayName: "PortFolio",
-  render : function() {
+    render: function () {
 
-   return ( 
+        return (
 
-React.createElement("div", {id: "portfolio", className: "color white"}, 
-		
-	
-		React.createElement("div", {className: "container"}, 
-
-	
-			React.createElement("div", {className: "wrapper span12"}, 
-	
-					
-			React.createElement("div", {id: "page-title"}, 
-
-				React.createElement("div", {id: "page-title-inner"}, 
-
-					React.createElement("h2", null, React.createElement("span", null, "Portfolio"))
-
-				)	
-
-			), 
-
-			React.createElement("div", {className: "slider"}, 
-				React.createElement("div", {id: "flex1", className: "flexslider"}, 
-					React.createElement("ul", {className: "slides"}, 
-
-						React.createElement("li", null, React.createElement("div", {className: "picture"}, " ", React.createElement("img", {src: "img/IMG_01.PNG", alt: ""}))), 
-
-						React.createElement("li", null, React.createElement("div", {className: "picture"}, React.createElement("img", {src: "img/IMG_02.PNG", alt: ""}))), 
-
-						React.createElement("li", null, React.createElement("div", {className: "picture"}, React.createElement("img", {src: "img/IMG_03.JPG", alt: ""})))
-
-					)
-				)
-			), 
-	
-
-			React.createElement("div", {id: "filters"}, 
-				React.createElement("ul", {className: "option-set", "data-option-key": "filter"}, 
-					React.createElement("li", null, React.createElement("a", {href: "#filter", className: "selected", "data-option-value": "*"}, "All")), 
-					React.createElement("li", null, "/"), 
-					React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".admin"}, "Admin")), 
-					React.createElement("li", null, "/"), 
-					React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".dashboard"}, "Dashboard")), 
-					React.createElement("li", null, "/"), 
-					React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".website"}, "Website")), 
-					React.createElement("li", null, "/"), 
-					React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".html5"}, "HTML5")), 
-					React.createElement("li", null, "/"), 
-					React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".css3"}, "CSS3")), 
-					React.createElement("li", null, "/"), 
-					React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".responsive"}, "Responsive"))
-				)
-			), 
-
-		
-			React.createElement("div", {id: "portfolio-wrapper", className: "row-fluid"}, 
-								
-				React.createElement("div", {className: "span4 portfolio-item website html5 css3 responsive"}, 
-					
-					React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://smart.bootstrapmaster.com", title: "Smart Responsive Template"}, React.createElement("img", {src: "/img/portfolio/smart.png", alt: ""}), React.createElement("div", {className: "image-overlay-link"})), 
-					
-						React.createElement("div", {className: "item-description alt"}, 
-							React.createElement("h5", null, React.createElement("a", {href: "http://smart.bootstrapmaster.com"}, "Smart Responsive Bootstrap Template")), 
-							React.createElement("p", null, 
-								"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat."
-							)
-						)
-					)	
-				), 
-
-				React.createElement("div", {className: "span4 portfolio-item website html5 css3 responsive"}, 
-					React.createElement("div", {className: "picture"}, 
-						React.createElement("a", {href: "http://acme.bootstrapmaster.com", title: "Title"}, React.createElement("img", {src: "img/portfolio/great.png", alt: ""}), React.createElement("div", {className: "image-overlay-link"})), 
-							React.createElement("div", {className: "item-description alt"}, 
-								React.createElement("h5", null, React.createElement("a", {href: "http://acme.bootstrapmaster.com"}, "Great Responsive Bootstrap Template")), 
-								React.createElement("p", null, 
-									"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat." 
-							)
-						)
-					)
-				), 
-
-				React.createElement("div", {className: "span4 portfolio-item website html5 css3 responsive"}, 
-					React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://magnus.bootstrapmaster.com", title: "Title"}, React.createElement("img", {src: "img/portfolio/magnus.png", alt: ""}), React.createElement("div", {className: "image-overlay-link"})), 
-						React.createElement("div", {className: "item-description alt"}, 
-							React.createElement("h5", null, React.createElement("a", {href: "http://magnus.bootstrapmaster.com"}, "Magnus Responsive Bootstrap Template")), 
-							React.createElement("p", null, 
-							"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat." 
-							)
-						)	
-					)
-				), 
-
-				React.createElement("div", {className: "span4 portfolio-item admin dashboard html5 css3 responsive"}, 
-					React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://optimus.bootstrapmaster.com", title: "Title"}, React.createElement("img", {src: "img/portfolio/optimus.png", alt: ""}), React.createElement("div", {className: "image-overlay-link"})), 
-						React.createElement("div", {className: "item-description alt"}, 
-							React.createElement("h5", null, React.createElement("a", {href: "http://optimus.bootstrapmaster.com"}, "Optimus Dashboard Bootstrap Template")), 
-							React.createElement("p", null, 
-								"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat." 
-							)
-						)
-					)
-				), 
-
-				React.createElement("div", {className: "span4 portfolio-item admin dashboard html5 css3 responsive"}, 
-					React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://perfectum.bootstrapmaster.com", title: "Title"}, React.createElement("img", {src: "img/portfolio/perfectum.png", alt: ""}), React.createElement("div", {className: "image-overlay-link"})), 
-						React.createElement("div", {className: "item-description alt"}, 
-							React.createElement("h5", null, React.createElement("a", {href: "http://perfectum.bootstrapmaster.com"}, "Perfectum Dashboard Bootstrap Template")), 
-							React.createElement("p", null, 
-								"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat." 
-							)
-						)
-					)
-				), 
-
-				React.createElement("div", {className: "span4 portfolio-item website html5 css3 responsive"}, 
-					React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://redbox.bootstrapmaster.com"}, React.createElement("img", {src: "img/portfolio/redbox.png", alt: ""}), React.createElement("div", {className: "image-overlay-link"})), 
-						React.createElement("div", {className: "item-description alt"}, 
-							React.createElement("h5", null, React.createElement("a", {href: "http://redbox.bootstrapmaster.com"}, "Red Box Responsive Bootstrap Template")), 
-							React.createElement("p", null, 
-								"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat." 
-							)
-						)
-					)
-				)
-
-			)
-		
-			)
-		
-		
-		)
-	
-		
-	)
+            React.createElement("div", {id: "portfolio", className: "color white"}, 
 
 
+                React.createElement("div", {className: "container"}, 
 
 
-   	);
+                    React.createElement("div", {className: "wrapper span12"}, 
 
 
-  }	
+                        React.createElement("div", {id: "page-title"}, 
+
+                            React.createElement("div", {id: "page-title-inner"}, 
+
+                                React.createElement("h2", null, React.createElement("span", null, "Portfolio"))
+
+                            )
+
+                        ), 
+
+                        React.createElement("div", {className: "slider"}, 
+                            React.createElement("div", {id: "flex1", className: "flexslider"}, 
+                                React.createElement("ul", {className: "slides"}, 
+
+                                    React.createElement("li", null, 
+                                        React.createElement("div", {className: "picture"}, React.createElement("img", {src: "img/IMG_01.PNG", alt: ""}))
+                                    ), 
+
+                                    React.createElement("li", null, 
+                                        React.createElement("div", {className: "picture"}, React.createElement("img", {src: "img/IMG_02.PNG", alt: ""}))
+                                    ), 
+
+                                    React.createElement("li", null, 
+                                        React.createElement("div", {className: "picture"}, React.createElement("img", {src: "img/IMG_03.JPG", alt: ""}))
+                                    )
+
+                                )
+                            )
+                        ), 
+
+
+                        React.createElement("div", {id: "filters"}, 
+                            React.createElement("ul", {className: "option-set", "data-option-key": "filter"}, 
+                                React.createElement("li", null, React.createElement("a", {href: "#filter", className: "selected", "data-option-value": "*"}, "All")), 
+                                React.createElement("li", null, "/"), 
+                                React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".admin"}, "Admin")), 
+                                React.createElement("li", null, "/"), 
+                                React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".dashboard"}, "Dashboard")), 
+                                React.createElement("li", null, "/"), 
+                                React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".website"}, "Website")), 
+                                React.createElement("li", null, "/"), 
+                                React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".html5"}, "HTML5")), 
+                                React.createElement("li", null, "/"), 
+                                React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".css3"}, "CSS3")), 
+                                React.createElement("li", null, "/"), 
+                                React.createElement("li", null, React.createElement("a", {href: "#filter", "data-option-value": ".responsive"}, "Responsive"))
+                            )
+                        ), 
+
+
+                        React.createElement("div", {id: "portfolio-wrapper", className: "row-fluid"}, 
+
+                            React.createElement("div", {className: "span4 portfolio-item website html5 css3 responsive"}, 
+
+                                React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://smart.bootstrapmaster.com", 
+                                                            title: "Smart Responsive Template"}, React.createElement("img", {
+                                    src: "/img/portfolio/smart.png", alt: ""}), 
+                                    React.createElement("div", {className: "image-overlay-link"})
+                                ), 
+
+                                    React.createElement("div", {className: "item-description alt"}, 
+                                        React.createElement("h5", null, React.createElement("a", {href: "http://smart.bootstrapmaster.com"}, "Smart Responsive Bootstrap" + ' ' +
+                                            "Template")), 
+                                        React.createElement("p", null, 
+                                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy" + ' ' +
+                                            "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut" + ' ' +
+                                            "wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" + ' ' +
+                                            "lobortis nisl ut aliquip ex ea commodo consequat."
+                                        )
+                                    )
+                                )
+                            ), 
+
+                            React.createElement("div", {className: "span4 portfolio-item website html5 css3 responsive"}, 
+                                React.createElement("div", {className: "picture"}, 
+                                    React.createElement("a", {href: "http://acme.bootstrapmaster.com", title: "Title"}, React.createElement("img", {
+                                        src: "img/portfolio/great.png", alt: ""}), 
+                                        React.createElement("div", {className: "image-overlay-link"})
+                                    ), 
+                                    React.createElement("div", {className: "item-description alt"}, 
+                                        React.createElement("h5", null, React.createElement("a", {href: "http://acme.bootstrapmaster.com"}, "Great Responsive Bootstrap" + ' ' +
+                                            "Template")), 
+                                        React.createElement("p", null, 
+                                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy" + ' ' +
+                                            "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut" + ' ' +
+                                            "wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" + ' ' +
+                                            "lobortis nisl ut aliquip ex ea commodo consequat."
+                                        )
+                                    )
+                                )
+                            ), 
+
+                            React.createElement("div", {className: "span4 portfolio-item website html5 css3 responsive"}, 
+                                React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://magnus.bootstrapmaster.com", title: "Title"}, React.createElement("img", {
+                                    src: "img/portfolio/magnus.png", alt: ""}), 
+                                    React.createElement("div", {className: "image-overlay-link"})
+                                ), 
+                                    React.createElement("div", {className: "item-description alt"}, 
+                                        React.createElement("h5", null, React.createElement("a", {href: "http://magnus.bootstrapmaster.com"}, "Magnus Responsive Bootstrap" + ' ' +
+                                            "Template")), 
+                                        React.createElement("p", null, 
+                                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy" + ' ' +
+                                            "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut" + ' ' +
+                                            "wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" + ' ' +
+                                            "lobortis nisl ut aliquip ex ea commodo consequat."
+                                        )
+                                    )
+                                )
+                            ), 
+
+                            React.createElement("div", {className: "span4 portfolio-item admin dashboard html5 css3 responsive"}, 
+                                React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://optimus.bootstrapmaster.com", title: "Title"}, React.createElement("img", {
+                                    src: "img/portfolio/optimus.png", alt: ""}), 
+                                    React.createElement("div", {className: "image-overlay-link"})
+                                ), 
+                                    React.createElement("div", {className: "item-description alt"}, 
+                                        React.createElement("h5", null, React.createElement("a", {href: "http://optimus.bootstrapmaster.com"}, "Optimus Dashboard Bootstrap" + ' ' +
+                                            "Template")), 
+                                        React.createElement("p", null, 
+                                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy" + ' ' +
+                                            "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut" + ' ' +
+                                            "wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" + ' ' +
+                                            "lobortis nisl ut aliquip ex ea commodo consequat."
+                                        )
+                                    )
+                                )
+                            ), 
+
+                            React.createElement("div", {className: "span4 portfolio-item admin dashboard html5 css3 responsive"}, 
+                                React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://perfectum.bootstrapmaster.com", 
+                                                            title: "Title"}, React.createElement("img", {src: "img/portfolio/perfectum.png", 
+                                                                               alt: ""}), 
+                                    React.createElement("div", {className: "image-overlay-link"})
+                                ), 
+                                    React.createElement("div", {className: "item-description alt"}, 
+                                        React.createElement("h5", null, React.createElement("a", {href: "http://perfectum.bootstrapmaster.com"}, "Perfectum Dashboard Bootstrap" + ' ' +
+                                            "Template")), 
+                                        React.createElement("p", null, 
+                                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy" + ' ' +
+                                            "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut" + ' ' +
+                                            "wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" + ' ' +
+                                            "lobortis nisl ut aliquip ex ea commodo consequat."
+                                        )
+                                    )
+                                )
+                            ), 
+
+                            React.createElement("div", {className: "span4 portfolio-item website html5 css3 responsive"}, 
+                                React.createElement("div", {className: "picture"}, React.createElement("a", {href: "http://redbox.bootstrapmaster.com"}, React.createElement("img", {
+                                    src: "img/portfolio/redbox.png", alt: ""}), 
+                                    React.createElement("div", {className: "image-overlay-link"})
+                                ), 
+                                    React.createElement("div", {className: "item-description alt"}, 
+                                        React.createElement("h5", null, React.createElement("a", {href: "http://redbox.bootstrapmaster.com"}, "Red Box Responsive Bootstrap" + ' ' +
+                                            "Template")), 
+                                        React.createElement("p", null, 
+                                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy" + ' ' +
+                                            "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut" + ' ' +
+                                            "wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" + ' ' +
+                                            "lobortis nisl ut aliquip ex ea commodo consequat."
+                                        )
+                                    )
+                                )
+                            )
+
+                        )
+
+                    )
+
+
+                )
+
+
+            )
 
 
 
-}) ;
+
+        );
+
+
+    }
+
+
+});
 
 
 module.exports = PortFolio;
@@ -53516,6 +53529,8 @@ React.createElement("div", {id: "pricing", className: "color blue"},
 module.exports = Pricing;
 
 },{"react":237}],249:[function(require,module,exports){
+
+},{}],250:[function(require,module,exports){
 var React = require('react');
 var Home = require('../components/homepage');
 
@@ -53551,7 +53566,7 @@ var App = React.createClass({displayName: "App",
 });
 module.exports =App;
 
-},{"../components/Header":246,"../components/Price":248,"../components/homepage":252,"jquery":25,"react":237,"react-router":59}],250:[function(require,module,exports){
+},{"../components/Header":246,"../components/Price":248,"../components/homepage":253,"jquery":25,"react":237,"react-router":59}],251:[function(require,module,exports){
 var React = require('react');
 
 var Ana = React.createClass({displayName: "Ana",
@@ -53685,7 +53700,7 @@ React.createElement("div", {id: "about", className: "color yellow"},
 
 module.exports = Ana;
 
-},{"react":237}],251:[function(require,module,exports){
+},{"react":237}],252:[function(require,module,exports){
 var React = require('react');
 var Header = require('./Header');
 var Home = require('./Price');
@@ -53772,117 +53787,109 @@ var Events = React.createClass({displayName: "Events",
 
 module.exports = Events;
 
-},{"./Admin":239,"./EventList":243,"./EventsApi":244,"./Header":246,"./Price":248,"react":237,"react-router":59}],252:[function(require,module,exports){
+},{"./Admin":239,"./EventList":243,"./EventsApi":244,"./Header":246,"./Price":248,"react":237,"react-router":59}],253:[function(require,module,exports){
 var React = require('react');
 
 var Home = React.createClass({displayName: "Home",
   render : function() {
 
    return (
+	   React.createElement("div", {id: "services", className: "color black"}, 
+
+		   React.createElement("div", {className: "container"}, 
+
+			   React.createElement("div", {className: "wrapper span12"}, 
+
+				   React.createElement("div", {id: "page-title"}, 
+
+					   React.createElement("div", {id: "page-title-inner"}, 
+
+						   React.createElement("h2", null, React.createElement("span", null, "Services"))
+
+					   )
+
+				   ), 
 
 
-React.createElement("div", {id: "services", className: "color black"}, 
-		
+				   React.createElement("div", {className: "row-fluid"}, 
 
-		React.createElement("div", {className: "container"}, 
+					   React.createElement("div", {className: "span12"}, 
 
-			React.createElement("div", {className: "wrapper span12"}, 
-				
-					
-			React.createElement("div", {id: "page-title"}, 
+						   React.createElement("p", null, 
+							   "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+						   )
 
-				React.createElement("div", {id: "p age-title-inner"}, 
+					   )
 
-					React.createElement("h2", null, React.createElement("span", null, "Servicessss"))
+				   ), 
 
-				)	
+				   React.createElement("div", {className: "row-fluid"}, 
 
-			), 
-		
-			
+					   React.createElement("div", {className: "span6"}, 
 
-      		React.createElement("div", {className: "row-fluid"}, 
-	
-        		React.createElement("div", {className: "span12"}, 
-	
-					React.createElement("p", null, 
-						"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-					)	
-          			
-        		)
-			
-			), 
+						   React.createElement("p", null, 
+							   "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+						   )
+
+					   ), 
+
+					   React.createElement("div", {className: "span6"}, 
+
+						   React.createElement("p", null, 
+							   "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+						   )
+
+					   )
+
+				   ), 
+
+				   React.createElement("div", {className: "row-fluid"}, 
+
+					   React.createElement("div", {className: "span4"}, 
+						   React.createElement("div", {className: "icons-box"}, 
+							   React.createElement("i", {className: "fa-icon-beaker"}), 
+							   React.createElement("h3", null, "Mobile"), 
+							   React.createElement("p", null, 
+								   "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+							   ), 
+							   React.createElement("div", {className: "clearfix"})
+						   )
+					   ), 
+
+					   React.createElement("div", {className: "span4"}, 
+						   React.createElement("div", {className: "icons-box"}, 
+							   React.createElement("i", {className: "fa-icon-thumbs-up"}), 
+							   React.createElement("h3", null, "Web"), 
+							   React.createElement("p", null, 
+								   "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+							   ), 
+							   React.createElement("div", {className: "clearfix"})
+						   )
+					   ), 
+
+					   React.createElement("div", {className: "span4"}, 
+						   React.createElement("div", {className: "icons-box"}, 
+							   React.createElement("i", {className: "fa-icon-heart-empty"}), 
+							   React.createElement("h3", null, "Responsive"), 
+							   React.createElement("p", null, 
+								   "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+							   ), 
+							   React.createElement("div", {className: "clearfix"})
+						   )
+					   )
+
+				   ), 
 
 
-      		React.createElement("div", {className: "row-fluid"}, 
-	
-        		React.createElement("div", {className: "span6"}, 
-	
-					React.createElement("p", null, 
-						"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-					)	
-          			
-        		), 
+				   React.createElement("div", {className: "clearfix"})
 
-				React.createElement("div", {className: "span6"}, 
-	
-					React.createElement("p", null, 
-						"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-					)	
-          			
-        		)
-			
-			), 
-		
-	
-      		React.createElement("div", {className: "row-fluid"}, 
-	
-        		React.createElement("div", {className: "span4"}, 
-          			React.createElement("div", {className: "icons-box"}, 
-						React.createElement("i", {className: "fa-icon-beaker"}), 
-						React.createElement("h3", null, "Mobile"), 
-						React.createElement("p", null, 
-							"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-						), 
-						React.createElement("div", {className: "clearfix"})
-					)
-        		), 
+			   )
 
-        		React.createElement("div", {className: "span4"}, 
-          			React.createElement("div", {className: "icons-box"}, 
-						React.createElement("i", {className: "fa-icon-thumbs-up"}), 
-						React.createElement("h3", null, "Web"), 
-						React.createElement("p", null, 
-							"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-						), 
-						React.createElement("div", {className: "clearfix"})
-					)
-        		), 
 
-        		React.createElement("div", {className: "span4"}, 
-          			React.createElement("div", {className: "icons-box"}, 
-						React.createElement("i", {className: "fa-icon-heart-empty"}), 
-						React.createElement("h3", null, "Responsive"), 
-						React.createElement("p", null, 
-							"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-						), 
-						React.createElement("div", {className: "clearfix"})
-					)
-        		)
+		   )
 
-			), 
-			
-			
-			React.createElement("div", {className: "clearfix"})
-						
-			)
-		
-		
-		)
 
-		
-	)
-
+	   )
 
    	);
 
@@ -53896,7 +53903,7 @@ React.createElement("div", {id: "services", className: "color black"},
 
 module.exports = Home;
 
-},{"react":237}],253:[function(require,module,exports){
+},{"react":237}],254:[function(require,module,exports){
 var React = require('react');
 
 var Contact = React.createClass({displayName: "Contact",
@@ -54018,7 +54025,91 @@ var Contact = React.createClass({displayName: "Contact",
 
 module.exports = Contact;
 
-},{"react":237}],254:[function(require,module,exports){
+},{"react":237}],255:[function(require,module,exports){
+
+
+
+var React = require('react');
+var EditForm=require('./EditForm');
+var Router = require('react-router');
+var SpotApi = require('./SpotApi');
+var SpotSearchForm = require('./spotifyForm');
+var toastr = require('toastr');
+var SpotSearch = React.createClass({displayName: "SpotSearch",
+
+    mixins:[
+        Router.Navigation
+    ],
+
+    getInitialState: function () {
+        return {
+            Artist:"",
+            // api call to database
+            EventsData: []
+
+        }
+    },
+    setEventStateData:function(event){
+       console.log(event.target.value);
+        this.setState({Artist: event.target.value});
+    },
+    saveEvent :function(event) {
+        event.preventDefault();
+        alert("Text field value is: '" + this.state.Artist + "'");
+        console.log(this.state.Artist);
+       // EventApi.PostEvent(this.state.EventData);
+        //toastr.success('Event Saved');
+       // this.transitionTo('Events');
+
+
+    },
+
+    render:function() {
+
+        return (
+            React.createElement(SpotSearchForm, {
+                Artist: this.state.Artist, 
+                Change: this.setEventStateData, 
+                onSave: this.saveEvent})
+        );
+
+
+    }
+
+
+});
+module.exports=SpotSearch;
+
+},{"./EditForm":242,"./SpotApi":249,"./spotifyForm":256,"react":237,"react-router":59,"toastr":238}],256:[function(require,module,exports){
+var React = require('react');
+
+var spotifyForm =React.createClass({displayName: "spotifyForm",
+    render: function () {
+
+        return (
+
+            React.createElement("form", null, 
+                React.createElement("h1", null, "Edits Event"), 
+
+
+                React.createElement("label", {htmlFor: "Typeofevent"}, "TypeOfEvent"), 
+                React.createElement("input", {type: "text", 
+                       name: "Name", 
+                       className: "form-control", 
+                       placeholder: "enter", 
+                       ref: "Typeofevent", 
+                       onChange: this.props.Change, 
+                       value: this.props.Artist.Name}
+                ), 
+
+                React.createElement("input", {type: "submit", value: "Save", className: "btn btn-default", onClick: this.props.onSave})
+            )
+        );
+    }
+});
+module.exports=spotifyForm;
+
+},{"react":237}],257:[function(require,module,exports){
 var React = require('react');
 
 var Team = React.createClass({displayName: "Team",
@@ -54175,15 +54266,14 @@ React.createElement("div", {className: "row-fluid"},
 
 module.exports = Team;
 
-},{"react":237}],255:[function(require,module,exports){
-
+},{"react":237}],258:[function(require,module,exports){
 $ = require('jquery');
 //alert("testing linting")
 //test = 1;
 var React = require('react');
 var Router = require('react-router');
 //var Route,Router,IndexRoute,hashHistory = require('react-router');
-var Reactdom =require('react-dom');
+var Reactdom = require('react-dom');
 var routes = require('./routes');
 
 //var Home = require('./components/homepage');
@@ -54204,56 +54294,53 @@ var Contact = require('./components/out');
 
 var Auth = require('./components/Admin');
 
-	
-Router.run(routes,Router.HistoryLocation,function(Handler){
-      Reactdom.render(React.createElement(Handler, null), document.getElementById('app'));
 
-
+Router.run(routes, Router.HistoryLocation, function (Handler) {
+    Reactdom.render(React.createElement(Handler, null), document.getElementById('app'));
 
 
 });
 
 /*
-Reactdom.render(<App/>,document.getElementById('app'));
+ Reactdom.render(<App/>,document.getElementById('app'));
 
-Reactdom.render(<Events/>,document.getElementById('events'));
-Reactdom.render(<Pricing/>,document.getElementById('Pricing'));
-Reactdom.render(<PortFolios/>,document.getElementById('PortFolio'));
-Reactdom.render(<Abouts/>,document.getElementById('AboutusDiv'));
-Reactdom.render(<Team/>,document.getElementById('Team'));
-Reactdom.render(<Contact/>,document.getElementById('DjContact')); */
+ Reactdom.render(<Events/>,document.getElementById('events'));
+ Reactdom.render(<Pricing/>,document.getElementById('Pricing'));
+ Reactdom.render(<PortFolios/>,document.getElementById('PortFolio'));
+ Reactdom.render(<Abouts/>,document.getElementById('AboutusDiv'));
+ Reactdom.render(<Team/>,document.getElementById('Team'));
+ Reactdom.render(<Contact/>,document.getElementById('DjContact')); */
 
-},{"./components/Admin":239,"./components/PortFolio":247,"./components/Price":248,"./components/app":249,"./components/bout":250,"./components/events":251,"./components/homepage":252,"./components/out":253,"./components/team":254,"./routes":256,"jquery":25,"react":237,"react-dom":34,"react-router":59}],256:[function(require,module,exports){
-var  React = require('react');
+},{"./components/Admin":239,"./components/PortFolio":247,"./components/Price":248,"./components/app":250,"./components/bout":251,"./components/events":252,"./components/homepage":253,"./components/out":254,"./components/team":257,"./routes":259,"jquery":25,"react":237,"react-dom":34,"react-router":59}],259:[function(require,module,exports){
+var React = require('react');
 var Router = require('react-router');
 
 var DefaultRoute = Router.DefaultRoute;
-var Route =Router.Route;
+var Route = Router.Route;
 
 
 var routes = (
 
-  React.createElement(Route, {Name: "app", path: "/", handler: require('./components/app')}, 
+    React.createElement(Route, {Name: "app", path: "/", handler: require('./components/app')}, 
+        React.createElement(DefaultRoute, {handler: require('./components/homepage')}), 
+            React.createElement(Route, {name: "header", handler: require('./components/Header')}), 
+        React.createElement(Route, {name: "Home", handler: require('./components/homepage')}), 
+        React.createElement(Route, {name: "Price", handler: require('./components/Price')}), 
+        React.createElement(Route, {path: "EventsData/:EventId", name: "EventsData", handler: require('./components/EventsData')}), 
+        React.createElement(Route, {name: "PortFolio", handler: require('./components/PortFolio')}), 
+        React.createElement(Route, {name: "AboutUs", handler: require('./components/bout')}), 
+        React.createElement(Route, {name: "EditEvent", handler: require('./components/EditEvent')}), 
+        React.createElement(Route, {name: "Edit/:EventId", handler: require('./components/Edit')}), 
+        React.createElement(Route, {name: "Team", handler: require('./components/team')}), 
+        React.createElement(Route, {name: "Contact", handler: require('./components/out')}), 
+        React.createElement(Route, {name: "Events", handler: require('./components/events')}), 
+            React.createElement(Route, {name: "Search", handler: require('./components/spotSearch')}), 
+        React.createElement(Route, {name: "Auth", handler: require('./components/Admin')})
 
-      React.createElement(DefaultRoute, {handler: require('./components/homepage')}), 
-      React.createElement(Route, {name: "header", handler: require('./components/Header')}), 
-      React.createElement(Route, {name: "Home", handler: require('./components/homepage')}), 
-       React.createElement(Route, {name: "Price", handler: require('./components/Price')}), 
-       React.createElement(Route, {path: "EventsData/:EventId", name: "EventsData", handler: require('./components/EventsData')}), 
-       React.createElement(Route, {name: "PortFolio", handler: require('./components/PortFolio')}), 
-      React.createElement(Route, {name: "AboutUs", handler: require('./components/bout')}), 
-      React.createElement(Route, {name: "EditEvent", handler: require('./components/EditEvent')}), 
-      React.createElement(Route, {name: "Edit/:EventId", handler: require('./components/Edit')}), 
-      React.createElement(Route, {name: "Team", handler: require('./components/team')}), 
-      React.createElement(Route, {name: "Contact", handler: require('./components/out')}), 
-      React.createElement(Route, {name: "Events", handler: require('./components/events')}), 
-
-      React.createElement(Route, {name: "Auth", handler: require('./components/Admin')})
-
-  )
+    )
 
 
 );
-module.exports =routes;
+module.exports = routes;
 
-},{"./components/Admin":239,"./components/Edit":240,"./components/EditEvent":241,"./components/EventsData":245,"./components/Header":246,"./components/PortFolio":247,"./components/Price":248,"./components/app":249,"./components/bout":250,"./components/events":251,"./components/homepage":252,"./components/out":253,"./components/team":254,"react":237,"react-router":59}]},{},[255]);
+},{"./components/Admin":239,"./components/Edit":240,"./components/EditEvent":241,"./components/EventsData":245,"./components/Header":246,"./components/PortFolio":247,"./components/Price":248,"./components/app":250,"./components/bout":251,"./components/events":252,"./components/homepage":253,"./components/out":254,"./components/spotSearch":255,"./components/team":257,"react":237,"react-router":59}]},{},[258]);

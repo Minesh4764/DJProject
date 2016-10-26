@@ -81,6 +81,7 @@ var EventList = React.createClass({
                                 );
                             }.bind(this))
                         }
+
                         <th className={this.props.Admin ? "" : "hidden"}>Edit</th>
                     </tr>
                     </thead>

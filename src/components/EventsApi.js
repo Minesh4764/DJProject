@@ -55,7 +55,13 @@ console.log(data)
 
         return Axios.delete('http://localhost:5000/events/'+ID);
 
-}
+},
+    getTopTracks :function(Artist) {
+
+        return Axios.get('https://api.spotify.com/v1/search?q='+ Artist + '&type=artist');
+
+    }
+
 
 
 

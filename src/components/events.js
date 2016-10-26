@@ -9,16 +9,15 @@ var Admin = require('./Admin')
 
 
 var Events = React.createClass({
-
+ Headers : ["Ids","EVENTS","AverageCost"],
 
     getInitialState: function () {
         return {
             // api call to database
             EventsData: [],
-            User :true /// onl if data found in mongo db
-
-
-
+            User :true,/// onl if data found in mongo db
+           SortBy:null,
+            descending:false,
 
     }},
     editEvetn:function() {
@@ -41,7 +40,26 @@ var Events = React.createClass({
 
     },
 
-    componentDidMount: function () {
+    sorting :function(e){
+
+    var Column =e.target.cellIndex;
+    var Data = this.state.EventsData.slice();
+        var descending = this.state.SortBy===Column && !this.state.descending;
+    Data.sort(function(a,b){
+         return descending
+        ? (a[Column] <b[Column] ? 1: -1)
+             :(a[Column] > b[Column] ? 1: -1);
+
+    });
+    this.setState({
+        EventsData : Data,
+        SortBy:Column,
+       descending:descending,
+    });
+},
+
+
+componentDidMount: function () {
 
         EventsApi.getAllEvents().then(function (result) {
             console.log(result.data);
@@ -68,7 +86,7 @@ var Events = React.createClass({
 
 
 
-                       <EventDisplay  Admin ={this.state.User} EventsData={this.state.EventsData} onEdit={this.editEvetn} onDelete={this.DeleteEvent}/>
+                       <EventDisplay sortby={this.state.SortBy} descending={this.state.descending} Header ={this.Headers} Admin ={this.state.User} EventsData={this.state.EventsData} onSort ={this.sorting} onEdit={this.editEvetn} onDelete={this.DeleteEvent}/>
 
 
 

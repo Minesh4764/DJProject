@@ -52915,10 +52915,13 @@ var Link = Router.Link;
 var EventList = React.createClass({displayName: "EventList",
 
 
-    render: function () {
+            render: function () {
+        console.log("this is the data" + this.props.EventsData);
+
+
 
         var createEventRow = function (Event) {
-            console.log(this.props.Admin);
+
             return (
 
 
@@ -52945,13 +52948,29 @@ var EventList = React.createClass({displayName: "EventList",
 
         };
 
+
+
         /*
          var SingleEventRow =      (<tr key = {this.props.EventData._id}>
          <td> <Link to ={"/EditEvent/" + this.props.EventData._id}>{this.props.EventData._id}</Link></td>
          <td>{this.props.EventData.Place}  </td>
          <td> {this.props.EventData.AverageCost} </td>
-         </tr>)
-         */
+         </tr>)          /*
+         {this.props.EventsData.map(function(row,index) {
+
+         return (
+         <tr key={index}>{row} {row.map(function(cell, index) {
+         return(
+         <td key={index}>{cell}</td>
+         );
+
+         })}</tr>
+         );
+         })}
+
+
+
+        */
 
 
         return (
@@ -52960,20 +52979,34 @@ var EventList = React.createClass({displayName: "EventList",
 
                 React.createElement("table", {className: "table table-striped"}, 
 
-                    React.createElement("thead", null, 
+                    React.createElement("thead", {onClick: this.props.onSort}, 
                     React.createElement("tr", null, 
-                        React.createElement("th", null, "ID"), 
-                        React.createElement("th", null, "Events"), 
-                        React.createElement("th", null, "Cost"), 
+                        this.props.Header.map(function(title,index){
+                            if(this.props.sortby===index) {
+
+                                title +=this.props.descending ? '\u2191' :'\u2193'
+                            }
+                            return(
+
+                                React.createElement("th", {key: index}, title)
+                                );
+                            }.bind(this)), 
+                        
                         React.createElement("th", {className: this.props.Admin ? "" : "hidden"}, "Edit")
                     )
                     ), 
-                    React.createElement("tbody", null, 
+                        React.createElement("tbody", null, this.props.EventsData.map(createEventRow, this)
+                        )
 
-                    this.props.EventsData.map(createEventRow, this)
 
 
-                    )
+
+
+
+
+
+
+
 
 
                 )
@@ -53048,7 +53081,13 @@ console.log(data)
 
         return Axios.delete('http://localhost:5000/events/'+ID);
 
-}
+},
+    getTopTracks :function(Artist) {
+
+        return Axios.get('https://api.spotify.com/v1/search?q='+ Artist + '&type=artist');
+
+    }
+
 
 
 
@@ -53529,8 +53568,81 @@ React.createElement("div", {id: "pricing", className: "color blue"},
 module.exports = Pricing;
 
 },{"react":237}],249:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
-},{}],250:[function(require,module,exports){
+var TrackDisplay = React.createClass({displayName: "TrackDisplay",
+
+
+    render: function () {
+
+
+
+
+    var createEventRow = function (Event) {
+
+
+        //console.log(this.props.Admin);
+        return (
+
+
+            React.createElement("tr", {key: Event.url}, 
+                React.createElement("td", null, React.createElement(Link, {to: "/EventsData/" + Event.url}, Event.url)), 
+                React.createElement("td", null, Event.url, "  "), 
+                React.createElement("td", null, " ", Event.url, " "), 
+
+
+                React.createElement("td", null, React.createElement(Link, {to: "/Edit/" + Event.url}, 
+                    React.createElement("button", {className: "btn btn-primary", type: "button"}, " Edit")
+                )), 
+
+
+                React.createElement("td", null, 
+                    React.createElement("button", {className: "btn btn-warning", type: "button"}
+
+                    )
+                )
+
+            )
+        );
+
+
+    };
+
+    return (
+        React.createElement("div", null, 
+
+
+            React.createElement("table", {className: "table table-striped"}, 
+
+                React.createElement("thead", null, 
+                React.createElement("tr", null, 
+                    React.createElement("th", null, "ID"), 
+                    React.createElement("th", null, "Events"), 
+                    React.createElement("th", null, "Cost"), 
+                    React.createElement("th", null, "Edit")
+                )
+                ), 
+                React.createElement("tbody", null, 
+
+                this.props.EventsData.map(createEventRow, this)
+
+
+                )
+
+            )
+        )
+
+    );
+
+
+}
+
+    });
+module.exports =TrackDisplay;
+
+},{"react":237,"react-router":59}],250:[function(require,module,exports){
 var React = require('react');
 var Home = require('../components/homepage');
 
@@ -53712,16 +53824,15 @@ var Admin = require('./Admin')
 
 
 var Events = React.createClass({displayName: "Events",
-
+ Headers : ["Ids","EVENTS","AverageCost"],
 
     getInitialState: function () {
         return {
             // api call to database
             EventsData: [],
-            User :true /// onl if data found in mongo db
-
-
-
+            User :true,/// onl if data found in mongo db
+           SortBy:null,
+            descending:false,
 
     }},
     editEvetn:function() {
@@ -53744,7 +53855,26 @@ var Events = React.createClass({displayName: "Events",
 
     },
 
-    componentDidMount: function () {
+    sorting :function(e){
+
+    var Column =e.target.cellIndex;
+    var Data = this.state.EventsData.slice();
+        var descending = this.state.SortBy===Column && !this.state.descending;
+    Data.sort(function(a,b){
+         return descending
+        ? (a[Column] <b[Column] ? 1: -1)
+             :(a[Column] > b[Column] ? 1: -1);
+
+    });
+    this.setState({
+        EventsData : Data,
+        SortBy:Column,
+       descending:descending,
+    });
+},
+
+
+componentDidMount: function () {
 
         EventsApi.getAllEvents().then(function (result) {
             console.log(result.data);
@@ -53771,7 +53901,7 @@ var Events = React.createClass({displayName: "Events",
 
 
 
-                       React.createElement(EventDisplay, {Admin: this.state.User, EventsData: this.state.EventsData, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
+                       React.createElement(EventDisplay, {sortby: this.state.SortBy, descending: this.state.descending, Header: this.Headers, Admin: this.state.User, EventsData: this.state.EventsData, onSort: this.sorting, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
 
 
 
@@ -54032,17 +54162,22 @@ module.exports = Contact;
 var React = require('react');
 var EditForm=require('./EditForm');
 var Router = require('react-router');
-var SpotApi = require('./SpotApi');
+var EventApi = require('./EventsApi');
 var SpotSearchForm = require('./spotifyForm');
 var toastr = require('toastr');
+TrackDisplay = require('./TrackDisplay');
 var SpotSearch = React.createClass({displayName: "SpotSearch",
 
     mixins:[
         Router.Navigation
     ],
 
+
+
+
     getInitialState: function () {
         return {
+            tracks :false,
             Artist:"",
             // api call to database
             EventsData: []
@@ -54057,7 +54192,23 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
         event.preventDefault();
         alert("Text field value is: '" + this.state.Artist + "'");
         console.log(this.state.Artist);
-       // EventApi.PostEvent(this.state.EventData);
+         EventApi.getTopTracks(this.state.Artist);
+
+        EventsApi.getTopTracks(this.state.Artist).then(function (result) {
+          //  console.log(result.data.artists.items);
+            if(result) {
+                this.state.tracks = true;
+
+            }
+           this.setState({EventsData: result.data.artists.items});
+            console.log(this.state.EventsData);
+
+
+        }.bind(this))
+
+
+
+        // EventApi.PostEvent(this.state.EventData);
         //toastr.success('Event Saved');
        // this.transitionTo('Events');
 
@@ -54067,10 +54218,16 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
     render:function() {
 
         return (
+
             React.createElement(SpotSearchForm, {
                 Artist: this.state.Artist, 
                 Change: this.setEventStateData, 
                 onSave: this.saveEvent})
+
+
+
+
+
         );
 
 
@@ -54080,7 +54237,7 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
 });
 module.exports=SpotSearch;
 
-},{"./EditForm":242,"./SpotApi":249,"./spotifyForm":256,"react":237,"react-router":59,"toastr":238}],256:[function(require,module,exports){
+},{"./EditForm":242,"./EventsApi":244,"./TrackDisplay":249,"./spotifyForm":256,"react":237,"react-router":59,"toastr":238}],256:[function(require,module,exports){
 var React = require('react');
 
 var spotifyForm =React.createClass({displayName: "spotifyForm",

@@ -111,9 +111,16 @@ var EventList = React.createClass({
 
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Events</th>
-                        <th>Cost</th>
+                        {this.props.Header.map(function(title){
+                            return(
+
+                              <th>{title}</th>
+                            );
+
+
+
+                        })}
+
                         <th className= {this.props.Admin ? "" :"hidden"}>Edit</th></tr>
                     </thead>
                     <tbody>

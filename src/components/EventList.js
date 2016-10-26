@@ -4,10 +4,13 @@ var Link = Router.Link;
 var EventList = React.createClass({
 
 
-    render: function () {
+            render: function () {
+        console.log("this is the data" + this.props.EventsData);
+
+
 
         var createEventRow = function (Event) {
-            console.log(this.props.Admin);
+
             return (
 
 
@@ -34,13 +37,29 @@ var EventList = React.createClass({
 
         };
 
+
+
         /*
          var SingleEventRow =      (<tr key = {this.props.EventData._id}>
          <td> <Link to ={"/EditEvent/" + this.props.EventData._id}>{this.props.EventData._id}</Link></td>
          <td>{this.props.EventData.Place}  </td>
          <td> {this.props.EventData.AverageCost} </td>
-         </tr>)
-         */
+         </tr>)          /*
+         {this.props.EventsData.map(function(row,index) {
+
+         return (
+         <tr key={index}>{row} {row.map(function(cell, index) {
+         return(
+         <td key={index}>{cell}</td>
+         );
+
+         })}</tr>
+         );
+         })}
+
+
+
+        */
 
 
         return (
@@ -49,20 +68,34 @@ var EventList = React.createClass({
 
                 <table className="table table-striped">
 
-                    <thead>
+                    <thead onClick={this.props.onSort}>
                     <tr>
-                        <th>ID</th>
-                        <th>Events</th>
-                        <th>Cost</th>
+                        {this.props.Header.map(function(title,index){
+                            if(this.props.sortby===index) {
+
+                                title +=this.props.descending ? '\u2191' :'\u2193'
+                            }
+                            return(
+
+                                <th key={index} >{title}</th>
+                                );
+                            }.bind(this))
+                        }
                         <th className={this.props.Admin ? "" : "hidden"}>Edit</th>
                     </tr>
                     </thead>
-                    <tbody>
+                        <tbody>{this.props.EventsData.map(createEventRow, this)}
+                        </tbody>
 
-                    {this.props.EventsData.map(createEventRow, this)}
 
 
-                    </tbody>
+
+
+
+
+
+
+
 
 
                 </table>

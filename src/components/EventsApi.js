@@ -45,9 +45,9 @@ PostEvent :function(data) {
 
 },
     EditEvents : function(id,data){
-console.log(id);
+//console.log(id);
 
-console.log(data)
+//console.log(data)
     return Axios.patch('http://localhost:5000/events/'+id,data)
 
     },

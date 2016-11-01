@@ -9,7 +9,7 @@ var source = require('vinyl-source-stream');
 var concat = require('gulp-concat'); // to join file
 var lint = require('gulp-eslint');
 var liveServer = require('gulp-live-server');
-
+var order = require('gulp-order');
 var config = { 
 
 	port: 7000,
@@ -17,7 +17,7 @@ var config = {
 	paths : {
            html: './src/*.html',
            js :   '.src/**/*.js',
-          css:   './src/css/*.css',
+           css:   './src/css/*.css',
            views: './views',
            bundle :'./views/scripts',
            mainJs :'./src/main.js'
@@ -58,6 +58,7 @@ gulp.task('open',['connect','js'],function() {
 
 });
 
+
 gulp.task('html',function() {
   gulp.src(config.paths.html)
   .pipe(gulp.dest(config.paths.views))
@@ -78,6 +79,7 @@ gulp.task('js',function(){
 gulp.task('css',function() {
     
      gulp.src(config.paths.css)
+         .pipe(order(['src/css/*.css','src/css/style.css','src/css/bootstrap.css','src/css/bootstrap-responsive.css']))
      .pipe(concat('bundle.css'))
      .pipe(gulp.dest(config.paths.views + '/css'))
 

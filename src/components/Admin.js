@@ -5,7 +5,6 @@ var Link = Router.Link;
 EventsApi = require('./EventsApi');
 var Admin = React.createClass({
 
-
     getInitialState: function () {
         return {
             // api call to database
@@ -54,6 +53,7 @@ var Admin = React.createClass({
 
                 <h1> EventList </h1>
                 <p></p>
+
 
 
 

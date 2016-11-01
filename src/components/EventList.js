@@ -3,11 +3,21 @@ var Router = require('react-router');
 var Link = Router.Link;
 var EventList = React.createClass({
 
+    _download: function(format, ev) {
+        var contents = format === 'json'
+            ? JSON.stringify(this.props.EventsData)
+            : '';
+
+        var URL = window.URL || window.webkitURL;
+        var blob = new Blob([contents], {type: 'text/' + format});
+        ev.target.href = URL.createObjectURL(blob);
+        ev.target.download = 'data.' + format;
+    },
 
             render: function () {
-        console.log("this is the data" + this.props.EventsData);
 
 
+              //  console.log(this.props.EventsData);
 
         var createEventRow = function (Event) {
 
@@ -39,33 +49,56 @@ var EventList = React.createClass({
 
 
 
+
+
         /*
+         //  {this.props.EventsData.map(createEventRow, this)}
+
          var SingleEventRow =      (<tr key = {this.props.EventData._id}>
          <td> <Link to ={"/EditEvent/" + this.props.EventData._id}>{this.props.EventData._id}</Link></td>
          <td>{this.props.EventData.Place}  </td>
          <td> {this.props.EventData.AverageCost} </td>
-         </tr>)          /*
+         </tr>)
+
+                 /*
          {this.props.EventsData.map(function(row,index) {
 
          return (
          <tr key={index}>{row} {row.map(function(cell, index) {
          return(
-         <td key={index}>{cell}</td>
-         );
+         <td key={index}>{cell}</td>;
 
-         })}</tr>
+
+         })}
+         </tr>
          );
          })}
+        </tbody>
+        </table>
+        </div>
+     <th className={this.props.Admin ? "" : "hidden"}>Edit</th>
+         {this.props.EventsData.map(function(row,index) {
+         return (
+         <tr key={index}>
+         {row.map(function(cell, index) {
 
-
-
+         return <td key={index}>{cell}
+         </td>;
+         })}
+         </tr>
+         );
+         })}
         */
 
 
         return (
             <div>
-
-
+                <div className="toolbar">
+                <a onClick={this._download.bind(this, 'json')}
+                   href="data.json">Export JSON</a>
+                    <a onClick={this._download.bind(this, 'csv')}
+                       href="data.csv">Export CSV</a>
+                </div>
                 <table className="table table-striped">
 
                     <thead onClick={this.props.onSort}>
@@ -82,26 +115,42 @@ var EventList = React.createClass({
                             }.bind(this))
                         }
 
-                        <th className={this.props.Admin ? "" : "hidden"}>Edit</th>
+
                     </tr>
                     </thead>
-                        <tbody>{this.props.EventsData.map(createEventRow, this)}
-                        </tbody>
+                    <tbody onClick={this.props.Edit}>
+                    {this.props.EventsData.map(function(row,rowid) {
+                      // console.log(row);
+                        return (
+                            <tr key={rowid}>{
+                                row.map(function(cell, index) {
+                                    var content  =cell;
+                                    var edit = this.props.edit;
+                                     //   console.log(this.props.edit.row);
 
 
 
+                                        if (edit && this.props.edit.row ===rowid && this.props.edit.cell===index ) {
 
 
+                                            return (
+                                                <form onSubmit={this.props.Save}><input type='text'
+                                                                                        defaultValue={content}/></form>
+
+                                            );
+
+                                        };
 
 
+                             return (<td key={index} data-row={rowid}>{content}</td>);
 
-
-
-
-
+                           }.bind(this))}
+                            </tr>
+                        );
+                    }.bind(this))}
+                    </tbody>
                 </table>
             </div>
-
 
 
         );

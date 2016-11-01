@@ -5332,28 +5332,6 @@ a {
 	color: #414141 !important;
 }
 
-.forty{
-
-  width:40%;
-
-}
-.sixty{
-
-  width:60%;
-
-}
-.eighty{
-
-  width:80%;
-
-}
-.oneHundred{
-
-  width:100%;
-
-}
-
-
 .color.white #page-title h2:before{
 	background: -moz-linear-gradient(left,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */

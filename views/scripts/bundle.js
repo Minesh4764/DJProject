@@ -52664,7 +52664,6 @@ var Link = Router.Link;
 EventsApi = require('./EventsApi');
 var Admin = React.createClass({displayName: "Admin",
 
-
     getInitialState: function () {
         return {
             // api call to database
@@ -52713,6 +52712,7 @@ var Admin = React.createClass({displayName: "Admin",
 
                 React.createElement("h1", null, " EventList "), 
                 React.createElement("p", null), 
+
 
 
 
@@ -52914,11 +52914,21 @@ var Router = require('react-router');
 var Link = Router.Link;
 var EventList = React.createClass({displayName: "EventList",
 
+    _download: function(format, ev) {
+        var contents = format === 'json'
+            ? JSON.stringify(this.props.EventsData)
+            : '';
+
+        var URL = window.URL || window.webkitURL;
+        var blob = new Blob([contents], {type: 'text/' + format});
+        ev.target.href = URL.createObjectURL(blob);
+        ev.target.download = 'data.' + format;
+    },
 
             render: function () {
-        console.log("this is the data" + this.props.EventsData);
 
 
+              //  console.log(this.props.EventsData);
 
         var createEventRow = function (Event) {
 
@@ -52950,33 +52960,56 @@ var EventList = React.createClass({displayName: "EventList",
 
 
 
+
+
         /*
+         //  {this.props.EventsData.map(createEventRow, this)}
+
          var SingleEventRow =      (<tr key = {this.props.EventData._id}>
          <td> <Link to ={"/EditEvent/" + this.props.EventData._id}>{this.props.EventData._id}</Link></td>
          <td>{this.props.EventData.Place}  </td>
          <td> {this.props.EventData.AverageCost} </td>
-         </tr>)          /*
+         </tr>)
+
+                 /*
          {this.props.EventsData.map(function(row,index) {
 
          return (
          <tr key={index}>{row} {row.map(function(cell, index) {
          return(
-         <td key={index}>{cell}</td>
-         );
+         <td key={index}>{cell}</td>;
 
-         })}</tr>
+
+         })}
+         </tr>
          );
          })}
+        </tbody>
+        </table>
+        </div>
+     <th className={this.props.Admin ? "" : "hidden"}>Edit</th>
+         {this.props.EventsData.map(function(row,index) {
+         return (
+         <tr key={index}>
+         {row.map(function(cell, index) {
 
-
-
+         return <td key={index}>{cell}
+         </td>;
+         })}
+         </tr>
+         );
+         })}
         */
 
 
         return (
             React.createElement("div", null, 
-
-
+                React.createElement("div", {className: "toolbar"}, 
+                React.createElement("a", {onClick: this._download.bind(this, 'json'), 
+                   href: "data.json"}, "Export JSON"), 
+                    React.createElement("a", {onClick: this._download.bind(this, 'csv'), 
+                       href: "data.csv"}, "Export CSV")
+                ), 
                 React.createElement("table", {className: "table table-striped"}, 
 
                     React.createElement("thead", {onClick: this.props.onSort}, 
@@ -52990,28 +53023,45 @@ var EventList = React.createClass({displayName: "EventList",
 
                                 React.createElement("th", {key: index}, title)
                                 );
-                            }.bind(this)), 
+                            }.bind(this))
                         
-                        React.createElement("th", {className: this.props.Admin ? "" : "hidden"}, "Edit")
+
+
                     )
                     ), 
-                        React.createElement("tbody", null, this.props.EventsData.map(createEventRow, this)
-                        )
+                    React.createElement("tbody", {onClick: this.props.Edit}, 
+                    this.props.EventsData.map(function(row,rowid) {
+                      // console.log(row);
+                        return (
+                            React.createElement("tr", {key: rowid}, 
+                                row.map(function(cell, index) {
+                                    var content  =cell;
+                                    var edit = this.props.edit;
+                                     //   console.log(this.props.edit.row);
 
 
 
+                                        if (edit && this.props.edit.row ===rowid && this.props.edit.cell===index ) {
 
 
+                                            return (
+                                                React.createElement("form", {onSubmit: this.props.Save}, React.createElement("input", {type: "text", 
+                                                                                        defaultValue: content}))
+
+                                            );
+
+                                        };
 
 
+                             return (React.createElement("td", {key: index, "data-row": rowid}, content));
 
-
-
-
-
+                           }.bind(this))
+                            )
+                        );
+                    }.bind(this))
+                    )
                 )
             )
-
 
 
         );
@@ -53071,9 +53121,9 @@ PostEvent :function(data) {
 
 },
     EditEvents : function(id,data){
-console.log(id);
+//console.log(id);
 
-console.log(data)
+//console.log(data)
     return Axios.patch('http://localhost:5000/events/'+id,data)
 
     },
@@ -53824,21 +53874,30 @@ var Admin = require('./Admin')
 
 
 var Events = React.createClass({displayName: "Events",
- Headers : ["Ids","EVENTS","AverageCost"],
+ Headers : ["Ids","EVENTS","AverageCost","cost","cost","cost"],
+
+     data : [
+         ["Ids","EVENTS","AverageCost","cost","cost","cost"],
+         ["Ids","EVENTS","AverageCost","cost","cost","cost"],
+         ["Ids","EVENTS","AverageCost","cost","cost","cost"],
+         ["Ids","EVENTS","AverageCost","cost","cost","cost"]
+    ],
 
     getInitialState: function () {
         return {
             // api call to database
+            data:null,
             EventsData: [],
-            User :true,/// onl if data found in mongo db
+            User :false,/// onl if data found in mongo db
            SortBy:null,
             descending:false,
+            edit:null,
 
     }},
     editEvetn:function() {
 
         EventsApi.PostEvent().then(function(result){
-            console.log(result);
+      //      console.log(result);
 
 
         });
@@ -53846,9 +53905,9 @@ var Events = React.createClass({displayName: "Events",
     },
 
     DeleteEvent:function(event){
-      console.log(event.target.value);
+     // console.log(event.target.value);
       EventsApi.DeleteEvents(event.target.value).then(function (result) {
-          console.log(result);
+         // console.log(result);
 
       });
 
@@ -53870,16 +53929,56 @@ var Events = React.createClass({displayName: "Events",
         EventsData : Data,
         SortBy:Column,
        descending:descending,
+
     });
 },
+    ObjectToArray:function(obj){
+        var retArray=[];
+
+        Object.keys(obj).forEach(function (item) {
+           retArray.push(obj[item]);
+        });
+
+        return retArray;
+    },
+
+    Edit :function(e) {
+     this.setState({edit:{
+         row:parseInt(e.target.dataset.row,10),
+         cell:e.target.cellIndex,
+
+
+     }});
+
+  console.log(this.state.edit);
+    },
+
+
+
+
+
+    Save: function(e) {
+        e.preventDefault();
+        var input = e.target.firstChild;
+        var data = this.state.data.slice();
+        data[this.state.edit.row][this.state.edit.cell] = input.value;
+        this.setState({
+            edit: null,
+            data: data,
+        });
+    },
 
 
 componentDidMount: function () {
 
         EventsApi.getAllEvents().then(function (result) {
-            console.log(result.data);
-            this.setState({EventsData: result.data});
-            console.log(this.state.EventsData);
+           //console.log(result.data);
+
+            var Data = result.data.map(this.ObjectToArray);
+
+
+            this.setState({EventsData :Data});
+          console.log(this.state.EventsData);
 
 
         }.bind(this))
@@ -53893,7 +53992,6 @@ componentDidMount: function () {
 
             React.createElement("div", null, 
 
-                React.createElement("h1", null, " EventList "), 
 
 
                 React.createElement(Link, {to: "EditEvent"}, "Add Event"), 
@@ -53901,7 +53999,7 @@ componentDidMount: function () {
 
 
 
-                       React.createElement(EventDisplay, {sortby: this.state.SortBy, descending: this.state.descending, Header: this.Headers, Admin: this.state.User, EventsData: this.state.EventsData, onSort: this.sorting, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
+                       React.createElement(EventDisplay, {sortby: this.state.SortBy, Save: this.Save, edit: this.state.edit, descending: this.state.descending, Edit: this.Edit, Header: this.Headers, Admin: this.state.User, EventsData: this.state.EventsData, onSort: this.sorting, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
 
 
 

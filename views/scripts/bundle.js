@@ -52925,6 +52925,24 @@ var EventList = React.createClass({displayName: "EventList",
         ev.target.download = 'data.' + format;
     },
 
+    renSearch:function() {
+        if(!this.props.search){
+            return null;
+        }
+        return (
+            React.createElement("tr", {onChange: this.props.SearchData}, this.props.Header.map(function (anyvalue, idx) {
+
+
+                    return (
+                        React.createElement("td", {key: idx}, React.createElement("input", {type: "text", "data-idx": idx}))
+                    );
+                })
+            )
+            )
+
+    },
+
+
             render: function () {
 
 
@@ -53010,6 +53028,9 @@ var EventList = React.createClass({displayName: "EventList",
                     React.createElement("a", {onClick: this._download.bind(this, 'csv'), 
                        href: "data.csv"}, "Export CSV")
                 ), 
+
+                    React.createElement("button", {className: "btn btn-primary", onClick: this.props.startSearch, type: "button"}, " Search"), 
+
                 React.createElement("table", {className: "table table-striped"}, 
 
                     React.createElement("thead", {onClick: this.props.onSort}, 
@@ -53029,7 +53050,8 @@ var EventList = React.createClass({displayName: "EventList",
 
                     )
                     ), 
-                    React.createElement("tbody", {onClick: this.props.Edit}, 
+                    React.createElement("tbody", {onDoubleClick: this.props.Edit}, 
+                      this.renSearch(), 
                     this.props.EventsData.map(function(row,rowid) {
                       // console.log(row);
                         return (
@@ -53041,19 +53063,19 @@ var EventList = React.createClass({displayName: "EventList",
 
 
 
-                                        if (edit && this.props.edit.row ===rowid && this.props.edit.cell===index ) {
+                                        if (this.props.edit!==null && this.props.edit.row ===rowid && this.props.edit.cell===index ) {
 
 
                                             return (
-                                                React.createElement("form", {onSubmit: this.props.Save}, React.createElement("input", {type: "text", 
-                                                                                        defaultValue: content}))
+                                                React.createElement("form", {onSubmit: this.props.Save}, React.createElement("input", {name: this.props.Header[index], onBlur: this.props.Save, onChange: this.props.onEditAdmin, type: "text", 
+                                                                                         placeholder: content}))
 
                                             );
 
                                         };
 
 
-                             return (React.createElement("td", {key: index, "data-row": rowid}, content));
+                             return (React.createElement("td", {onChange: this.props.onEditAdmin, name: this.props.Header[index], key: index, "data-row": rowid}, content));
 
                            }.bind(this))
                             )
@@ -53892,6 +53914,7 @@ var Events = React.createClass({displayName: "Events",
            SortBy:null,
             descending:false,
             edit:null,
+            Search:false,
 
     }},
     editEvetn:function() {
@@ -53954,19 +53977,76 @@ var Events = React.createClass({displayName: "Events",
     },
 
 
+  adminOnchange:function(event) {
+
+          var field = event.target.name;
+          var value=event.target.value;
+
+         console.log(field +"value is =  " + value);
+
+        //  return this.setState({EventData: this.state.EventData});
+
+      },
+
+
+
 
 
 
     Save: function(e) {
         e.preventDefault();
-        var input = e.target.firstChild;
-        var data = this.state.data.slice();
-        data[this.state.edit.row][this.state.edit.cell] = input.value;
+        console.log('i m in save');
+     //   var input = e.target.firstChild;
+     //  console.log("this is the input" + input);
+       // console.log(data[this.state.edit.row][0])
+      var data = this.state.EventsData.slice();
+
+        console.log(data);
+       data[this.state.edit.row][this.state.edit.cell] = e.target.value;
+        var id = data[this.state.edit.row][0];
+        console.log(id);
+        console.log(data);
         this.setState({
             edit: null,
-            data: data,
+            EventsData: data,
         });
     },
+ BeforeSearchData :null,
+
+    SearchField :function() {
+        if (this.state.Search) {
+            this.setState({
+                data: this.BeforeSearchData,
+                Search: false,
+            });
+            this.BeforeSearchData = null;
+        } else {
+            this.BeforeSearchData = this.state.EventsData;
+
+            this.setState({
+                Search: true,
+            });
+        }
+    },
+
+    SearchData:function(e) {
+        var toSerach = e.target.value.toLowerCase();
+         if(!toSerach) {
+             this.setState({
+                 EventsData:this.BeforeSearchData
+             });
+             return;
+         }
+         var Index = e.target.dataset.idx;
+          var SrchData =this.BeforeSearchData.filter(function(row){
+              return row[Index].toString().toLowerCase().indexOf(toSerach) >-1;
+
+            console.log(SrchData);
+          });
+          this.setState({EventsData:SrchData});
+
+    },
+
 
 
 componentDidMount: function () {
@@ -53999,7 +54079,7 @@ componentDidMount: function () {
 
 
 
-                       React.createElement(EventDisplay, {sortby: this.state.SortBy, Save: this.Save, edit: this.state.edit, descending: this.state.descending, Edit: this.Edit, Header: this.Headers, Admin: this.state.User, EventsData: this.state.EventsData, onSort: this.sorting, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
+                       React.createElement(EventDisplay, {startSearch: this.SearchField, search: this.state.Search, SearchData: this.SearchData, onEditAdmin: this.adminOnchange, sortby: this.state.SortBy, Save: this.Save, edit: this.state.edit, descending: this.state.descending, Edit: this.Edit, Header: this.Headers, Admin: this.state.User, EventsData: this.state.EventsData, onSort: this.sorting, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
 
 
 

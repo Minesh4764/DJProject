@@ -27,6 +27,7 @@ var Events = React.createClass({
            SortBy:null,
             descending:false,
             edit:null,
+            Search:false,
 
     }},
     editEvetn:function() {
@@ -89,19 +90,76 @@ var Events = React.createClass({
     },
 
 
+  adminOnchange:function(event) {
+
+          var field = event.target.name;
+          var value=event.target.value;
+
+         console.log(field +"value is =  " + value);
+
+        //  return this.setState({EventData: this.state.EventData});
+
+      },
+
+
+
 
 
 
     Save: function(e) {
         e.preventDefault();
-        var input = e.target.firstChild;
-        var data = this.state.data.slice();
-        data[this.state.edit.row][this.state.edit.cell] = input.value;
+        console.log('i m in save');
+     //   var input = e.target.firstChild;
+     //  console.log("this is the input" + input);
+       // console.log(data[this.state.edit.row][0])
+      var data = this.state.EventsData.slice();
+
+        console.log(data);
+       data[this.state.edit.row][this.state.edit.cell] = e.target.value;
+        var id = data[this.state.edit.row][0];
+        console.log(id);
+        console.log(data);
         this.setState({
             edit: null,
-            data: data,
+            EventsData: data,
         });
     },
+ BeforeSearchData :null,
+
+    SearchField :function() {
+        if (this.state.Search) {
+            this.setState({
+                data: this.BeforeSearchData,
+                Search: false,
+            });
+            this.BeforeSearchData = null;
+        } else {
+            this.BeforeSearchData = this.state.EventsData;
+
+            this.setState({
+                Search: true,
+            });
+        }
+    },
+
+    SearchData:function(e) {
+        var toSerach = e.target.value.toLowerCase();
+         if(!toSerach) {
+             this.setState({
+                 EventsData:this.BeforeSearchData
+             });
+             return;
+         }
+         var Index = e.target.dataset.idx;
+          var SrchData =this.BeforeSearchData.filter(function(row){
+              return row[Index].toString().toLowerCase().indexOf(toSerach) >-1;
+
+            console.log(SrchData);
+          });
+          this.setState({EventsData:SrchData});
+
+    },
+
 
 
 componentDidMount: function () {
@@ -134,7 +192,7 @@ componentDidMount: function () {
 
 
 
-                       <EventDisplay sortby={this.state.SortBy} Save ={this.Save} edit ={this.state.edit} descending={this.state.descending} Edit ={this.Edit} Header ={this.Headers} Admin ={this.state.User} EventsData={this.state.EventsData} onSort ={this.sorting} onEdit={this.editEvetn} onDelete={this.DeleteEvent}/>
+                       <EventDisplay startSearch={this.SearchField} search={this.state.Search} SearchData ={this.SearchData} onEditAdmin = {this.adminOnchange} sortby={this.state.SortBy} Save ={this.Save} edit ={this.state.edit} descending={this.state.descending} Edit ={this.Edit} Header ={this.Headers} Admin ={this.state.User} EventsData={this.state.EventsData} onSort ={this.sorting} onEdit={this.editEvetn} onDelete={this.DeleteEvent}/>
 
 
 

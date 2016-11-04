@@ -36,7 +36,7 @@ var EventList = React.createClass({
 
 
               //  console.log(this.props.EventsData);
-
+/*
         var createEventRow = function (Event) {
 
             return (

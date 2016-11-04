@@ -7,14 +7,21 @@ var Router = require('react-router');
 var EventApi = require('./EventsApi');
 var SpotSearchForm = require('./spotifyForm');
 var toastr = require('toastr');
-TrackDisplay = require('./TrackDisplay');
+var TrackDisplay = require('./TrackDisplay');
+
 var SpotSearch = React.createClass({
+
+    TopTracks: [
+        ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
+        ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
+        ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
+        ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"]
+    ],
+
 
     mixins:[
         Router.Navigation
     ],
-
-
 
 
     getInitialState: function () {
@@ -22,7 +29,8 @@ var SpotSearch = React.createClass({
             tracks :false,
             Artist:"",
             // api call to database
-            EventsData: []
+            EventsData: [],
+
 
         }
     },
@@ -32,22 +40,23 @@ var SpotSearch = React.createClass({
     },
     saveEvent :function(event) {
         event.preventDefault();
-        alert("Text field value is: '" + this.state.Artist + "'");
-        console.log(this.state.Artist);
-         EventApi.getTopTracks(this.state.Artist);
+      //   alert("Text field value is: '" + this.state.Artist + "'");
+        // console.log(this.state.Artist);
+        // EventApi. getTopTracks(this.state.Artist);
 
-        EventsApi.getTopTracks(this.state.Artist).then(function (result) {
-          //  console.log(result.data.artists.items);
-            if(result) {
-                this.state.tracks = true;
-
-            }
-           this.setState({EventsData: result.data.artists.items});
-            console.log(this.state.EventsData);
+       //  EventsApi.getTopTracks(this.state.Artist).then(function (result) {
+             // console.log("this is the result");
+         //     console.log("this is thedata"+ result);
+           //  console.log(Data);
 
 
-        }.bind(this))
+        this.setState({
 
+            tracks: true,
+
+
+        });
+    },
 
 
         // EventApi.PostEvent(this.state.EventData);
@@ -55,20 +64,18 @@ var SpotSearch = React.createClass({
        // this.transitionTo('Events');
 
 
-    },
+
 
     render:function() {
 
         return (
 
             <SpotSearchForm
+                tracks = {this.state.tracks}
                 Artist={this.state.Artist}
                 Change ={this.setEventStateData}
-                onSave ={this.saveEvent}/>
-
-
-
-
+                onSave ={this.saveEvent}
+                 ArtistData={this.TopTracks}/>
 
         );
 

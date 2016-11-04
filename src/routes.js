@@ -21,6 +21,7 @@ var routes = (
         <Route name="Contact" handler={require('./components/out')}/>
         <Route name="Events" handler={require('./components/events')}/>
             <Route name="Search" handler={require('./components/spotSearch')}/>
+
         <Route name="Auth" handler={require('./components/Admin')}/>
 
     </Route>

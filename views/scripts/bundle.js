@@ -52947,30 +52947,30 @@ var EventList = React.createClass({displayName: "EventList",
 
 
               //  console.log(this.props.EventsData);
-
+/*
         var createEventRow = function (Event) {
 
             return (
 
 
-                React.createElement("tr", {key: Event._id}, 
-                    React.createElement("td", null, React.createElement(Link, {to: "/EventsData/" + Event._id}, Event._id)), 
-                    React.createElement("td", null, Event.Place, "  "), 
-                    React.createElement("td", null, " ", Event.AverageCost, " "), 
+                <tr key={Event._id}>
+                    <td><Link to={"/EventsData/" + Event._id}>{Event._id}</Link></td>
+                    <td>{Event.Place}  </td>
+                    <td> {Event.AverageCost} </td>
 
 
-                    React.createElement("td", {className: this.props.Admin ? "" : "hidden"}, React.createElement(Link, {to: "/Edit/" + Event._id}, 
-                        React.createElement("button", {className: "btn btn-primary", type: "button"}, " Edit")
-                    )), 
+                    <td className={this.props.Admin ? "" : "hidden"}><Link to={"/Edit/" + Event._id}>
+                        <button className="btn btn-primary" type="button"> Edit</button>
+                    </Link></td>
 
 
-                    React.createElement("td", {className: this.props.Admin ? "" : "hidden"}, 
-                        React.createElement("button", {className: "btn btn-warning", type: "button", value: Event._id, 
-                                onClick: this.props.onDelete}, " Delete"
-                        )
-                    )
+                    <td className={this.props.Admin ? "" : "hidden"}>
+                        <button className="btn btn-warning" type="button" value={Event._id}
+                                onClick={this.props.onDelete}> Delete
+                        </button>
+                    </td>
 
-                )
+                </tr>
             );
 
 
@@ -53097,8 +53097,8 @@ module.exports = EventList;
 
 },{"react":237,"react-router":59}],244:[function(require,module,exports){
 // over here  i be using the api method to get the data
+$=jQuery=require('jquery');
 
-$ = jQuery = require('jquery');
 var Axios = require('axios');
 
 
@@ -53156,9 +53156,71 @@ PostEvent :function(data) {
 },
     getTopTracks :function(Artist) {
 
-        return Axios.get('https://api.spotify.com/v1/search?q='+ Artist + '&type=artist');
 
-    }
+
+        $.ajax({
+            url: "https://api.spotify.com/v1/search?q=" + Artist + "&type=artist",
+
+            success: function (data) {
+                console.log(data);
+                var artist;
+
+                for (var i = 0; i < data.artists.items.length; i++) {
+
+                    //pick the right artist & assign artist if conditions are good
+                    if (Artist.toUpperCase().trim() == data.artists.items[i].name.toUpperCase().trim()) {
+
+                        artist = data.artists.items[i];
+                        console.log(artist);
+                    }
+
+
+                }
+                $.ajax({
+                    url: "https://api.spotify.com/v1/artists/" +artist.id+ "/top-tracks?country=US",
+
+                    success: function (data) {
+                        console.log(data);
+
+                      return [data.tracks];
+                    },
+
+                    error: function (error) {
+                        console.log(error)
+
+                       console.log("There has been an error receiving data from Spotify - please make sure artist name is spelled correctly.");
+                    }
+
+                });
+
+
+            }});
+
+
+
+             //   return Axios.get('https://api.spotify.com/v1/search?q='+ Artist + '&type=artist');
+      /* Axios.get('https://api.spotify.com/v1/search?q=' + Artist + '&type=artist').then(function(data) {
+           console.log(data.data.artists);
+
+
+           for (var i = 0; i < data.data.artists.items.length; i++) {
+               if (Artist.toUpperCase().trim() == data.data.artists.items[i].name.toUpperCase().trim()) {
+
+                   artistid = data.data.artists.items[i].id;
+               }
+
+
+           }
+           console.log("thsi is artistid" + artistid);
+               return Axios.get('https://api.spotify.com/v1/artists/0du5cEVh5yTK9QJze8zA0C/top-tracks?country=US');
+
+
+
+       }
+
+       )*/},
+
+
 
 
 
@@ -53896,124 +53958,122 @@ var Admin = require('./Admin')
 
 
 var Events = React.createClass({displayName: "Events",
- Headers : ["Ids","EVENTS","AverageCost","cost","cost","cost"],
+    Headers: ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
 
-     data : [
-         ["Ids","EVENTS","AverageCost","cost","cost","cost"],
-         ["Ids","EVENTS","AverageCost","cost","cost","cost"],
-         ["Ids","EVENTS","AverageCost","cost","cost","cost"],
-         ["Ids","EVENTS","AverageCost","cost","cost","cost"]
-    ],
+
 
     getInitialState: function () {
         return {
             // api call to database
-            data:null,
+            data: null,
             EventsData: [],
-            User :false,/// onl if data found in mongo db
-           SortBy:null,
-            descending:false,
-            edit:null,
-            Search:false,
+            User: false,/// onl if data found in mongo db
+            SortBy: null,
+            descending: false,
+            edit: null,
+            Search: false,
 
-    }},
-    editEvetn:function() {
+        }
+    },
+    editEvetn: function () {
 
-        EventsApi.PostEvent().then(function(result){
-      //      console.log(result);
+        EventsApi.PostEvent().then(function (result) {
+            //      console.log(result);
 
 
         });
 
     },
 
-    DeleteEvent:function(event){
-     // console.log(event.target.value);
-      EventsApi.DeleteEvents(event.target.value).then(function (result) {
-         // console.log(result);
+    DeleteEvent: function (event) {
+        // console.log(event.target.value);
+        EventsApi.DeleteEvents(event.target.value).then(function (result) {
+            // console.log(result);
 
-      });
-
-
-    },
-
-    sorting :function(e){
-
-    var Column =e.target.cellIndex;
-    var Data = this.state.EventsData.slice();
-        var descending = this.state.SortBy===Column && !this.state.descending;
-    Data.sort(function(a,b){
-         return descending
-        ? (a[Column] <b[Column] ? 1: -1)
-             :(a[Column] > b[Column] ? 1: -1);
-
-    });
-    this.setState({
-        EventsData : Data,
-        SortBy:Column,
-       descending:descending,
-
-    });
-},
-    ObjectToArray:function(obj){
-        var retArray=[];
-
-        Object.keys(obj).forEach(function (item) {
-           retArray.push(obj[item]);
         });
 
-        return retArray;
+
     },
 
-    Edit :function(e) {
-     this.setState({edit:{
-         row:parseInt(e.target.dataset.row,10),
-         cell:e.target.cellIndex,
+    sorting: function (e) {
 
+        var Column = e.target.cellIndex;
+        var Data = this.state.EventsData.slice();
+        var descending = this.state.SortBy === Column && !this.state.descending;
+        Data.sort(function (a, b) {
+            return descending
+                ? (a[Column] < b[Column] ? 1 : -1)
+                : (a[Column] > b[Column] ? 1 : -1);
 
-     }});
+        });
+        this.setState({
+            EventsData: Data,
+            SortBy: Column,
+            descending: descending,
 
-  console.log(this.state.edit);
+        });
     },
 
 
-  adminOnchange:function(event) {
+    Edit: function (e) {
+        this.setState({
+            edit: {
+                row: parseInt(e.target.dataset.row, 10),
+                cell: e.target.cellIndex,
 
-          var field = event.target.name;
-          var value=event.target.value;
 
-         console.log(field +"value is =  " + value);
+            }
+        });
+
+        console.log(this.state.edit);
+    },
+
+
+    adminOnchange: function (event) {
+
+        var field = event.target.name;
+        var value = event.target.value;
+
+        console.log(field + "value is =  " + value);
 
         //  return this.setState({EventData: this.state.EventData});
 
-      },
+    },
 
 
-
-
-
-
-    Save: function(e) {
+    Save: function (e) {
         e.preventDefault();
         console.log('i m in save');
-     //   var input = e.target.firstChild;
-     //  console.log("this is the input" + input);
-       // console.log(data[this.state.edit.row][0])
-      var data = this.state.EventsData.slice();
+        //   var input = e.target.firstChild;
+        //  console.log("this is the input" + input);
+        // console.log(data[this.state.edit.row][0])
+        var data = this.state.EventsData.slice();
 
         console.log(data);
-       data[this.state.edit.row][this.state.edit.cell] = e.target.value;
+        data[this.state.edit.row][this.state.edit.cell] = e.target.value;
         var id = data[this.state.edit.row][0];
         console.log(id);
         console.log(data);
+        //Push into an array and do batch update or single update
+        /*var DataTobepost:{
+         Id: id,
+         AverageCost:data[this.state.Edit.row][1];
+         Accordingly post the date or
+
+
+         }*/
+        // EventsApi.PostEvent()
+
         this.setState({
             edit: null,
             EventsData: data,
         });
     },
- BeforeSearchData :null,
 
-    SearchField :function() {
+
+    BeforeSearchData: null,
+
+    SearchField: function () {
         if (this.state.Search) {
             this.setState({
                 data: this.BeforeSearchData,
@@ -54029,36 +54089,45 @@ var Events = React.createClass({displayName: "Events",
         }
     },
 
-    SearchData:function(e) {
+    SearchData: function (e) {
         var toSerach = e.target.value.toLowerCase();
-         if(!toSerach) {
-             this.setState({
-                 EventsData:this.BeforeSearchData
-             });
-             return;
-         }
-         var Index = e.target.dataset.idx;
-          var SrchData =this.BeforeSearchData.filter(function(row){
-              return row[Index].toString().toLowerCase().indexOf(toSerach) >-1;
+        if (!toSerach) {
+            this.setState({
+                EventsData: this.BeforeSearchData
+            });
+            return;
+        }
+        var Index = e.target.dataset.idx;
+        var SrchData = this.BeforeSearchData.filter(function (row) {
+            return row[Index].toString().toLowerCase().indexOf(toSerach) > -1;
 
             console.log(SrchData);
-          });
-          this.setState({EventsData:SrchData});
+        });
+        this.setState({EventsData: SrchData});
+        //
+
 
     },
 
+    ObjectToArray: function (obj) {
+        var retArray = [];
 
+        Object.keys(obj).forEach(function (item) {
+            retArray.push(obj[item]);
+        });
 
-componentDidMount: function () {
+        return retArray;
+    },
+    componentDidMount: function () {
 
         EventsApi.getAllEvents().then(function (result) {
-           //console.log(result.data);
+            //console.log(result.data);
 
             var Data = result.data.map(this.ObjectToArray);
 
 
-            this.setState({EventsData :Data});
-          console.log(this.state.EventsData);
+            this.setState({EventsData: Data});
+            console.log(this.state.EventsData);
 
 
         }.bind(this))
@@ -54073,15 +54142,15 @@ componentDidMount: function () {
             React.createElement("div", null, 
 
 
-
                 React.createElement(Link, {to: "EditEvent"}, "Add Event"), 
                 React.createElement(Admin, null), 
 
 
-
-                       React.createElement(EventDisplay, {startSearch: this.SearchField, search: this.state.Search, SearchData: this.SearchData, onEditAdmin: this.adminOnchange, sortby: this.state.SortBy, Save: this.Save, edit: this.state.edit, descending: this.state.descending, Edit: this.Edit, Header: this.Headers, Admin: this.state.User, EventsData: this.state.EventsData, onSort: this.sorting, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
-
-
+                React.createElement(EventDisplay, {startSearch: this.SearchField, search: this.state.Search, SearchData: this.SearchData, 
+                              onEditAdmin: this.adminOnchange, sortby: this.state.SortBy, Save: this.Save, 
+                              edit: this.state.edit, descending: this.state.descending, Edit: this.Edit, 
+                              Header: this.Headers, Admin: this.state.User, EventsData: this.state.EventsData, 
+                              onSort: this.sorting, onEdit: this.editEvetn, onDelete: this.DeleteEvent})
 
 
             )
@@ -54343,14 +54412,21 @@ var Router = require('react-router');
 var EventApi = require('./EventsApi');
 var SpotSearchForm = require('./spotifyForm');
 var toastr = require('toastr');
-TrackDisplay = require('./TrackDisplay');
+var TrackDisplay = require('./TrackDisplay');
+
 var SpotSearch = React.createClass({displayName: "SpotSearch",
+
+    TopTracks: [
+        ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
+        ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
+        ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
+        ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"]
+    ],
+
 
     mixins:[
         Router.Navigation
     ],
-
-
 
 
     getInitialState: function () {
@@ -54358,7 +54434,8 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
             tracks :false,
             Artist:"",
             // api call to database
-            EventsData: []
+            EventsData: [],
+
 
         }
     },
@@ -54368,22 +54445,23 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
     },
     saveEvent :function(event) {
         event.preventDefault();
-        alert("Text field value is: '" + this.state.Artist + "'");
-        console.log(this.state.Artist);
-         EventApi.getTopTracks(this.state.Artist);
+      //   alert("Text field value is: '" + this.state.Artist + "'");
+        // console.log(this.state.Artist);
+        // EventApi. getTopTracks(this.state.Artist);
 
-        EventsApi.getTopTracks(this.state.Artist).then(function (result) {
-          //  console.log(result.data.artists.items);
-            if(result) {
-                this.state.tracks = true;
-
-            }
-           this.setState({EventsData: result.data.artists.items});
-            console.log(this.state.EventsData);
+       //  EventsApi.getTopTracks(this.state.Artist).then(function (result) {
+             // console.log("this is the result");
+         //     console.log("this is thedata"+ result);
+           //  console.log(Data);
 
 
-        }.bind(this))
+        this.setState({
 
+            tracks: true,
+
+
+        });
+    },
 
 
         // EventApi.PostEvent(this.state.EventData);
@@ -54391,20 +54469,18 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
        // this.transitionTo('Events');
 
 
-    },
+
 
     render:function() {
 
         return (
 
             React.createElement(SpotSearchForm, {
+                tracks: this.state.tracks, 
                 Artist: this.state.Artist, 
                 Change: this.setEventStateData, 
-                onSave: this.saveEvent})
-
-
-
-
+                onSave: this.saveEvent, 
+                 ArtistData: this.TopTracks})
 
         );
 
@@ -54418,30 +54494,87 @@ module.exports=SpotSearch;
 },{"./EditForm":242,"./EventsApi":244,"./TrackDisplay":249,"./spotifyForm":256,"react":237,"react-router":59,"toastr":238}],256:[function(require,module,exports){
 var React = require('react');
 
+
 var spotifyForm =React.createClass({displayName: "spotifyForm",
+
+    renSearch: function () {
+        if (!this.props.tracks) {
+            return null;
+        }
+        return (
+
+            React.createElement("div", {className: "strack-template"}, 
+                React.createElement("div", {className: "sborder"}, 
+                    React.createElement("div", {className: "sart"}, 
+                        React.createElement("img", {className: "simg", src: "https://i.scdn.co/image/f77f484d87a4b84e611af30011c381f9ccef0d0b"})
+                    ), 
+                    React.createElement("div", {className: "spreview"}, 
+
+                        React.createElement("a", {href: "https://p.scdn.co/mp3-preview/3213a35ec32d4c747e794072a5ef7b464b4fcb69", target: "_blank"}, "preview track")
+
+                    ), 
+                    React.createElement("div", {className: "link"}, 
+                        React.createElement("a", {href: "https://open.spotify.com/track/2gFvRmQiWg9fN9i74Q0aiw"}, React.createElement("img", {src: "img/listen.jpg", className: "listen"}))
+                    ), 
+                        React.createElement("span", {className: "strack"}, "Bruno Mars-24k magic"), 
+                    React.createElement("div", {className: "snumbers"})
+                )
+            )
+
+
+        );
+
+    },
+
     render: function () {
+
 
         return (
 
-            React.createElement("form", null, 
-                React.createElement("h1", null, "Edits Event"), 
+            React.createElement("div", {className: "sbody"}, 
 
 
-                React.createElement("label", {htmlFor: "Typeofevent"}, "TypeOfEvent"), 
-                React.createElement("input", {type: "text", 
-                       name: "Name", 
-                       className: "form-control", 
-                       placeholder: "enter", 
-                       ref: "Typeofevent", 
-                       onChange: this.props.Change, 
-                       value: this.props.Artist.Name}
+                React.createElement("div", {className: "sintro1"}, 
+                    React.createElement("img", {className: "simg", src: "img/spotfy.png"})
                 ), 
+                React.createElement("div", {className: "sintro2"}, "Get an artist's top ten tracks!!"), 
+                React.createElement("div", {className: "scontainer"}, 
 
-                React.createElement("input", {type: "submit", value: "Save", className: "btn btn-default", onClick: this.props.onSave})
+                    React.createElement("form", {className: "sname"}, 
+                        React.createElement("input", {type: "text", onChange: this.props.Change, value: this.props.Artist.Name, 
+                               placeholder: "artist", 
+                               name: "Name", size: "30", 
+                               ref: "Typeofevent", id: "search"}), 
+                        React.createElement("input", {type: "submit", value: "Save", 
+                               className: "ssubmit", 
+                               id: "submit", onClick: this.props.onSave})
+                    ), 
+
+
+                React.createElement("div", {id: "results"}, 
+
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch(), 
+                this.renSearch()
+               )
+                )
             )
         );
-    }
+
+    },
 });
+
+
+
 module.exports=spotifyForm;
 
 },{"react":237}],257:[function(require,module,exports){
@@ -54670,6 +54803,7 @@ var routes = (
         React.createElement(Route, {name: "Contact", handler: require('./components/out')}), 
         React.createElement(Route, {name: "Events", handler: require('./components/events')}), 
             React.createElement(Route, {name: "Search", handler: require('./components/spotSearch')}), 
+
         React.createElement(Route, {name: "Auth", handler: require('./components/Admin')})
 
     )

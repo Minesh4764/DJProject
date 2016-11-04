@@ -1,6 +1,6 @@
 jQuery(document).ready(function($){
 	
-	function goToByScroll(id){
+	/*function goToByScroll(id){
 	      // Remove "link" from the ID
 	    id = id.replace("link", "");
 	      // Scroll

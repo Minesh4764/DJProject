@@ -53,50 +53,61 @@ PostEvent :function(data) {
     },
     DeleteEvents :function(ID) {
 
-        return Axios.delete('http://localhost:5000/events/'+ID);
+
 
 },
     getTopTracks :function(Artist) {
+        var P = new Promise(function(resolve,reject){
+
+            $.ajax({
+                url: "https://api.spotify.com/v1/search?q=" + Artist + "&type=artist",
+
+                success: function (data) {
+                  //  console.log(data);
+                    var artist;
+
+                    for (var i = 0; i < data.artists.items.length; i++) {
+
+                        //pick the right artist & assign artist if conditions are good
+                        if (Artist.toUpperCase().trim() == data.artists.items[i].name.toUpperCase().trim()) {
+
+                            artist = data.artists.items[i];
+                          //  console.log(artist);
+                        }
 
 
-
-        $.ajax({
-            url: "https://api.spotify.com/v1/search?q=" + Artist + "&type=artist",
-
-            success: function (data) {
-                console.log(data);
-                var artist;
-
-                for (var i = 0; i < data.artists.items.length; i++) {
-
-                    //pick the right artist & assign artist if conditions are good
-                    if (Artist.toUpperCase().trim() == data.artists.items[i].name.toUpperCase().trim()) {
-
-                        artist = data.artists.items[i];
-                        console.log(artist);
                     }
+
+                    $.ajax({
+                        url: "https://api.spotify.com/v1/artists/" + artist.id + "/top-tracks?country=US",
+
+                        success: function (data) {
+                         //   console.log(data);
+
+                            resolve(data.tracks);
+                        },
+
+
+
+                        error: function (error) {
+                            console.log(error)
+
+                            console.log("There has been an error receiving data from Spotify - please make sure artist name is spelled correctly.");
+                        }
+                    });
+
+                }});
+
 
 
                 }
-                $.ajax({
-                    url: "https://api.spotify.com/v1/artists/" +artist.id+ "/top-tracks?country=US",
 
-                    success: function (data) {
-                        console.log(data);
-
-                      return [data.tracks];
-                    },
-
-                    error: function (error) {
-                        console.log(error)
-
-                       console.log("There has been an error receiving data from Spotify - please make sure artist name is spelled correctly.");
-                    }
-
-                });
+                );
+        return P;
 
 
-            }});
+
+            },
 
 
 
@@ -108,7 +119,7 @@ PostEvent :function(data) {
            for (var i = 0; i < data.data.artists.items.length; i++) {
                if (Artist.toUpperCase().trim() == data.data.artists.items[i].name.toUpperCase().trim()) {
 
-                   artistid = data.data.artists.items[i].id;
+                   artist = data.data.artists.items[i].id;
                }
 
 
@@ -120,7 +131,7 @@ PostEvent :function(data) {
 
        }
 
-       )*/},
+       )*/
 
 
 

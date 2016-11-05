@@ -78,7 +78,7 @@ var EventList = React.createClass({
          <td> {this.props.EventData.AverageCost} </td>
          </tr>)
 
-                 /*
+          /*
          {this.props.EventsData.map(function(row,index) {
 
          return (

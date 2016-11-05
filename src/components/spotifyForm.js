@@ -3,37 +3,44 @@ var React = require('react');
 
 var spotifyForm =React.createClass({
 
-    renSearch: function () {
-        if (!this.props.tracks) {
-            return null;
-        }
+renSearch :function (Event) {
+      if(!this.props.tracks) {
+          return null;
+      }
         return (
+            <div>
+                {Event.map(function(ignore,index) {
+                 console.log(Event[index][10]);
 
-            <div className="strack-template">
-                <div className="sborder">
-                    <div className="sart">
-                        <img className="simg" src="https://i.scdn.co/image/f77f484d87a4b84e611af30011c381f9ccef0d0b"/>
-                    </div>
-                    <div className="spreview">
+                  return (
+                     <div className="strack-template">
+                         <div className="sborder">
+                             <div className="sart">
 
-                        <a href="https://p.scdn.co/mp3-preview/3213a35ec32d4c747e794072a5ef7b464b4fcb69" target="_blank">preview track</a>
+                                 <img className="simg" src={Event[index][10]}/>
+                             </div>
+                             <div className="spreview">
 
-                    </div>
-                    <div className="link">
-                        <a href="https://open.spotify.com/track/2gFvRmQiWg9fN9i74Q0aiw"><img  src="img/listen.jpg" className="listen"/></a>
-                    </div>
-                        <span className="strack">Bruno Mars-24k magic</span>
-                    <div className="snumbers"></div>
-                </div>
-            </div>
+                                 <a href={Event[index][10]} target="_blank">preview track</a>
 
+                             </div>
+                             <div className="link">
+                                 <a href={Event[index][10]}><img src="img/listen.jpg" className="listen"/></a>
+                             </div>
+                             <span className="strack">{Event[index][10]}</span>
+                             <div className="snumbers"></div>
+                         </div>
+                     </div>
 
-        );
+                 );
 
-    },
+             }.bind(this))}
+          </div>);
+        },
+
 
     render: function () {
-
+console.log(this.props.ArtistData);
 
         return (
 
@@ -59,18 +66,9 @@ var spotifyForm =React.createClass({
 
                 <div id="results">
 
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
-                {this.renSearch()}
+
+                    {this.renSearch(this.props.ArtistData,this)}
+
                </div>
                 </div>
             </div>

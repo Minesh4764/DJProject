@@ -1,7 +1,17 @@
 
 var Axios = require('axios');
 
-https://api.spotify.com/v1/search?q=" + searchText + "&type=artist
+//https://api.spotify.com/v1/search?q=" + searchText + "&type=artist
+
+
+
+
+
+
+
+
+
+
 
 
 var getFromApi = function (endpoint, args) {

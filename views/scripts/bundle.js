@@ -52989,7 +52989,7 @@ var EventList = React.createClass({displayName: "EventList",
          <td> {this.props.EventData.AverageCost} </td>
          </tr>)
 
-                 /*
+          /*
          {this.props.EventsData.map(function(row,index) {
 
          return (
@@ -53151,50 +53151,61 @@ PostEvent :function(data) {
     },
     DeleteEvents :function(ID) {
 
-        return Axios.delete('http://localhost:5000/events/'+ID);
+
 
 },
     getTopTracks :function(Artist) {
+        var P = new Promise(function(resolve,reject){
+
+            $.ajax({
+                url: "https://api.spotify.com/v1/search?q=" + Artist + "&type=artist",
+
+                success: function (data) {
+                  //  console.log(data);
+                    var artist;
+
+                    for (var i = 0; i < data.artists.items.length; i++) {
+
+                        //pick the right artist & assign artist if conditions are good
+                        if (Artist.toUpperCase().trim() == data.artists.items[i].name.toUpperCase().trim()) {
+
+                            artist = data.artists.items[i];
+                          //  console.log(artist);
+                        }
 
 
-
-        $.ajax({
-            url: "https://api.spotify.com/v1/search?q=" + Artist + "&type=artist",
-
-            success: function (data) {
-                console.log(data);
-                var artist;
-
-                for (var i = 0; i < data.artists.items.length; i++) {
-
-                    //pick the right artist & assign artist if conditions are good
-                    if (Artist.toUpperCase().trim() == data.artists.items[i].name.toUpperCase().trim()) {
-
-                        artist = data.artists.items[i];
-                        console.log(artist);
                     }
+
+                    $.ajax({
+                        url: "https://api.spotify.com/v1/artists/" + artist.id + "/top-tracks?country=US",
+
+                        success: function (data) {
+                         //   console.log(data);
+
+                            resolve(data.tracks);
+                        },
+
+
+
+                        error: function (error) {
+                            console.log(error)
+
+                            console.log("There has been an error receiving data from Spotify - please make sure artist name is spelled correctly.");
+                        }
+                    });
+
+                }});
+
 
 
                 }
-                $.ajax({
-                    url: "https://api.spotify.com/v1/artists/" +artist.id+ "/top-tracks?country=US",
 
-                    success: function (data) {
-                        console.log(data);
-
-                      return [data.tracks];
-                    },
-
-                    error: function (error) {
-                        console.log(error)
-
-                       console.log("There has been an error receiving data from Spotify - please make sure artist name is spelled correctly.");
-                    }
-
-                });
+                );
+        return P;
 
 
-            }});
+
+            },
 
 
 
@@ -53206,7 +53217,7 @@ PostEvent :function(data) {
            for (var i = 0; i < data.data.artists.items.length; i++) {
                if (Artist.toUpperCase().trim() == data.data.artists.items[i].name.toUpperCase().trim()) {
 
-                   artistid = data.data.artists.items[i].id;
+                   artist = data.data.artists.items[i].id;
                }
 
 
@@ -53218,7 +53229,7 @@ PostEvent :function(data) {
 
        }
 
-       )*/},
+       )*/
 
 
 
@@ -54416,14 +54427,14 @@ var TrackDisplay = require('./TrackDisplay');
 
 var SpotSearch = React.createClass({displayName: "SpotSearch",
 
-    TopTracks: [
+    /*TopTracks: [
         ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
         ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
         ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"],
         ["Ids", "EVENTS", "AverageCost", "cost", "cost", "cost"]
     ],
 
-
+*/
     mixins:[
         Router.Navigation
     ],
@@ -54431,6 +54442,7 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
 
     getInitialState: function () {
         return {
+            TopTracks:{},
             tracks :false,
             Artist:"",
             // api call to database
@@ -54439,36 +54451,45 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
 
         }
     },
+
+
+
+ ObjectToArray: function (obj) {
+    var retArray = [];
+
+    Object.keys(obj).forEach(function (item) {
+        retArray.push(obj[item]);
+    });
+
+    return retArray;
+},
+
+
+
+
+
+
+
     setEventStateData:function(event){
        console.log(event.target.value);
         this.setState({Artist: event.target.value});
     },
     saveEvent :function(event) {
         event.preventDefault();
-      //   alert("Text field value is: '" + this.state.Artist + "'");
-        // console.log(this.state.Artist);
-        // EventApi. getTopTracks(this.state.Artist);
 
-       //  EventsApi.getTopTracks(this.state.Artist).then(function (result) {
-             // console.log("this is the result");
-         //     console.log("this is thedata"+ result);
-           //  console.log(Data);
+        EventsApi.getTopTracks(this.state.Artist).then(function (result) {
+            var Data = result.map(this.ObjectToArray);
+            this.setState({
 
-
-        this.setState({
-
-            tracks: true,
+                tracks: true,
+               TopTracks :Data,
 
 
-        });
+
+            });
+
+        }.bind(this));
     },
-
-
-        // EventApi.PostEvent(this.state.EventData);
-        //toastr.success('Event Saved');
-       // this.transitionTo('Events');
-
-
 
 
     render:function() {
@@ -54480,7 +54501,7 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
                 Artist: this.state.Artist, 
                 Change: this.setEventStateData, 
                 onSave: this.saveEvent, 
-                 ArtistData: this.TopTracks})
+                 ArtistData: this.state.TopTracks})
 
         );
 
@@ -54497,37 +54518,44 @@ var React = require('react');
 
 var spotifyForm =React.createClass({displayName: "spotifyForm",
 
-    renSearch: function () {
-        if (!this.props.tracks) {
-            return null;
-        }
+renSearch :function (Event) {
+      if(!this.props.tracks) {
+          return null;
+      }
         return (
+            React.createElement("div", null, 
+                Event.map(function(ignore,index) {
+                 console.log(Event[index][10]);
 
-            React.createElement("div", {className: "strack-template"}, 
-                React.createElement("div", {className: "sborder"}, 
-                    React.createElement("div", {className: "sart"}, 
-                        React.createElement("img", {className: "simg", src: "https://i.scdn.co/image/f77f484d87a4b84e611af30011c381f9ccef0d0b"})
-                    ), 
-                    React.createElement("div", {className: "spreview"}, 
+                  return (
+                     React.createElement("div", {className: "strack-template"}, 
+                         React.createElement("div", {className: "sborder"}, 
+                             React.createElement("div", {className: "sart"}, 
 
-                        React.createElement("a", {href: "https://p.scdn.co/mp3-preview/3213a35ec32d4c747e794072a5ef7b464b4fcb69", target: "_blank"}, "preview track")
+                                 React.createElement("img", {className: "simg", src: Event[index][10]})
+                             ), 
+                             React.createElement("div", {className: "spreview"}, 
 
-                    ), 
-                    React.createElement("div", {className: "link"}, 
-                        React.createElement("a", {href: "https://open.spotify.com/track/2gFvRmQiWg9fN9i74Q0aiw"}, React.createElement("img", {src: "img/listen.jpg", className: "listen"}))
-                    ), 
-                        React.createElement("span", {className: "strack"}, "Bruno Mars-24k magic"), 
-                    React.createElement("div", {className: "snumbers"})
-                )
-            )
+                                 React.createElement("a", {href: Event[index][10], target: "_blank"}, "preview track")
 
+                             ), 
+                             React.createElement("div", {className: "link"}, 
+                                 React.createElement("a", {href: Event[index][10]}, React.createElement("img", {src: "img/listen.jpg", className: "listen"}))
+                             ), 
+                             React.createElement("span", {className: "strack"}, Event[index][10]), 
+                             React.createElement("div", {className: "snumbers"})
+                         )
+                     )
 
-        );
+                 );
 
-    },
+             }.bind(this))
+          ));
+        },
+
 
     render: function () {
-
+console.log(this.props.ArtistData);
 
         return (
 
@@ -54553,18 +54581,9 @@ var spotifyForm =React.createClass({displayName: "spotifyForm",
 
                 React.createElement("div", {id: "results"}, 
 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch(), 
-                this.renSearch()
+
+                    this.renSearch(this.props.ArtistData,this)
+
                )
                 )
             )

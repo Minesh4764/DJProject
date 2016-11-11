@@ -52,6 +52,7 @@ var djEventRouter = express.Router();
 var djEventRouter = require('./views/routes/eventRoutes')(Events);
 var addEventRouter = require('./views/routes/addAdminEvent')(Events);
 var adminRouter = require('./views/routes/adminRouter');
+var priceRouter = require('./views/routes/Price');
 var auth = require('./views/routes/auth');
 var users = require('./views/routes/users');
 
@@ -73,6 +74,7 @@ djEventRouter.route('/event/:id')
 
 app.use('/addEvent', addEventRouter);
 app.use('/admin', adminRouter);
+app.use('/price', priceRouter);
 app.use('/events', djEventRouter);
 app.use('/auth', auth);
 app.use('/users/', users);

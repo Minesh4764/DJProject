@@ -63,7 +63,7 @@ app.get('/search/:name', function (req, res) {
 
 
                 artist.related.forEach(function (current, index, related) {
-                    var toptracks = getFromApi('artists/' + current.id + '/top-tracks?country=US', null);
+                    var toptracks = getFromApi('artists/' + current.id + '/top-tracks', null);
                     toptracks.on('end1', function (item) {
                         console.log(index);
                         current.tracks = item.tracks;

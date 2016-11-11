@@ -1,135 +1,42 @@
 var React = require('react');
-
+var EventsApi = require('./EventsApi');
+var PriceForm = require('./PriceForm');
 var Pricing = React.createClass({
-  render : function() {
 
-   return ( 
+	getInitialState: function () {
+		return {
 
+			data: [],
 
-<div id="pricing" className="color blue">
-		
-	
-		<div className="container">
-
-	
-			<div className="wrapper span12">
+		}
+	},
 
 
-			<div id="page-title">
+	componentDidMount: function () {
 
-				<div id="page-title-inner">
+		EventsApi.GetPrice().then(function (result) {
+			//console.log(result.data);
 
-					<h2><span>Price</span></h2>
+			//var Data = result.data.map(this.ObjectToArray);
 
-				</div>	
 
-			</div>
-		
-	
-			<div className="four-tables">
-				
-				
-				<div className="row-fluid">
-					
-					<div className="span3">
-						<div className="pricing-table">
-							<div className="color-cccddd">
-								<h3>Standard</h3>
-								<h4><span className="price">€9.99</span> <span className="time">per month</span></h4>
-								<ul>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-								</ul>
-								<a href="#" className="buy"><span>Buy</span></a>
-							</div>
-						</div>
-					</div>
+			this.setState({data: result.data});
+			console.log(this.state.data);
 
-					<div className="span3">
-						<div className="pricing-table">
-							<div className="color-666777">
-								<h3>Premium</h3>
-								<h4><span className="price">€29.99</span> <span className="time">per month</span></h4>
-								<ul>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-								</ul>
-								<a href="#" className="buy"><span>Buy</span></a>
-							</div>
-						</div>
-					</div>	
 
-					<div className="span3">
-						<div className="pricing-table best-option">
-							<div className="color-custom">
-								<h3>Professional</h3>
-								<h4><span className="price">€49.99</span> <span className="time">per month</span></h4>
-								<ul>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-								</ul>
-								<a href="#" className="buy"><span>Buy</span></a>
-							</div>
-						</div>
-					</div>
+		}.bind(this))
 
-					<div className="span3">
-						<div className="pricing-table">
-							<div className="color-666777">
-								<h3>Ultimate</h3>
-								<h4><span className="price">€99.99</span> <span className="time">per month</span></h4>
-								<ul>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-									<li>Custom option</li>
-								</ul>
-								<a href="#" className="buy"><span>Buy</span></a>
-							</div>
-						</div>
-					</div>
-				
-				</div>
 
-			</div>
-		
-			</div>
-			
-		
-		</div>
-	
-		
-	</div>
+	},
+
+
+
+	render : function() {
+
+
+
+   return (
+   	  <PriceForm data={this.state.data}/>
 
 	   	);
 

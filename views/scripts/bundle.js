@@ -52932,7 +52932,6 @@ var EventList = React.createClass({displayName: "EventList",
         return (
             React.createElement("tr", {onChange: this.props.SearchData}, this.props.Header.map(function (anyvalue, idx) {
 
-
                     return (
                         React.createElement("td", {key: idx}, React.createElement("input", {type: "text", "data-idx": idx}))
                     );
@@ -53142,6 +53141,11 @@ PostEvent :function(data) {
 
 
 },
+    GetPrice:function () {
+        return Axios.get('http://localhost:5000/price');
+    },
+
+
     EditEvents : function(id,data){
 //console.log(id);
 
@@ -53569,137 +53573,44 @@ module.exports = PortFolio;
 
 },{"react":237}],248:[function(require,module,exports){
 var React = require('react');
-
+var EventsApi = require('./EventsApi');
+var PriceForm = require('./PriceForm');
 var Pricing = React.createClass({displayName: "Pricing",
-  render : function() {
 
-   return ( 
+	getInitialState: function () {
+		return {
 
+			data: [],
 
-React.createElement("div", {id: "pricing", className: "color blue"}, 
-		
-	
-		React.createElement("div", {className: "container"}, 
-
-	
-			React.createElement("div", {className: "wrapper span12"}, 
+		}
+	},
 
 
-			React.createElement("div", {id: "page-title"}, 
+	componentDidMount: function () {
 
-				React.createElement("div", {id: "page-title-inner"}, 
+		EventsApi.GetPrice().then(function (result) {
+			//console.log(result.data);
 
-					React.createElement("h2", null, React.createElement("span", null, "Price"))
+			//var Data = result.data.map(this.ObjectToArray);
 
-				)	
 
-			), 
-		
-	
-			React.createElement("div", {className: "four-tables"}, 
-				
-				
-				React.createElement("div", {className: "row-fluid"}, 
-					
-					React.createElement("div", {className: "span3"}, 
-						React.createElement("div", {className: "pricing-table"}, 
-							React.createElement("div", {className: "color-cccddd"}, 
-								React.createElement("h3", null, "Standard"), 
-								React.createElement("h4", null, React.createElement("span", {className: "price"}, "€9.99"), " ", React.createElement("span", {className: "time"}, "per month")), 
-								React.createElement("ul", null, 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option")
-								), 
-								React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
-							)
-						)
-					), 
+			this.setState({data: result.data});
+			console.log(this.state.data);
 
-					React.createElement("div", {className: "span3"}, 
-						React.createElement("div", {className: "pricing-table"}, 
-							React.createElement("div", {className: "color-666777"}, 
-								React.createElement("h3", null, "Premium"), 
-								React.createElement("h4", null, React.createElement("span", {className: "price"}, "€29.99"), " ", React.createElement("span", {className: "time"}, "per month")), 
-								React.createElement("ul", null, 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option")
-								), 
-								React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
-							)
-						)
-					), 	
 
-					React.createElement("div", {className: "span3"}, 
-						React.createElement("div", {className: "pricing-table best-option"}, 
-							React.createElement("div", {className: "color-custom"}, 
-								React.createElement("h3", null, "Professional"), 
-								React.createElement("h4", null, React.createElement("span", {className: "price"}, "€49.99"), " ", React.createElement("span", {className: "time"}, "per month")), 
-								React.createElement("ul", null, 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option")
-								), 
-								React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
-							)
-						)
-					), 
+		}.bind(this))
 
-					React.createElement("div", {className: "span3"}, 
-						React.createElement("div", {className: "pricing-table"}, 
-							React.createElement("div", {className: "color-666777"}, 
-								React.createElement("h3", null, "Ultimate"), 
-								React.createElement("h4", null, React.createElement("span", {className: "price"}, "€99.99"), " ", React.createElement("span", {className: "time"}, "per month")), 
-								React.createElement("ul", null, 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option"), 
-									React.createElement("li", null, "Custom option")
-								), 
-								React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
-							)
-						)
-					)
-				
-				)
 
-			)
-		
-			)
-			
-		
-		)
-	
-		
-	)
+	},
+
+
+
+	render : function() {
+
+
+
+   return (
+   	  React.createElement(PriceForm, {data: this.state.data})
 
 	   	);
 
@@ -53712,7 +53623,102 @@ React.createElement("div", {id: "pricing", className: "color blue"},
 
 module.exports = Pricing;
 
-},{"react":237}],249:[function(require,module,exports){
+},{"./EventsApi":244,"./PriceForm":249,"react":237}],249:[function(require,module,exports){
+var React = require('react');
+
+
+var PriceForm =React.createClass({displayName: "PriceForm",
+
+    renSearch :function (Event) {
+
+        return (
+            React.createElement("div", null, 
+                Event.map(function(ignore,index) {
+
+
+                    return(
+                        React.createElement("div", {className: "span3"}, 
+                            React.createElement("div", {className: "pricing-table"}, 
+
+                                React.createElement("div", {className: "color-cccddd"}, 
+                                    React.createElement("h3", null, Event[index].Name), 
+                                    React.createElement("h4", null, React.createElement("span", {className: "price"}, "€9.99"), " ", React.createElement("span", {className: "time"}, "per month")
+                                    ), 
+                                    React.createElement("ul", null, 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option"), 
+                                        React.createElement("li", null, "Custom option")
+                                    ), 
+                                    React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
+                                )
+                            )
+                        ) );
+
+                }.bind(this))
+            ));
+    },
+
+    render: function () {
+console.log(this.props.data);
+
+        return (
+
+
+            React.createElement("div", {id: "pricing", className: "color blue"}, 
+
+
+                React.createElement("div", {className: "container"}, 
+
+
+                    React.createElement("div", {className: "wrapper span12"}, 
+
+
+                        React.createElement("div", {id: "page-title"}, 
+
+                            React.createElement("div", {id: "page-title-inner"}, 
+
+                                React.createElement("h2", null, React.createElement("span", null, "Price"))
+
+                            )
+
+                        ), 
+
+
+                        React.createElement("div", {className: "four-tables"}, 
+
+
+                            React.createElement("div", {className: "row-fluid"}, 
+
+                                this.renSearch(this.props.data,this)
+
+
+                            )
+
+                        )
+
+                    )
+
+
+                )
+
+
+            )
+
+        );
+
+    },
+});
+
+module.exports=PriceForm;
+
+},{"react":237}],250:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53787,7 +53793,7 @@ var TrackDisplay = React.createClass({displayName: "TrackDisplay",
     });
 module.exports =TrackDisplay;
 
-},{"react":237,"react-router":59}],250:[function(require,module,exports){
+},{"react":237,"react-router":59}],251:[function(require,module,exports){
 var React = require('react');
 var Home = require('../components/homepage');
 
@@ -53823,7 +53829,7 @@ var App = React.createClass({displayName: "App",
 });
 module.exports =App;
 
-},{"../components/Header":246,"../components/Price":248,"../components/homepage":253,"jquery":25,"react":237,"react-router":59}],251:[function(require,module,exports){
+},{"../components/Header":246,"../components/Price":248,"../components/homepage":254,"jquery":25,"react":237,"react-router":59}],252:[function(require,module,exports){
 var React = require('react');
 
 var Ana = React.createClass({displayName: "Ana",
@@ -53957,7 +53963,7 @@ React.createElement("div", {id: "about", className: "color yellow"},
 
 module.exports = Ana;
 
-},{"react":237}],252:[function(require,module,exports){
+},{"react":237}],253:[function(require,module,exports){
 var React = require('react');
 var Header = require('./Header');
 var Home = require('./Price');
@@ -54175,7 +54181,7 @@ var Events = React.createClass({displayName: "Events",
 
 module.exports = Events;
 
-},{"./Admin":239,"./EventList":243,"./EventsApi":244,"./Header":246,"./Price":248,"react":237,"react-router":59}],253:[function(require,module,exports){
+},{"./Admin":239,"./EventList":243,"./EventsApi":244,"./Header":246,"./Price":248,"react":237,"react-router":59}],254:[function(require,module,exports){
 var React = require('react');
 
 var Home = React.createClass({displayName: "Home",
@@ -54291,7 +54297,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"react":237}],254:[function(require,module,exports){
+},{"react":237}],255:[function(require,module,exports){
 var React = require('react');
 
 var Contact = React.createClass({displayName: "Contact",
@@ -54413,7 +54419,7 @@ var Contact = React.createClass({displayName: "Contact",
 
 module.exports = Contact;
 
-},{"react":237}],255:[function(require,module,exports){
+},{"react":237}],256:[function(require,module,exports){
 
 
 
@@ -54512,7 +54518,7 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
 });
 module.exports=SpotSearch;
 
-},{"./EditForm":242,"./EventsApi":244,"./TrackDisplay":249,"./spotifyForm":256,"react":237,"react-router":59,"toastr":238}],256:[function(require,module,exports){
+},{"./EditForm":242,"./EventsApi":244,"./TrackDisplay":250,"./spotifyForm":257,"react":237,"react-router":59,"toastr":238}],257:[function(require,module,exports){
 var React = require('react');
 
 
@@ -54535,9 +54541,7 @@ renSearch :function (Event) {
                                  React.createElement("img", {className: "simg", src: Event[index][10]})
                              ), 
                              React.createElement("div", {className: "spreview"}, 
-
-                                 React.createElement("a", {href: Event[index][10], target: "_blank"}, "preview track")
-
+                                 React.createElement("a", {href: Event[index][7].spotify, target: "_blank"}, "preview track")
                              ), 
                              React.createElement("div", {className: "link"}, 
                                  React.createElement("a", {href: Event[index][10]}, React.createElement("img", {src: "img/listen.jpg", className: "listen"}))
@@ -54546,13 +54550,11 @@ renSearch :function (Event) {
                              React.createElement("div", {className: "snumbers"})
                          )
                      )
-
                  );
 
              }.bind(this))
           ));
         },
-
 
     render: function () {
 console.log(this.props.ArtistData);
@@ -54560,8 +54562,6 @@ console.log(this.props.ArtistData);
         return (
 
             React.createElement("div", {className: "sbody"}, 
-
-
                 React.createElement("div", {className: "sintro1"}, 
                     React.createElement("img", {className: "simg", src: "img/spotfy.png"})
                 ), 
@@ -54578,25 +54578,19 @@ console.log(this.props.ArtistData);
                                id: "submit", onClick: this.props.onSave})
                     ), 
 
-
                 React.createElement("div", {id: "results"}, 
-
-
                     this.renSearch(this.props.ArtistData,this)
 
                )
                 )
             )
         );
-
     },
 });
 
-
-
 module.exports=spotifyForm;
 
-},{"react":237}],257:[function(require,module,exports){
+},{"react":237}],258:[function(require,module,exports){
 var React = require('react');
 
 var Team = React.createClass({displayName: "Team",
@@ -54753,7 +54747,7 @@ React.createElement("div", {className: "row-fluid"},
 
 module.exports = Team;
 
-},{"react":237}],258:[function(require,module,exports){
+},{"react":237}],259:[function(require,module,exports){
 $ = require('jquery');
 //alert("testing linting")
 //test = 1;
@@ -54798,7 +54792,7 @@ Router.run(routes, Router.HistoryLocation, function (Handler) {
  Reactdom.render(<Team/>,document.getElementById('Team'));
  Reactdom.render(<Contact/>,document.getElementById('DjContact')); */
 
-},{"./components/Admin":239,"./components/PortFolio":247,"./components/Price":248,"./components/app":250,"./components/bout":251,"./components/events":252,"./components/homepage":253,"./components/out":254,"./components/team":257,"./routes":259,"jquery":25,"react":237,"react-dom":34,"react-router":59}],259:[function(require,module,exports){
+},{"./components/Admin":239,"./components/PortFolio":247,"./components/Price":248,"./components/app":251,"./components/bout":252,"./components/events":253,"./components/homepage":254,"./components/out":255,"./components/team":258,"./routes":260,"jquery":25,"react":237,"react-dom":34,"react-router":59}],260:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 
@@ -54831,4 +54825,4 @@ var routes = (
 );
 module.exports = routes;
 
-},{"./components/Admin":239,"./components/Edit":240,"./components/EditEvent":241,"./components/EventsData":245,"./components/Header":246,"./components/PortFolio":247,"./components/Price":248,"./components/app":250,"./components/bout":251,"./components/events":252,"./components/homepage":253,"./components/out":254,"./components/spotSearch":255,"./components/team":257,"react":237,"react-router":59}]},{},[258]);
+},{"./components/Admin":239,"./components/Edit":240,"./components/EditEvent":241,"./components/EventsData":245,"./components/Header":246,"./components/PortFolio":247,"./components/Price":248,"./components/app":251,"./components/bout":252,"./components/events":253,"./components/homepage":254,"./components/out":255,"./components/spotSearch":256,"./components/team":258,"react":237,"react-router":59}]},{},[259]);

@@ -21,7 +21,6 @@ var EventList = React.createClass({
         return (
             <tr onChange={this.props.SearchData}>{this.props.Header.map(function (anyvalue, idx) {
 
-
                     return (
                         <td key={idx}><input type='text'   data-idx={idx}/></td>
                     );

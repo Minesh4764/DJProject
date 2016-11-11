@@ -44,6 +44,11 @@ PostEvent :function(data) {
 
 
 },
+    GetPrice:function () {
+        return Axios.get('http://localhost:5000/price');
+    },
+
+
     EditEvents : function(id,data){
 //console.log(id);
 

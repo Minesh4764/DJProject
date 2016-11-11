@@ -20,9 +20,7 @@ renSearch :function (Event) {
                                  <img className="simg" src={Event[index][10]}/>
                              </div>
                              <div className="spreview">
-
-                                 <a href={Event[index][10]} target="_blank">preview track</a>
-
+                                 <a href={Event[index][7].spotify }target="_blank">preview track</a>
                              </div>
                              <div className="link">
                                  <a href={Event[index][10]}><img src="img/listen.jpg" className="listen"/></a>
@@ -31,13 +29,11 @@ renSearch :function (Event) {
                              <div className="snumbers"></div>
                          </div>
                      </div>
-
                  );
 
              }.bind(this))}
           </div>);
         },
-
 
     render: function () {
 console.log(this.props.ArtistData);
@@ -45,8 +41,6 @@ console.log(this.props.ArtistData);
         return (
 
             <div className="sbody">
-
-
                 <div className="sintro1">
                     <img className="simg" src="img/spotfy.png"/>
                 </div>
@@ -63,21 +57,15 @@ console.log(this.props.ArtistData);
                                id="submit" onClick={this.props.onSave}/>
                     </form>
 
-
                 <div id="results">
-
-
                     {this.renSearch(this.props.ArtistData,this)}
 
                </div>
                 </div>
             </div>
         );
-
     },
 });
-
-
 
 module.exports=spotifyForm;
 

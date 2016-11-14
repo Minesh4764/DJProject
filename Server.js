@@ -18,7 +18,7 @@ app.use(Cors());
 
 var db = mongoose.connect('mongodb://localhost/DJJB');  //connecting to DJJB database
 
-
+var PackModel = require('./views/Model/PackageModel');
 var Events = require('./views//model/EventModel');
 
 var swig = require('swig');
@@ -28,15 +28,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.set('view engine', 'html');
 
-
-/* for cross origin access
- app.all('/', function(req, res, next) {
- res.header("Access-Control-Allow-Origin", "*");
- res.header("Access-Control-Allow-Headers", "X-Requested-With");
- next();
- });
-
- */
 
 
 app.use(express.static(path.join(__dirname, 'views')));
@@ -52,7 +43,7 @@ var djEventRouter = express.Router();
 var djEventRouter = require('./views/routes/eventRoutes')(Events);
 var addEventRouter = require('./views/routes/addAdminEvent')(Events);
 var adminRouter = require('./views/routes/adminRouter');
-var priceRouter = require('./views/routes/Price');
+var priceRouter = require('./views/routes/PackageRouter')(PackModel);
 var auth = require('./views/routes/auth');
 var users = require('./views/routes/users');
 

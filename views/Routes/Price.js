@@ -14,17 +14,22 @@ priceRouter.route('/')
 // Use connect method to connect to the server
         MongoClient.connect(url, function (err, db) {
             assert.equal(null, err);
-            console.log("Connected correctly to server");
-
+          //  console.log("Connected correctly to server");
+            var Collection1 = db.collection('Accesory');
             var collection = db.collection('Package');
+
             // Find some documents
-            collection.find({}).toArray(function (err, docs) {
-                assert.equal(err, null);
-                console.log("Found the following records");
-                console.log(docs);
+            collection.find({}).toArray(function (err1, docs) {
 
+                assert.equal(err1, null);
+                Collection1.find({}).toArray(function(err,docs1){
+                       assert.equal(err,null);
+
+                        console.log("Found the following records");
+                        console.log(docs);
+                  //docs.concat(docs1);
                 res.send(docs)
-
+                    });
             });
 
 

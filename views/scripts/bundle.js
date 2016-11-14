@@ -53158,6 +53158,9 @@ PostEvent :function(data) {
 
 
 },
+
+
+
     getTopTracks :function(Artist) {
         var P = new Promise(function(resolve,reject){
 
@@ -53629,12 +53632,25 @@ var React = require('react');
 
 var PriceForm =React.createClass({displayName: "PriceForm",
 
+    ObjectToArray: function (obj) {
+        var retArray = [];
+
+        Object.keys(obj).forEach(function (item) {
+            retArray.push(obj[key]+":"+obj[item]);
+        });
+
+        return retArray;
+    },
+
     renSearch :function (Event) {
 
         return (
             React.createElement("div", null, 
                 Event.map(function(ignore,index) {
 
+                    Object.keys(Event[index].Accessory).forEach(function(key) {
+                        console.log(key, Event[index].Accessory[key]);
+                    });
 
                     return(
                         React.createElement("div", {className: "span3"}, 
@@ -53642,32 +53658,34 @@ var PriceForm =React.createClass({displayName: "PriceForm",
 
                                 React.createElement("div", {className: "color-cccddd"}, 
                                     React.createElement("h3", null, Event[index].Name), 
-                                    React.createElement("h4", null, React.createElement("span", {className: "price"}, "€9.99"), " ", React.createElement("span", {className: "time"}, "per month")
+                                    React.createElement("h4", null, React.createElement("span", {className: "price"}), " ", React.createElement("span", {className: "time"}, "per month")
                                     ), 
                                     React.createElement("ul", null, 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option"), 
-                                        React.createElement("li", null, "Custom option")
-                                    ), 
+                                        Event[index].Equipment.map(function(ignore,idx) {
+                                            return(
+                                                React.createElement("li", null, React.createElement("form", null, React.createElement("input", {otype: "Button", placeholder: "Add"}), "Add"), 
+
+
+
+                                                    Event[index].Equipment[idx])
+                                            );
+                                            }), ";"
+                        ), 
+
                                     React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
                                 )
-                            )
+                            ), "g"
                         ) );
+
 
                 }.bind(this))
             ));
     },
 
     render: function () {
-console.log(this.props.data);
-
+//console.log(this.props.data[1].Equipment);
+  //  var Newdata =this.ObjectToArray(this.props.data[0].Accessory);
+  // console.log(Newdata);
         return (
 
 

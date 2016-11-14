@@ -61,6 +61,9 @@ PostEvent :function(data) {
 
 
 },
+
+
+
     getTopTracks :function(Artist) {
         var P = new Promise(function(resolve,reject){
 

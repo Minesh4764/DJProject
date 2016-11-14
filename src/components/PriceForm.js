@@ -3,12 +3,25 @@ var React = require('react');
 
 var PriceForm =React.createClass({
 
+    ObjectToArray: function (obj) {
+        var retArray = [];
+
+        Object.keys(obj).forEach(function (item) {
+            retArray.push(obj[key]+":"+obj[item]);
+        });
+
+        return retArray;
+    },
+
     renSearch :function (Event) {
 
         return (
             <div>
                 {Event.map(function(ignore,index) {
 
+                    Object.keys(Event[index].Accessory).forEach(function(key) {
+                        console.log(key, Event[index].Accessory[key]);
+                    });
 
                     return(
                         <div className="span3">
@@ -16,32 +29,34 @@ var PriceForm =React.createClass({
 
                                 <div className="color-cccddd">
                                     <h3>{Event[index].Name}</h3>
-                                    <h4><span className="price">€9.99</span> <span className="time">per month</span>
+                                    <h4><span className="price"></span> <span className="time">per month</span>
                                     </h4>
                                     <ul>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                        <li>Custom option</li>
-                                    </ul>
+                                        {Event[index].Equipment.map(function(ignore,idx) {
+                                            return(
+                                                <li><form ><input  otype='Button' placeholder='Add'/>Add</form>
+
+
+
+                                                    {Event[index].Equipment[idx]}</li>
+                                            );
+                                            })};
+                        </ul>
+
                                     <a href="#" className="buy"><span>Buy</span></a>
                                 </div>
-                            </div>
+                            </div>g
                         </div> );
+
 
                 }.bind(this))}
             </div>);
     },
 
     render: function () {
-console.log(this.props.data);
-
+//console.log(this.props.data[1].Equipment);
+  //  var Newdata =this.ObjectToArray(this.props.data[0].Accessory);
+  // console.log(Newdata);
         return (
 
 

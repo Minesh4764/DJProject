@@ -38,7 +38,7 @@ app.use(session({secret: 'anything'}));
 
 require('./config/passport')(app);
 
-
+require('./views/Model/AccessoriesModel');
 var djEventRouter = express.Router();
 var djEventRouter = require('./views/routes/eventRoutes')(Events);
 var addEventRouter = require('./views/routes/addAdminEvent')(Events);

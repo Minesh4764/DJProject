@@ -24,4 +24,4 @@ var AdminSchema = Schema({
 
 
 });
-module.exports =mongoose.model('AdminSchm1',AdminSchema);
+module.exports =mongoose.model('AdminSchm',AdminSchema);

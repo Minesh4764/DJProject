@@ -1,3 +1,4 @@
+
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
@@ -8,7 +9,8 @@ var mongoose = require('mongoose'),
 var PackageModel = new Schema({  //defining a schema and assigning a model prototype
     TypeofPackage: {type:String},
     Description:{type:String},
-    Extras : [{type: Schema.Types.ObjectId,ref:'AccessoriesModel'}],
+    Extras :
+        [{type: Schema.Types.Array,ref:'AccessoriesModel'}],
     BasicCost: {type:Number,default:400},
     ForNoOFPeople: {type:Number}
 });

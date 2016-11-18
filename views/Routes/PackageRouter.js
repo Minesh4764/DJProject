@@ -10,7 +10,7 @@ var Package = function(Model) {
         .get(function (req, res) {
 
             // res.send("IM in proce");
-            Model.find().populate('Equipment')
+            Model.find()
                 .exec(function (err, docs) {
                 if (err) {
 
@@ -35,7 +35,14 @@ var Package = function(Model) {
 
 
 
-            NeweModel.save();
+            NeweModel.save(function (err,doc){
+                if (err) {
+
+                    console.log(err);
+                }
+
+
+            });
 
           //  res.send("I in in post");
 

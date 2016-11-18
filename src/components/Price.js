@@ -3,6 +3,16 @@ var EventsApi = require('./EventsApi');
 var PriceForm = require('./PriceForm');
 var Pricing = React.createClass({
 
+
+    ObjectToArray: function (obj) {
+        var retArray = [];
+
+        Object.keys(obj).forEach(function (item) {
+            retArray.push(obj[item]);
+        });
+
+        return retArray;
+    },
 	getInitialState: function () {
 		return {
 
@@ -36,7 +46,7 @@ var Pricing = React.createClass({
 
 
    return (
-   	  <PriceForm data={this.state.data}/>
+<PriceForm data={this.state.data}/>
 
 	   	);
 

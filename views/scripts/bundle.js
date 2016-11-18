@@ -53580,6 +53580,16 @@ var EventsApi = require('./EventsApi');
 var PriceForm = require('./PriceForm');
 var Pricing = React.createClass({displayName: "Pricing",
 
+
+    ObjectToArray: function (obj) {
+        var retArray = [];
+
+        Object.keys(obj).forEach(function (item) {
+            retArray.push(obj[item]);
+        });
+
+        return retArray;
+    },
 	getInitialState: function () {
 		return {
 
@@ -53613,7 +53623,7 @@ var Pricing = React.createClass({displayName: "Pricing",
 
 
    return (
-   	  React.createElement(PriceForm, {data: this.state.data})
+React.createElement(PriceForm, {data: this.state.data})
 
 	   	);
 
@@ -53632,15 +53642,7 @@ var React = require('react');
 
 var PriceForm =React.createClass({displayName: "PriceForm",
 
-    ObjectToArray: function (obj) {
-        var retArray = [];
 
-        Object.keys(obj).forEach(function (item) {
-            retArray.push(obj[key]+":"+obj[item]);
-        });
-
-        return retArray;
-    },
 
     renSearch :function (Event) {
 
@@ -53648,34 +53650,35 @@ var PriceForm =React.createClass({displayName: "PriceForm",
             React.createElement("div", null, 
                 Event.map(function(ignore,index) {
 
-                    Object.keys(Event[index].Accessory).forEach(function(key) {
-                        console.log(key, Event[index].Accessory[key]);
-                    });
-
                     return(
                         React.createElement("div", {className: "span3"}, 
                             React.createElement("div", {className: "pricing-table"}, 
 
                                 React.createElement("div", {className: "color-cccddd"}, 
-                                    React.createElement("h3", null, Event[index].Name), 
-                                    React.createElement("h4", null, React.createElement("span", {className: "price"}), " ", React.createElement("span", {className: "time"}, "per month")
+                                    React.createElement("h3", null, Event[index].TypeofPackage), 
+                                    React.createElement("h4", null, React.createElement("span", {className: "price"}), " ", React.createElement("span", {className: "time"}, Event[index].BasicCost)
                                     ), 
-                                    React.createElement("ul", null, 
-                                        Event[index].Equipment.map(function(ignore,idx) {
-                                            return(
-                                                React.createElement("li", null, React.createElement("form", null, React.createElement("input", {otype: "Button", placeholder: "Add"}), "Add"), 
+
+                                        React.createElement("ul", null, 
+
+                                            Event[index].Extras.map(function(obj,idx) {
 
 
+                                                return (
+                                                    obj.map(function (item,id) {
+                                                        return (React.createElement("li", {key: item.Accesory +':'+ item.Price}, item.noOfAccesory, " :", item.Accesory));
 
-                                                    Event[index].Equipment[idx])
-                                            );
-                                            }), ";"
-                        ), 
+                                                    }));
 
+
+                                            }.bind(this))
+
+                                        ), 
                                     React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
                                 )
-                            ), "g"
-                        ) );
+                            )
+                        )
+                    );
 
 
                 }.bind(this))
@@ -53683,9 +53686,9 @@ var PriceForm =React.createClass({displayName: "PriceForm",
     },
 
     render: function () {
-//console.log(this.props.data[1].Equipment);
-  //  var Newdata =this.ObjectToArray(this.props.data[0].Accessory);
-  // console.log(Newdata);
+        console.log(this.props.data);
+          //  var Newdata =this.ObjectToArray(this.props.data[0].Accessory);
+          // console.log(Newdata);
         return (
 
 

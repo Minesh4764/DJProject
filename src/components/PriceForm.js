@@ -5,11 +5,37 @@ var PriceForm =React.createClass({
 
 
 
+    ButtonMinus:function(item) {
+        if(item.originalVal >item.noOfAccesory) {
+            return null;
+        }
+        return (
+
+
+            <button className="btn btn-primary"    type ="button"> Search</button>
+        );
+
+    },
+
+
+
+
     renSearch :function (Event) {
+
+
+
+
+
+    var Save = this.props.Save;
 
         return (
             <div>
                 {Event.map(function(ignore,index) {
+                       var Cost =  Event[index].BasicCost;
+                        if(this.props.lEdit!==null && this.props.lEdit.ID ==Event[index]._id) {
+                            var Cost = Event[index].BasicCost + this.props.lEdit.Price ;
+
+                        };
 
                     return(
                         <div className="span3">
@@ -17,13 +43,25 @@ var PriceForm =React.createClass({
 
                                 <div className="color-cccddd">
                                     <h3>{Event[index].TypeofPackage}</h3>
-                                    <h4><span className="price"></span> <span className="time">{Event[index].BasicCost}</span>
+
+                                    <h4><span className="price"></span> <span className="time">{Cost}</span>
                                     </h4>
-                                        <ul>
+                                        <ul key={index}>
                                             {Event[index].Extras.map(function(obj,idx) {
                                                 return (
+
                                                     obj.map(function (item,id) {
-                                                        return (<li key={item.Accesory +':'+ item.Price}>{item.noOfAccesory} :{item.Accesory}</li>);
+                                                        if (item.originalVal < item.noOfAccesory) {
+                                                           // var htmlbut = <button className='btn btn-primary'    type ='button'> Search</button>;
+                                                            var htmlbut = <button type='button' data-row =  {idx} onClick={Save}  value ={[item.Price+":@"+ Event[index]._id]} className='btn btn-default'><span className='glyphicon glyphicon-minus'></span> </button>
+
+                                                        }
+
+                                                       return <li  data-val = {[item.Price]} data-row={idx} key={idx} value ={[item.Price]}> <button className="btn btn-default"  data-row={idx} onClick={Save} key={id} value ={[item.Price+":"+ Event[index]._id]}type="button"> <span className='glyphicon glyphicon-plus'></span> </button>{item.noOfAccesory} :{item.Accesory}{htmlbut};</li>
+
+
+
+
 
                                                     }));
                                             }.bind(this))}
@@ -40,9 +78,8 @@ var PriceForm =React.createClass({
     },
 
     render: function () {
-        console.log(this.props.data);
-          //  var Newdata =this.ObjectToArray(this.props.data[0].Accessory);
-          // console.log(Newdata);
+
+
         return (
 
 
@@ -71,7 +108,7 @@ var PriceForm =React.createClass({
 
                             <div className="row-fluid">
 
-                                {this.renSearch(this.props.data,this)}
+                           {this.renSearch(this.props.data,this)}
 
 
                             </div>

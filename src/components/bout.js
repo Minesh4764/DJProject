@@ -17,9 +17,9 @@ var Ana = React.createClass({
 
 				<div id="page-title-inner">
 
-						<h2><span>About Us</span></h2>
+						<h2><span>About Uss</span></h2>
 
-				</div>	
+				</div>	s
 
 			</div>
 

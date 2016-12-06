@@ -34,79 +34,6 @@ var EventList = React.createClass({
             render: function () {
 
 
-              //  console.log(this.props.EventsData);
-/*
-        var createEventRow = function (Event) {
-
-            return (
-
-
-                <tr key={Event._id}>
-                    <td><Link to={"/EventsData/" + Event._id}>{Event._id}</Link></td>
-                    <td>{Event.Place}  </td>
-                    <td> {Event.AverageCost} </td>
-
-
-                    <td className={this.props.Admin ? "" : "hidden"}><Link to={"/Edit/" + Event._id}>
-                        <button className="btn btn-primary" type="button"> Edit</button>
-                    </Link></td>
-
-
-                    <td className={this.props.Admin ? "" : "hidden"}>
-                        <button className="btn btn-warning" type="button" value={Event._id}
-                                onClick={this.props.onDelete}> Delete
-                        </button>
-                    </td>
-
-                </tr>
-            );
-
-
-        };
-
-
-
-
-
-        /*
-         //  {this.props.EventsData.map(createEventRow, this)}
-
-         var SingleEventRow =      (<tr key = {this.props.EventData._id}>
-         <td> <Link to ={"/EditEvent/" + this.props.EventData._id}>{this.props.EventData._id}</Link></td>
-         <td>{this.props.EventData.Place}  </td>
-         <td> {this.props.EventData.AverageCost} </td>
-         </tr>)
-
-          /*
-         {this.props.EventsData.map(function(row,index) {
-
-         return (
-         <tr key={index}>{row} {row.map(function(cell, index) {
-         return(
-         <td key={index}>{cell}</td>;
-
-
-         })}
-         </tr>
-         );
-         })}
-        </tbody>
-        </table>
-        </div>
-     <th className={this.props.Admin ? "" : "hidden"}>Edit</th>
-         {this.props.EventsData.map(function(row,index) {
-         return (
-         <tr key={index}>
-         {row.map(function(cell, index) {
-
-         return <td key={index}>{cell}
-         </td>;
-         })}
-         </tr>
-         );
-         })}
-        */
-
 
         return (
             <div>
@@ -118,6 +45,7 @@ var EventList = React.createClass({
                 </div>
 
                     <button className="btn btn-primary" onClick={this.props.startSearch} type="button"> Search</button>
+
 
                 <table className="table table-striped">
 
@@ -147,7 +75,7 @@ var EventList = React.createClass({
                                 row.map(function(cell, index) {
                                     var content  =cell;
                                     var edit = this.props.edit;
-                                     //   console.log(this.props.edit.row);
+
 
 
 
@@ -161,7 +89,6 @@ var EventList = React.createClass({
                                             );
 
                                         };
-
 
                              return (<td onChange={this.props.onEditAdmin} name={this.props.Header[index]} key={index} data-row={rowid}>{content}</td>);
 

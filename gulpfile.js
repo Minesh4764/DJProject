@@ -95,13 +95,13 @@ gulp.task('watch',function() {
 
 gulp.task('default',['html','js','css','lint','open','watch'],function(){
   var options = {
-    
+
        script : 'server.js',
        env: {
           'PORT':3000
 
        }
-     
+
   }
 
 

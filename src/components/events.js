@@ -95,9 +95,7 @@ var Events = React.createClass({
     Save: function (e) {
         e.preventDefault();
         console.log('i m in save');
-        //   var input = e.target.firstChild;
-        //  console.log("this is the input" + input);
-        // console.log(data[this.state.edit.row][0])
+
         var data = this.state.EventsData.slice();
 
         console.log(data);

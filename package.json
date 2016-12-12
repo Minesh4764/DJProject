@@ -28,6 +28,7 @@
     "react": "^15.3.1",
     "react-router": "^0.13.3",
     "reactify": "^1.1.1",
+    "sendgrid": "^4.7.1",
     "toastr": "^2.1.0",
     "unirest": "^0.5.1",
     "vinyl-source-stream": "^1.1.0"

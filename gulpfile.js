@@ -98,7 +98,9 @@ gulp.task('default',['html','js','css','lint','open','watch'],function(){
 
        script : 'server.js',
        env: {
-          'PORT':3000
+          'PORT':3000,
+           'app_user':'mineshpatel',
+           'api_key':'checking',
 
        }
 

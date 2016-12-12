@@ -19,12 +19,8 @@ var Team = require('./components/team'); // this is for the team page
 var Contact = require('./components/out');
 
 
-
-
 Reactdom.render(
-  <Router history = {hashHistory}>
-      <Route path ="/" component ={Events}>
-      </Route>,app)
+    <Router history = {hashHistory}>
+          <Route path ="/" component ={Events}>
+          </Route>,app)
 
-
-);

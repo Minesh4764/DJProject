@@ -1,5 +1,5 @@
 jQuery(document).ready(function($){
-	
+
 	/*function goToByScroll(id){
 	      // Remove "link" from the ID
 	    id = id.replace("link", "");
@@ -8,21 +8,21 @@ jQuery(document).ready(function($){
 	        scrollTop: $("#"+id).offset().top},
 	        'slow');
 	}
-	
+
 	$('.nav > li > a').click(function(){
-		
+
 		goToByScroll($(this).attr('class'));
-				
+
 	});
-		
-});	
+	 */
+});
 
 
 
 /* -------------------- Check Browser --------------------- */
 
 function browser() {
-	
+
 	//var isOpera = !!(window.opera && window.opera.version);  // Opera 8.0+
 	//var isFirefox = testCSS('MozBoxSizing');                 // FF 0.8+
 	var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
@@ -33,27 +33,27 @@ function browser() {
 	function testCSS(prop) {
 	    return prop in document.documentElement.style;
 	}
-	
+
 	if (isSafari || isChrome) {
-		
+
 		return true;
-		
+
 	} else {
-		
+
 		return false;
-		
+
 	}
-	
+
 }
 
 /* -------------------- Charts --------------------- */
 
 jQuery(document).ready(function($){
-		
+
 	function randNum(){
 		return (Math.floor( Math.random()* (1+40-20) ) ) + 20;
 	}
-	
+
 	if($("#stockPrice").length)
 	{
 		var price = [[1, randNum()-10], [2, randNum()-10], [3, randNum()-10], [4, randNum()],[5, randNum()],[6, 4+randNum()],[7, 5+randNum()],[8, 6+randNum()],[9, 6+randNum()],[10, 8+randNum()],[11, 9+randNum()],[12, 10+randNum()],[13,11+randNum()],[14, 12+randNum()],[15, 13+randNum()],[16, 14+randNum()],[17, 15+randNum()],[18, 15+randNum()],[19, 16+randNum()],[20, 17+randNum()],[21, 18+randNum()],[22, 19+randNum()],[23, 20+randNum()],[24, 21+randNum()],[25, 14+randNum()],[26, 24+randNum()],[27,25+randNum()],[28, 26+randNum()],[29, 27+randNum()], [30, 31+randNum()]];
@@ -68,8 +68,8 @@ jQuery(document).ready(function($){
 					   points: { show: true },
 					   shadowSize: 1
 				   },
-				   grid: { hoverable: true, 
-						   clickable: true, 
+				   grid: { hoverable: true,
+						   clickable: true,
 						   tickColor: "#eee",
 						   borderWidth: 0,
 						 },
@@ -112,9 +112,9 @@ jQuery(document).ready(function($){
 					$("#tooltip").remove();
 					previousPoint = null;
 				}
-		
+
 		});
-		
+
 	}
 
 });
@@ -122,9 +122,9 @@ jQuery(document).ready(function($){
 /* -------------------- Search --------------------- */
 
 jQuery(document).ready(function($){
-	
+
 	$('.search > :input').on('keyup',function(){
-		
+
 		$(this).attr('class', 'activeSearch');
 
 		var count;
@@ -159,31 +159,31 @@ jQuery(document).ready(function($){
 			$(this).wrap('<div class="btn-overlay" />');
 
 			var inner = $(this).html();
-			
+
 			if(browser()) {
 
 				$(this).html('<span>' + inner + '</span>');
-				
-			}	
+
+			}
 
 		}
 
 	});
-	
-		
+
+
 	$('a').each(function(){
 
 		if($(this).hasClass('btnOverlay')) {
-			
+
 			$(this).wrap('<div class="btn-overlay" />');
 
 			var inner = $(this).html();
-			
+
 			if(browser()) {
 
 				$(this).html('<span>' + inner + '</span>');
-				
-			}	
+
+			}
 
 		}
 
@@ -194,15 +194,15 @@ jQuery(document).ready(function($){
 /* -------------------- Twitter --------------------- */
 
 jQuery(document).ready(function($){
-	
+
 	$.getJSON('http://api.twitter.com/1/statuses/user_timeline/lukaszholeczek.json?count=3&callback=?', function(tweets){
 		$("#twitter").html(tz_format_twitter(tweets));
-	}); 
+	});
 
 });
 
 jQuery(document).ready(function($){
-	
+
 	/* ------------------- Fancybox --------------------- */
 
 	(function() {
@@ -234,8 +234,8 @@ jQuery(document).ready(function($){
 
 
 	})();
-	
-	
+
+
 	/* ------------------- Client Carousel --------------------- */
 
 	$('.clients-carousel').flexslider({
@@ -255,12 +255,12 @@ jQuery(document).ready(function($){
 	/* ------------------ Back To Top ------------------- */
 
 	jQuery('#under-footer-back-to-top a').click(function(){
-		jQuery('html, body').animate({scrollTop:0}, 300); 
-		return false; 
+		jQuery('html, body').animate({scrollTop:0}, 300);
+		return false;
 	});
-	
 
-	/* --------------------- Tabs ------------------------ */	
+
+	/* --------------------- Tabs ------------------------ */
 
 		(function() {
 
@@ -290,8 +290,8 @@ jQuery(document).ready(function($){
 			});
 
 		})();
-		
-			
+
+
 });
 
 /* ------------------ Tooltips ----------------- */
@@ -304,10 +304,10 @@ jQuery(document).ready(function() {
 
 });
 
-/* ------------------ Progress Bar ------------------- */	
+/* ------------------ Progress Bar ------------------- */
 
 jQuery(document).ready(function($){
-	
+
 	$(".meter > span").each(function() {
 		$(this)
 		.data("origWidth", $(this).width())
@@ -321,21 +321,21 @@ jQuery(document).ready(function($){
 /* ------------------ Image Overlay ----------------- */
 
 jQuery(document).ready(function () {
-	
+
 	$('.picture').hover(function () {
 		$(this).find('.image-overlay-zoom, .image-overlay-link').stop().fadeTo(150, 1);
 	},function () {
 		$(this).find('.image-overlay-zoom, .image-overlay-link').stop().fadeTo(150, 0);
 	});
-	
+
 });
 
 /* -------------------- Isotope --------------------- */
 
 jQuery(document).ready(function () {
-	
+
 	$('#portfolio-wrapper').imagesLoaded(function() {
-		
+
 		var $container = $('#portfolio-wrapper');
 			$select = $('#filters select');
 
@@ -349,7 +349,7 @@ jQuery(document).ready(function () {
 
 		// update columnWidth on window resize
 		$(window).smartresize(function(){
-		
+
 			$container.isotope({
 			// update columnWidth to a percentage of container width
 			masonry: { columnWidth: $container.width() / 12 }
@@ -362,20 +362,20 @@ jQuery(document).ready(function () {
 		});
 
 		$select.change(function() {
-			
+
 			var filters = $(this).val();
 
 				$container.isotope({
 					filter: filters
 				});
-			
+
 			});
 
 			var $optionSets = $('#filters .option-set'),
 		  	$optionLinks = $optionSets.find('a');
 
 		  	$optionLinks.click(function(){
-			
+
 				var $this = $(this);
 				// don't proceed if already selected
 				if ( $this.hasClass('selected') ) {
@@ -401,9 +401,9 @@ jQuery(document).ready(function () {
 			}
 
 			return false;
-			
+
 		  });
-		
+
 	});
-	
+
 });

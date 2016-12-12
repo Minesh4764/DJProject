@@ -150,7 +150,7 @@ var Events = React.createClass({
         var SrchData = this.BeforeSearchData.filter(function (row) {
             return row[Index].toString().toLowerCase().indexOf(toSerach) > -1;
 
-            console.log(SrchData);
+            console.log(SrchData);// this is the seach data that i can filter again.
         });
         this.setState({EventsData: SrchData});
         //

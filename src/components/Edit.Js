@@ -6,9 +6,13 @@ var Edit = React.createClass({
 
 
     getInitialState: function () {
+        console.log('thisis on proce');
+
+       alert(this.props.params.data);
         return {
             // api call to database
-            EventData:{}
+
+            EventData:this.props.data,
         };
 
     },

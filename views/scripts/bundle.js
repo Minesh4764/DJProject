@@ -52858,9 +52858,13 @@ var Edit = React.createClass({displayName: "Edit",
 
 
     getInitialState: function () {
+        console.log('thisis on proce');
+
+       alert(this.props.params.data);
         return {
             // api call to database
-            EventData:{}
+
+            EventData:this.props.data,
         };
 
     },
@@ -53646,7 +53650,10 @@ var Pricing = React.createClass({displayName: "Pricing",
 
         }
     },
-
+  Buy :function(e){
+        console.log(this.state.data);
+       alert('ready to save');
+  },
 
     Save: function (e) {
 
@@ -53718,6 +53725,33 @@ var Pricing = React.createClass({displayName: "Pricing",
         }
 
     },
+    ConfirmOrder: function (e) {
+        e.preventDefault();
+        console.log('i m in save');
+
+        var data = this.state.EventsData.slice();
+
+        console.log(data);
+        data[this.state.edit.row][this.state.edit.cell] = e.target.value;
+        var id = data[this.state.edit.row][0];
+        console.log(id);
+        console.log(data);
+        //Push into an array and do batch update or single update
+        /*var DataTobepost:{
+         Id: id,
+         AverageCost:data[this.state.Edit.row][1];
+         Accordingly post the date or
+
+
+         }*/
+        // EventsApi.PostEvent()
+
+        this.setState({
+            edit: null,
+            EventsData: data,
+        });
+    },
+
 
     componentDidMount: function () {
 
@@ -53741,7 +53775,7 @@ var Pricing = React.createClass({displayName: "Pricing",
 
 
         return (
-            React.createElement(PriceForm, {data: this.state.data, Save: this.Save, lEdit: this.state.lEdit})
+            React.createElement(PriceForm, {Buy: this.ConfirmOrder, data: this.state.data, Save: this.Save, lEdit: this.state.lEdit})
 
         );
 
@@ -53753,9 +53787,53 @@ var Pricing = React.createClass({displayName: "Pricing",
 
 module.exports = Pricing;
 
-},{"./EventsApi":246,"./PriceForm":251,"react":239,"react-addons-update":34}],251:[function(require,module,exports){
+},{"./EventsApi":246,"./PriceForm":252,"react":239,"react-addons-update":34}],251:[function(require,module,exports){
 var React = require('react');
 
+var PriceConfirm =React.createClass({displayName: "PriceConfirm",
+    render: function () {
+
+        return (
+
+            React.createElement("form", null, 
+                React.createElement("h1", null, "Please Confirm your order as this will be consider as final and the DJJB will be notified about this Event"), 
+                React.createElement("h2", null, this.props.Typeofevent), 
+
+                React.createElement("label", {htmlFor: "Typeofevent"}, "TypeOfEvent"), 
+                React.createElement("input", {type: "text", 
+                       name: "Typeofevent", 
+                       className: "form-control", 
+                       placeholder: this.props.EventData.Typeofevent, 
+                       ref: "Typeofevent", 
+                       onChange: this.props.onChange, 
+                       value: this.props.EventData.Typeofevent}), 
+                React.createElement("label", {htmlFor: "Place"}, "Place"), 
+                React.createElement("input", {type: "text", 
+                       name: "Place", 
+                       className: "form-control", 
+                       placeholder: this.props.EventData.Place, 
+                       ref: "Place", 
+                       onChange: this.props.onChange, 
+                       value: this.props.EventData.Place}), 
+                React.createElement("label", {htmlFor: "Cost"}, "Cost"), 
+                React.createElement("input", {type: "text", 
+                       name: "AverageCost", 
+                       className: "form-control", 
+                       placeholder: this.props.EventData.AverageCost, 
+                       ref: "Cost", 
+                       onChange: this.props.onChange, 
+                       value: this.props.EventData.AverageCost}), 
+                React.createElement("input", {type: "submit", value: "Save", className: "btn btn-default", onClick: this.props.ConfirmOrder})
+            )
+        );
+    }
+});
+module.exports=PriceConfirm;
+
+},{"react":239}],252:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var PriceForm =React.createClass({displayName: "PriceForm",
 
@@ -53767,63 +53845,47 @@ var PriceForm =React.createClass({displayName: "PriceForm",
         }
         return (
 
-
             React.createElement("button", {className: "btn btn-primary", type: "button"}, " Search")
         );
 
     },
 
-
-
-
     renSearch :function (Event) {
-
-
-
-
 
     var Save = this.props.Save;
 
         return (
             React.createElement("div", null, 
                 Event.map(function(ignore,index) {
+                    console.log(Event[index]);
                        var Cost =  Event[index].BasicCost;
                         if(this.props.lEdit!==null && this.props.lEdit.ID ==Event[index]._id) {
                             var Cost = Event[index].BasicCost + this.props.lEdit.Price ;
-
                         };
 
                     return(
                         React.createElement("div", {className: "span3"}, 
                             React.createElement("div", {className: "pricing-table"}, 
-
                                 React.createElement("div", {className: "color-cccddd"}, 
                                     React.createElement("h3", null, Event[index].TypeofPackage), 
-
                                     React.createElement("h4", null, React.createElement("span", {className: "price"}), " ", React.createElement("span", {className: "time"}, Cost)
                                     ), 
                                         React.createElement("ul", {key: index}, 
                                             Event[index].Extras.map(function(obj,idx) {
                                                 return (
-
                                                     obj.map(function (item,id) {
                                                         if (item.originalVal < item.noOfAccesory) {
                                                            // var htmlbut = <button className='btn btn-primary'    type ='button'> Search</button>;
                                                             var htmlbut = React.createElement("button", {type: "button", "data-row": idx, onClick: Save, value: [item.Price+":@"+ Event[index]._id], className: "btn btn-default"}, React.createElement("span", {className: "glyphicon glyphicon-minus"}), " ")
 
                                                         }
-
                                                        return React.createElement("li", {"data-val": [item.Price], "data-row": idx, key: idx, value: [item.Price]}, " ", React.createElement("button", {className: "btn btn-default", "data-row": idx, onClick: Save, key: id, value: [item.Price+":"+ Event[index]._id], type: "button"}, " ", React.createElement("span", {className: "glyphicon glyphicon-plus"}), " "), item.noOfAccesory, " :", item.Accesory, htmlbut, ";")
-
-
-
-
 
                                                     }));
                                             }.bind(this))
 
                                         ), 
-                                    React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
+                                   React.createElement(Link, {to: "/Edit/" + Event[index], className: "buy"}, "buy")
                                 )
                             )
                         )
@@ -53835,18 +53897,13 @@ var PriceForm =React.createClass({displayName: "PriceForm",
 
     render: function () {
 
-
         return (
-
 
             React.createElement("div", {id: "pricing", className: "color blue"}, 
 
-
                 React.createElement("div", {className: "container"}, 
 
-
                     React.createElement("div", {className: "wrapper span12"}, 
-
 
                         React.createElement("div", {id: "page-title"}, 
 
@@ -53854,20 +53911,12 @@ var PriceForm =React.createClass({displayName: "PriceForm",
 
                                 React.createElement("h2", null, React.createElement("span", null, "Price"))
 
-                            )
+                             )
 
-                        ), 
-
-
+                            ), 
                         React.createElement("div", {className: "four-tables"}, 
 
-
-                            React.createElement("div", {className: "row-fluid"}, 
-
-                           this.renSearch(this.props.data,this)
-
-
-                            )
+                            React.createElement("div", {className: "row-fluid"})
 
                         )
 
@@ -53886,7 +53935,7 @@ var PriceForm =React.createClass({displayName: "PriceForm",
 
 module.exports=PriceForm;
 
-},{"react":239}],252:[function(require,module,exports){
+},{"react":239,"react-router":60}],253:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53961,7 +54010,7 @@ var TrackDisplay = React.createClass({displayName: "TrackDisplay",
     });
 module.exports =TrackDisplay;
 
-},{"react":239,"react-router":60}],253:[function(require,module,exports){
+},{"react":239,"react-router":60}],254:[function(require,module,exports){
 var React = require('react');
 var Home = require('../components/homepage');
 
@@ -53997,7 +54046,7 @@ var App = React.createClass({displayName: "App",
 });
 module.exports =App;
 
-},{"../components/Header":248,"../components/Price":250,"../components/homepage":256,"jquery":25,"react":239,"react-router":60}],254:[function(require,module,exports){
+},{"../components/Header":248,"../components/Price":250,"../components/homepage":257,"jquery":25,"react":239,"react-router":60}],255:[function(require,module,exports){
 var React = require('react');
 
 var Ana = React.createClass({displayName: "Ana",
@@ -54131,7 +54180,7 @@ React.createElement("div", {id: "about", className: "color yellow"},
 
 module.exports = Ana;
 
-},{"react":239}],255:[function(require,module,exports){
+},{"react":239}],256:[function(require,module,exports){
 var React = require('react');
 var Header = require('./Header');
 var Home = require('./Price');
@@ -54284,7 +54333,7 @@ var Events = React.createClass({displayName: "Events",
         var SrchData = this.BeforeSearchData.filter(function (row) {
             return row[Index].toString().toLowerCase().indexOf(toSerach) > -1;
 
-            console.log(SrchData);
+            console.log(SrchData);// this is the seach data that i can filter again.
         });
         this.setState({EventsData: SrchData});
         //
@@ -54347,7 +54396,7 @@ var Events = React.createClass({displayName: "Events",
 
 module.exports = Events;
 
-},{"./Admin":241,"./EventList":245,"./EventsApi":246,"./Header":248,"./Price":250,"react":239,"react-router":60}],256:[function(require,module,exports){
+},{"./Admin":241,"./EventList":245,"./EventsApi":246,"./Header":248,"./Price":250,"react":239,"react-router":60}],257:[function(require,module,exports){
 var React = require('react');
 
 var Home = React.createClass({displayName: "Home",
@@ -54463,7 +54512,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"react":239}],257:[function(require,module,exports){
+},{"react":239}],258:[function(require,module,exports){
 var React = require('react');
 
 var Contact = React.createClass({displayName: "Contact",
@@ -54585,7 +54634,7 @@ var Contact = React.createClass({displayName: "Contact",
 
 module.exports = Contact;
 
-},{"react":239}],258:[function(require,module,exports){
+},{"react":239}],259:[function(require,module,exports){
 
 
 
@@ -54684,7 +54733,7 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
 });
 module.exports=SpotSearch;
 
-},{"./EditForm":244,"./EventsApi":246,"./TrackDisplay":252,"./spotifyForm":259,"react":239,"react-router":60,"toastr":240}],259:[function(require,module,exports){
+},{"./EditForm":244,"./EventsApi":246,"./TrackDisplay":253,"./spotifyForm":260,"react":239,"react-router":60,"toastr":240}],260:[function(require,module,exports){
 var React = require('react');
 
 
@@ -54756,7 +54805,7 @@ console.log(this.props.ArtistData);
 
 module.exports=spotifyForm;
 
-},{"react":239}],260:[function(require,module,exports){
+},{"react":239}],261:[function(require,module,exports){
 var React = require('react');
 
 var Team = React.createClass({displayName: "Team",
@@ -54913,7 +54962,7 @@ React.createElement("div", {className: "row-fluid"},
 
 module.exports = Team;
 
-},{"react":239}],261:[function(require,module,exports){
+},{"react":239}],262:[function(require,module,exports){
 $ = require('jquery');
 //alert("testing linting")
 //test = 1;
@@ -54958,7 +55007,7 @@ Router.run(routes, Router.HistoryLocation, function (Handler) {
  Reactdom.render(<Team/>,document.getElementById('Team'));
  Reactdom.render(<Contact/>,document.getElementById('DjContact')); */
 
-},{"./components/Admin":241,"./components/PortFolio":249,"./components/Price":250,"./components/app":253,"./components/bout":254,"./components/events":255,"./components/homepage":256,"./components/out":257,"./components/team":260,"./routes":262,"jquery":25,"react":239,"react-dom":35,"react-router":60}],262:[function(require,module,exports){
+},{"./components/Admin":241,"./components/PortFolio":249,"./components/Price":250,"./components/app":254,"./components/bout":255,"./components/events":256,"./components/homepage":257,"./components/out":258,"./components/team":261,"./routes":263,"jquery":25,"react":239,"react-dom":35,"react-router":60}],263:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 
@@ -54977,10 +55026,11 @@ var routes = (
         React.createElement(Route, {name: "PortFolio", handler: require('./components/PortFolio')}), 
         React.createElement(Route, {name: "AboutUs", handler: require('./components/bout')}), 
         React.createElement(Route, {name: "EditEvent", handler: require('./components/EditEvent')}), 
-        React.createElement(Route, {name: "Edit/:EventId", handler: require('./components/Edit')}), 
+        React.createElement(Route, {name: "Edit/:data", handler: require('./components/Edit')}), 
         React.createElement(Route, {name: "Team", handler: require('./components/team')}), 
         React.createElement(Route, {name: "Contact", handler: require('./components/out')}), 
         React.createElement(Route, {name: "Events", handler: require('./components/events')}), 
+        React.createElement(Route, {name: "PriceConfirm/:EventId", handler: require('./components/PriceConfirm')}), 
             React.createElement(Route, {name: "Search", handler: require('./components/spotSearch')}), 
 
         React.createElement(Route, {name: "Auth", handler: require('./components/Admin')})
@@ -54991,4 +55041,4 @@ var routes = (
 );
 module.exports = routes;
 
-},{"./components/Admin":241,"./components/Edit":242,"./components/EditEvent":243,"./components/EventsData":247,"./components/Header":248,"./components/PortFolio":249,"./components/Price":250,"./components/app":253,"./components/bout":254,"./components/events":255,"./components/homepage":256,"./components/out":257,"./components/spotSearch":258,"./components/team":260,"react":239,"react-router":60}]},{},[261]);
+},{"./components/Admin":241,"./components/Edit":242,"./components/EditEvent":243,"./components/EventsData":247,"./components/Header":248,"./components/PortFolio":249,"./components/Price":250,"./components/PriceConfirm":251,"./components/app":254,"./components/bout":255,"./components/events":256,"./components/homepage":257,"./components/out":258,"./components/spotSearch":259,"./components/team":261,"react":239,"react-router":60}]},{},[262]);

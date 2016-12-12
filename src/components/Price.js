@@ -24,7 +24,10 @@ var Pricing = React.createClass({
 
         }
     },
-
+  Buy :function(e){
+        console.log(this.state.data);
+       alert('ready to save');
+  },
 
     Save: function (e) {
 
@@ -96,6 +99,33 @@ var Pricing = React.createClass({
         }
 
     },
+    ConfirmOrder: function (e) {
+        e.preventDefault();
+        console.log('i m in save');
+
+        var data = this.state.EventsData.slice();
+
+        console.log(data);
+        data[this.state.edit.row][this.state.edit.cell] = e.target.value;
+        var id = data[this.state.edit.row][0];
+        console.log(id);
+        console.log(data);
+        //Push into an array and do batch update or single update
+        /*var DataTobepost:{
+         Id: id,
+         AverageCost:data[this.state.Edit.row][1];
+         Accordingly post the date or
+
+
+         }*/
+        // EventsApi.PostEvent()
+
+        this.setState({
+            edit: null,
+            EventsData: data,
+        });
+    },
+
 
     componentDidMount: function () {
 
@@ -119,7 +149,7 @@ var Pricing = React.createClass({
 
 
         return (
-            <PriceForm data={this.state.data} Save={this.Save} lEdit={this.state.lEdit}/>
+            <PriceForm Buy ={this.ConfirmOrder} data={this.state.data} Save={this.Save} lEdit={this.state.lEdit}/>
 
         );
 

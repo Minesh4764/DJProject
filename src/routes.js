@@ -16,10 +16,11 @@ var routes = (
         <Route name="PortFolio" handler={require('./components/PortFolio')}/>
         <Route name="AboutUs" handler={require('./components/bout')}/>
         <Route name="EditEvent" handler={require('./components/EditEvent')}/>
-        <Route name="Edit/:EventId" handler={require('./components/Edit')}/>
+        <Route name="Edit/:data" handler={require('./components/Edit')}/>
         <Route name="Team" handler={require('./components/team')}/>
         <Route name="Contact" handler={require('./components/out')}/>
         <Route name="Events" handler={require('./components/events')}/>
+        <Route name="PriceConfirm/:EventId" handler={require('./components/PriceConfirm')}/>
             <Route name="Search" handler={require('./components/spotSearch')}/>
 
         <Route name="Auth" handler={require('./components/Admin')}/>

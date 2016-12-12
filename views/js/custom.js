@@ -1,5 +1,5 @@
 jQuery(document).ready(function($){
-	/*
+
 	function goToByScroll(id){
 	      // Remove "link" from the ID
 	    id = id.replace("link", "");
@@ -14,7 +14,7 @@ jQuery(document).ready(function($){
 		goToByScroll($(this).attr('class'));
 				
 	});
-		
+
 });	
 
 

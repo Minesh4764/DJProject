@@ -1,6 +1,7 @@
 var React = require('react');
 
-
+var Router = require('react-router');
+var Link = Router.Link;
 var PriceForm =React.createClass({
 
 
@@ -59,15 +60,13 @@ var PriceForm =React.createClass({
 
                                                        return <li  data-val = {[item.Price]} data-row={idx} key={idx} value ={[item.Price]}> <button className="btn btn-default"  data-row={idx} onClick={Save} key={id} value ={[item.Price+":"+ Event[index]._id]}type="button"> <span className='glyphicon glyphicon-plus'></span> </button>{item.noOfAccesory} :{item.Accesory}{htmlbut};</li>
 
-
-
-
-
                                                     }));
                                             }.bind(this))}
 
                                         </ul>
-                                    <a href="#" className="buy"><span>Buy</span></a>
+
+                                    <Link to={"/PriceConfirm/" +Event[index]} >buy</Link>
+
                                 </div>
                             </div>
                         </div>

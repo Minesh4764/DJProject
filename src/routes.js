@@ -18,6 +18,7 @@ var routes = (
         <Route name="EditEvent" handler={require('./components/EditEvent')}/>
         <Route name="Edit/:EventId" handler={require('./components/Edit')}/>
         <Route name="Team" handler={require('./components/team')}/>
+        <Route name="PriceConfirm/:data" handler={require('./components/PriceConfirm')}/>
         <Route name="Contact" handler={require('./components/out')}/>
         <Route name="Events" handler={require('./components/events')}/>
             <Route name="Search" handler={require('./components/spotSearch')}/>

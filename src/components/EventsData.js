@@ -34,7 +34,7 @@ var EventsData = React.createClass({
 
             <div >
 
-                <h1> EvetnList </h1>
+                <h1> EventList </h1>
 
 
                 <table className="table">

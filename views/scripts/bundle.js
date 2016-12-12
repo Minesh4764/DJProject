@@ -53329,7 +53329,7 @@ var EventsData = React.createClass({displayName: "EventsData",
 
             React.createElement("div", null, 
 
-                React.createElement("h1", null, " EvetnList "), 
+                React.createElement("h1", null, " EventList "), 
 
 
                 React.createElement("table", {className: "table"}, 
@@ -53753,10 +53753,54 @@ var Pricing = React.createClass({displayName: "Pricing",
 
 module.exports = Pricing;
 
-},{"./EventsApi":246,"./PriceForm":251,"react":239,"react-addons-update":34}],251:[function(require,module,exports){
+},{"./EventsApi":246,"./PriceForm":252,"react":239,"react-addons-update":34}],251:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+
+var PriceConfirm = React.createClass({displayName: "PriceConfirm",
+
+
+
+    getInitialState: function () {
+        return {
+            // api call to database
+
+        };
+
+    },
+
+
+    componentDidMount: function () {
+     console.log('this is the data');
+
+        console.log(this.props.params.data);
+
+    },
+
+    render: function () {
+        return (
+
+            React.createElement("div", null, 
+
+                React.createElement("h1", null, " EventList ")
+
+
+            )
+        );
+
+
+    }
+
+
+});
+
+module.exports = PriceConfirm;
+
+},{"react":239,"react-router":60}],252:[function(require,module,exports){
 var React = require('react');
 
-
+var Router = require('react-router');
+var Link = Router.Link;
 var PriceForm =React.createClass({displayName: "PriceForm",
 
 
@@ -53815,15 +53859,13 @@ var PriceForm =React.createClass({displayName: "PriceForm",
 
                                                        return React.createElement("li", {"data-val": [item.Price], "data-row": idx, key: idx, value: [item.Price]}, " ", React.createElement("button", {className: "btn btn-default", "data-row": idx, onClick: Save, key: id, value: [item.Price+":"+ Event[index]._id], type: "button"}, " ", React.createElement("span", {className: "glyphicon glyphicon-plus"}), " "), item.noOfAccesory, " :", item.Accesory, htmlbut, ";")
 
-
-
-
-
                                                     }));
                                             }.bind(this))
 
                                         ), 
-                                    React.createElement("a", {href: "#", className: "buy"}, React.createElement("span", null, "Buy"))
+
+                                    React.createElement(Link, {to: "/PriceConfirm/" +Event[index]}, "buy")
+
                                 )
                             )
                         )
@@ -53886,7 +53928,7 @@ var PriceForm =React.createClass({displayName: "PriceForm",
 
 module.exports=PriceForm;
 
-},{"react":239}],252:[function(require,module,exports){
+},{"react":239,"react-router":60}],253:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53961,7 +54003,7 @@ var TrackDisplay = React.createClass({displayName: "TrackDisplay",
     });
 module.exports =TrackDisplay;
 
-},{"react":239,"react-router":60}],253:[function(require,module,exports){
+},{"react":239,"react-router":60}],254:[function(require,module,exports){
 var React = require('react');
 var Home = require('../components/homepage');
 
@@ -53997,7 +54039,7 @@ var App = React.createClass({displayName: "App",
 });
 module.exports =App;
 
-},{"../components/Header":248,"../components/Price":250,"../components/homepage":256,"jquery":25,"react":239,"react-router":60}],254:[function(require,module,exports){
+},{"../components/Header":248,"../components/Price":250,"../components/homepage":257,"jquery":25,"react":239,"react-router":60}],255:[function(require,module,exports){
 var React = require('react');
 
 var Ana = React.createClass({displayName: "Ana",
@@ -54131,7 +54173,7 @@ React.createElement("div", {id: "about", className: "color yellow"},
 
 module.exports = Ana;
 
-},{"react":239}],255:[function(require,module,exports){
+},{"react":239}],256:[function(require,module,exports){
 var React = require('react');
 var Header = require('./Header');
 var Home = require('./Price');
@@ -54347,7 +54389,7 @@ var Events = React.createClass({displayName: "Events",
 
 module.exports = Events;
 
-},{"./Admin":241,"./EventList":245,"./EventsApi":246,"./Header":248,"./Price":250,"react":239,"react-router":60}],256:[function(require,module,exports){
+},{"./Admin":241,"./EventList":245,"./EventsApi":246,"./Header":248,"./Price":250,"react":239,"react-router":60}],257:[function(require,module,exports){
 var React = require('react');
 
 var Home = React.createClass({displayName: "Home",
@@ -54463,7 +54505,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"react":239}],257:[function(require,module,exports){
+},{"react":239}],258:[function(require,module,exports){
 var React = require('react');
 
 var Contact = React.createClass({displayName: "Contact",
@@ -54585,7 +54627,7 @@ var Contact = React.createClass({displayName: "Contact",
 
 module.exports = Contact;
 
-},{"react":239}],258:[function(require,module,exports){
+},{"react":239}],259:[function(require,module,exports){
 
 
 
@@ -54684,7 +54726,7 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
 });
 module.exports=SpotSearch;
 
-},{"./EditForm":244,"./EventsApi":246,"./TrackDisplay":252,"./spotifyForm":259,"react":239,"react-router":60,"toastr":240}],259:[function(require,module,exports){
+},{"./EditForm":244,"./EventsApi":246,"./TrackDisplay":253,"./spotifyForm":260,"react":239,"react-router":60,"toastr":240}],260:[function(require,module,exports){
 var React = require('react');
 
 
@@ -54756,7 +54798,7 @@ console.log(this.props.ArtistData);
 
 module.exports=spotifyForm;
 
-},{"react":239}],260:[function(require,module,exports){
+},{"react":239}],261:[function(require,module,exports){
 var React = require('react');
 
 var Team = React.createClass({displayName: "Team",
@@ -54913,7 +54955,7 @@ React.createElement("div", {className: "row-fluid"},
 
 module.exports = Team;
 
-},{"react":239}],261:[function(require,module,exports){
+},{"react":239}],262:[function(require,module,exports){
 $ = require('jquery');
 //alert("testing linting")
 //test = 1;
@@ -54958,7 +55000,7 @@ Router.run(routes, Router.HistoryLocation, function (Handler) {
  Reactdom.render(<Team/>,document.getElementById('Team'));
  Reactdom.render(<Contact/>,document.getElementById('DjContact')); */
 
-},{"./components/Admin":241,"./components/PortFolio":249,"./components/Price":250,"./components/app":253,"./components/bout":254,"./components/events":255,"./components/homepage":256,"./components/out":257,"./components/team":260,"./routes":262,"jquery":25,"react":239,"react-dom":35,"react-router":60}],262:[function(require,module,exports){
+},{"./components/Admin":241,"./components/PortFolio":249,"./components/Price":250,"./components/app":254,"./components/bout":255,"./components/events":256,"./components/homepage":257,"./components/out":258,"./components/team":261,"./routes":263,"jquery":25,"react":239,"react-dom":35,"react-router":60}],263:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 
@@ -54979,6 +55021,7 @@ var routes = (
         React.createElement(Route, {name: "EditEvent", handler: require('./components/EditEvent')}), 
         React.createElement(Route, {name: "Edit/:EventId", handler: require('./components/Edit')}), 
         React.createElement(Route, {name: "Team", handler: require('./components/team')}), 
+        React.createElement(Route, {name: "PriceConfirm/:data", handler: require('./components/PriceConfirm')}), 
         React.createElement(Route, {name: "Contact", handler: require('./components/out')}), 
         React.createElement(Route, {name: "Events", handler: require('./components/events')}), 
             React.createElement(Route, {name: "Search", handler: require('./components/spotSearch')}), 
@@ -54991,4 +55034,4 @@ var routes = (
 );
 module.exports = routes;
 
-},{"./components/Admin":241,"./components/Edit":242,"./components/EditEvent":243,"./components/EventsData":247,"./components/Header":248,"./components/PortFolio":249,"./components/Price":250,"./components/app":253,"./components/bout":254,"./components/events":255,"./components/homepage":256,"./components/out":257,"./components/spotSearch":258,"./components/team":260,"react":239,"react-router":60}]},{},[261]);
+},{"./components/Admin":241,"./components/Edit":242,"./components/EditEvent":243,"./components/EventsData":247,"./components/Header":248,"./components/PortFolio":249,"./components/Price":250,"./components/PriceConfirm":251,"./components/app":254,"./components/bout":255,"./components/events":256,"./components/homepage":257,"./components/out":258,"./components/spotSearch":259,"./components/team":261,"react":239,"react-router":60}]},{},[262]);

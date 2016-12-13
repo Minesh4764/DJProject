@@ -1,10 +1,14 @@
 var React = require('react');
 
-var Router = require('react-router');
-var Link = Router.Link;
+
 var PriceForm =React.createClass({
 
+getInitialState:function () {
+    return {
+        priceConfirm: false
+    }
 
+},
 
     ButtonMinus:function(item) {
         if(item.originalVal >item.noOfAccesory) {
@@ -24,7 +28,9 @@ var PriceForm =React.createClass({
     renSearch :function (Event) {
 
 
-
+if (this.state.priceConfirm) {
+      return null;
+}
 
 
     var Save = this.props.Save;
@@ -64,8 +70,7 @@ var PriceForm =React.createClass({
                                             }.bind(this))}
 
                                         </ul>
-
-                                    <Link to={"/PriceConfirm/" +Event[index]} >buy</Link>
+                                    <button key="123" className="btn btn-default" value ={Event[index]._id} onClick={this.props.renderConfirm}  type="button"> </button>
 
                                 </div>
                             </div>

@@ -53624,6 +53624,7 @@ var React = require('react');
 var EventsApi = require('./EventsApi');
 var update = require('react-addons-update');
 var PriceForm = require('./PriceForm');
+var PriceConfirm = require('./PriceConfirm');
 var Pricing = React.createClass({displayName: "Pricing",
 
 
@@ -53644,7 +53645,35 @@ var Pricing = React.createClass({displayName: "Pricing",
             originalval:null,
 
 
+
         }
+    },
+    renderConfirm  :function(e) {
+        alert('hello');
+   var Id = e.target.value;
+
+        var packages = this.state.data.slice();
+        var ChoosePackage = [];
+
+        for (var i = 0; i <= packages.length; i++) {
+          //  var newdata = null;
+           // newdata = this.state.data.slice();
+            // console.log(newdata.id);
+            if (packages[i]._id == Id) {
+
+
+                ChoosePackage.push(packages[i]);
+                console.log(ChoosePackage);
+                this.setState({newData:ChoosePackage})
+                 return;
+                // var newPackage = ChoosePackage.slice();
+                // console.log(newPackage);
+                //
+            }
+        }
+
+
+
     },
 
 
@@ -53709,8 +53738,8 @@ var Pricing = React.createClass({displayName: "Pricing",
 
                // console.log(newPackage);
                 this.setState({data: newdata});
-                console.log("after changes");
-                console.log(this.state.data);
+
+
                 return;
             }
 
@@ -53739,13 +53768,24 @@ var Pricing = React.createClass({displayName: "Pricing",
 
     render: function () {
 
+      if (this.state.newData!=null) {
 
-        return (
-            React.createElement(PriceForm, {data: this.state.data, Save: this.Save, lEdit: this.state.lEdit})
-
-        );
+          return(
+              React.createElement(PriceConfirm, {data: this.state.newData})
 
 
+          );
+
+
+      }
+      else {
+          return (
+              React.createElement(PriceForm, {renderConfirm: this.renderConfirm, data: this.state.data, Save: this.Save, 
+                         lEdit: this.state.lEdit})
+
+          );
+
+      }
     }
 
 
@@ -53753,7 +53793,7 @@ var Pricing = React.createClass({displayName: "Pricing",
 
 module.exports = Pricing;
 
-},{"./EventsApi":246,"./PriceForm":252,"react":239,"react-addons-update":34}],251:[function(require,module,exports){
+},{"./EventsApi":246,"./PriceConfirm":251,"./PriceForm":252,"react":239,"react-addons-update":34}],251:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 
@@ -53773,19 +53813,67 @@ var PriceConfirm = React.createClass({displayName: "PriceConfirm",
     componentDidMount: function () {
      console.log('this is the data');
 
-        console.log(this.props.params.data);
 
     },
 
     render: function () {
         return (
-
-            React.createElement("div", null, 
-
-                React.createElement("h1", null, " EventList ")
+            React.createElement("div", {id: "pricing", className: "color blue"}, 
 
 
+                React.createElement("div", {className: "container"}, 
+
+
+                    React.createElement("div", {className: "wrapper span12"}, 
+
+            React.createElement("div", {className: "panel-primary class"}, 
+                React.createElement("div", {className: "panel-heading"}, 
+                    React.createElement("h3", {className: "panel-title"}, " ", this.props.data[0].TypeofPackage)
+                ), 
+
+                React.createElement("div", {className: "panel-body"}, 
+                    React.createElement("div", {className: "row"}, 
+                        React.createElement("div", {className: "col-md-4"}, 
+                            React.createElement("div", null, React.createElement("img", {className: "thumbnail", src: "img/Minesh.jpg", style: {width:"100%"}}))
+
+                        ), 
+                        React.createElement("div", {className: "color blue"}, 
+                        React.createElement("div", {className: "col-md-8"}, 
+                            React.createElement("div", {className: "row"}, 
+                                React.createElement("div", {className: "col-md-12"}, 
+                                    React.createElement("span", {className: "label label-primary"}, " Repos"), 
+                                    React.createElement("span", {className: "label label-success"}, "Gists"), 
+                                    React.createElement("span", {className: "label label-info"}, "Followers"), 
+                                    React.createElement("span", {className: "label label-"}, "Following")
+
+
+                                )
+                            ), 
+                            React.createElement("hr", null), 
+                            React.createElement("div", {className: "row"}, 
+
+                                React.createElement("div", {className: "col-md-12"}, 
+
+                                    React.createElement("ul", {id: "FntColor"}, 
+                                        React.createElement("li", {className: "list-group-item"}, " ", React.createElement("strong", null, "Cost:"), " ", this.props.data[0].BasicCost), 
+                                        React.createElement("li", {className: "list-group-item"}, " ", React.createElement("strong", null, "Desciption"), " ", this.props.data[0].Description), 
+                                        React.createElement("li", {className: "list-group-item"}, " ", React.createElement("strong", null, "For No of People"), this.props.data[0].ForNoOFPeople)
+
+                                    )
+                                )
+                            ), 
+                            React.createElement("br", null), 
+                            React.createElement("a", {className: "btn btn-primary", target: "_blank", href: ""}, " Visit Profile ")
+                        ))
+                    )
+
+
+
+                )
             )
+                    )))
+
+
         );
 
 
@@ -53799,11 +53887,15 @@ module.exports = PriceConfirm;
 },{"react":239,"react-router":60}],252:[function(require,module,exports){
 var React = require('react');
 
-var Router = require('react-router');
-var Link = Router.Link;
+
 var PriceForm =React.createClass({displayName: "PriceForm",
 
+getInitialState:function () {
+    return {
+        priceConfirm: false
+    }
 
+},
 
     ButtonMinus:function(item) {
         if(item.originalVal >item.noOfAccesory) {
@@ -53823,7 +53915,9 @@ var PriceForm =React.createClass({displayName: "PriceForm",
     renSearch :function (Event) {
 
 
-
+if (this.state.priceConfirm) {
+      return null;
+}
 
 
     var Save = this.props.Save;
@@ -53863,8 +53957,7 @@ var PriceForm =React.createClass({displayName: "PriceForm",
                                             }.bind(this))
 
                                         ), 
-
-                                    React.createElement(Link, {to: "/PriceConfirm/" +Event[index]}, "buy")
+                                    React.createElement("button", {key: "123", className: "btn btn-default", value: Event[index]._id, onClick: this.props.renderConfirm, type: "button"}, " ")
 
                                 )
                             )
@@ -53928,7 +54021,7 @@ var PriceForm =React.createClass({displayName: "PriceForm",
 
 module.exports=PriceForm;
 
-},{"react":239,"react-router":60}],253:[function(require,module,exports){
+},{"react":239}],253:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;

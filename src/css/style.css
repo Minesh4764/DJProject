@@ -119,6 +119,7 @@ body {
 	background: #fff;
 	color: #888888;
 	font-size: 12px;
+	padding-top: 15px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -232,7 +233,11 @@ a {
 .box h5 {
 	margin-top: -10px;
 }
+#FntColor {
 
+	color:#b55381;
+
+}
 .box h3,
 .box h5 {
 	-webkit-transition: all 0.5s ease-in-out;

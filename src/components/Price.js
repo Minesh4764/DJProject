@@ -2,6 +2,7 @@ var React = require('react');
 var EventsApi = require('./EventsApi');
 var update = require('react-addons-update');
 var PriceForm = require('./PriceForm');
+var PriceConfirm = require('./PriceConfirm');
 var Pricing = React.createClass({
 
 
@@ -22,7 +23,35 @@ var Pricing = React.createClass({
             originalval:null,
 
 
+
         }
+    },
+    renderConfirm  :function(e) {
+        alert('hello');
+   var Id = e.target.value;
+
+        var packages = this.state.data.slice();
+        var ChoosePackage = [];
+
+        for (var i = 0; i <= packages.length; i++) {
+          //  var newdata = null;
+           // newdata = this.state.data.slice();
+            // console.log(newdata.id);
+            if (packages[i]._id == Id) {
+
+
+                ChoosePackage.push(packages[i]);
+                console.log(ChoosePackage);
+                this.setState({newData:ChoosePackage})
+                 return;
+                // var newPackage = ChoosePackage.slice();
+                // console.log(newPackage);
+                //
+            }
+        }
+
+
+
     },
 
 
@@ -87,8 +116,8 @@ var Pricing = React.createClass({
 
                // console.log(newPackage);
                 this.setState({data: newdata});
-                console.log("after changes");
-                console.log(this.state.data);
+
+
                 return;
             }
 
@@ -117,13 +146,24 @@ var Pricing = React.createClass({
 
     render: function () {
 
+      if (this.state.newData!=null) {
 
-        return (
-            <PriceForm data={this.state.data} Save={this.Save} lEdit={this.state.lEdit}/>
-
-        );
+          return(
+              <PriceConfirm data = {this.state.newData} />
 
 
+          );
+
+
+      }
+      else {
+          return (
+              <PriceForm renderConfirm={this.renderConfirm} data={this.state.data} Save={this.Save}
+                         lEdit={this.state.lEdit}/>
+
+          );
+
+      }
     }
 
 

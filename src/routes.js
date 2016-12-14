@@ -11,7 +11,7 @@ var routes = (
         <DefaultRoute handler={require('./components/homepage')}/>
             <Route name="header" handler={require('./components/Header')}/>
         <Route name="Home" handler={require('./components/homepage')}/>
-        <Route name="Price" handler={require('./components/Price')}/>
+        <Route name="Price" path="Price" handler={require('./components/Price')}/>
         <Route path="EventsData/:EventId" name="EventsData" handler={require('./components/EventsData')}/>
         <Route name="PortFolio" handler={require('./components/PortFolio')}/>
         <Route name="AboutUs" handler={require('./components/bout')}/>

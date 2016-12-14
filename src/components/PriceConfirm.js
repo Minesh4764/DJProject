@@ -1,5 +1,12 @@
 var React = require('react');
 var Router = require('react-router');
+var Back = require('./BackButton');
+var Link = Router.Link;
+
+
+var History = Router.History;
+
+
 
 var PriceConfirm = React.createClass({
 
@@ -43,16 +50,7 @@ var PriceConfirm = React.createClass({
                         </div>
                         <div className="color blue">
                         <div className="col-md-8">
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <span className="label label-primary"> Repos</span>
-                                    <span className="label label-success">Gists</span>
-                                    <span className="label label-info">Followers</span>
-                                    <span className="label label-">Following</span>
 
-
-                                </div>
-                            </div>
                             <hr />
                             <div className = "row">
 
@@ -67,7 +65,10 @@ var PriceConfirm = React.createClass({
                                 </div>
                             </div>
                             <br />
-                            <a className ="btn btn-primary" target="_blank" href =""> Visit Profile </a>
+
+                            <a className ="btn btn-primary" onClick={this.props.GoBack} > Confirm</a>
+                            <a className ="btn btn-primary" onClick={this.props.resubmit} target="" href =""> Confirm</a>
+                            <a className ="btn btn-primary" target="_blank" href =""> Confirm</a>
                         </div></div>
                     </div>
 

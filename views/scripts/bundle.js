@@ -52849,7 +52849,26 @@ var Admin = React.createClass({displayName: "Admin",
 
 module.exports = Admin;
 
-},{"./EventsApi":246,"react":239,"react-router":60}],242:[function(require,module,exports){
+},{"./EventsApi":247,"react":239,"react-router":60}],242:[function(require,module,exports){
+var React = require('react');
+var Router = require('react-router');
+
+
+
+var BackButton = React.createClass({displayName: "BackButton",
+    render: function() {
+        return (
+            React.createElement("button", {
+                className: "button icon-left", 
+                onClick: Router.goBack}, 
+                "Back"
+            )
+        );
+    }
+});
+module.exports = BackButton;
+
+},{"react":239,"react-router":60}],243:[function(require,module,exports){
 
 var React = require('react');
 var EditForm=require('./EditForm');
@@ -52930,7 +52949,7 @@ var Edit = React.createClass({displayName: "Edit",
 });
 module.exports=Edit;
 
-},{"./EditForm":244,"./EventsApi":246,"react":239}],243:[function(require,module,exports){
+},{"./EditForm":245,"./EventsApi":247,"react":239}],244:[function(require,module,exports){
 
 var React = require('react');
 var EditForm=require('./EditForm');
@@ -52983,7 +53002,7 @@ var EditEvent = React.createClass({displayName: "EditEvent",
 });
 module.exports=EditEvent;
 
-},{"./EditForm":244,"./EventsApi":246,"react":239,"react-router":60,"toastr":240}],244:[function(require,module,exports){
+},{"./EditForm":245,"./EventsApi":247,"react":239,"react-router":60,"toastr":240}],245:[function(require,module,exports){
 var React = require('react');
 
 var EditForm =React.createClass({displayName: "EditForm",
@@ -53026,7 +53045,7 @@ var EditForm =React.createClass({displayName: "EditForm",
 });
 module.exports=EditForm;
 
-},{"react":239}],245:[function(require,module,exports){
+},{"react":239}],246:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53139,7 +53158,7 @@ var EventList = React.createClass({displayName: "EventList",
 });
 module.exports = EventList;
 
-},{"react":239,"react-router":60}],246:[function(require,module,exports){
+},{"react":239,"react-router":60}],247:[function(require,module,exports){
 // over here  i be using the api method to get the data
 $=jQuery=require('jquery');
 
@@ -53292,7 +53311,7 @@ PostEvent :function(data) {
 };
 module.exports = EventsApi;
 
-},{"axios":1,"jquery":25,"lodash":26}],247:[function(require,module,exports){
+},{"axios":1,"jquery":25,"lodash":26}],248:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53359,7 +53378,7 @@ var EventsData = React.createClass({displayName: "EventsData",
 
 module.exports = EventsData;
 
-},{"./EventList":245,"./EventsApi":246,"react":239,"react-router":60}],248:[function(require,module,exports){
+},{"./EventList":246,"./EventsApi":247,"react":239,"react-router":60}],249:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -53413,7 +53432,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"react":239,"react-router":60}],249:[function(require,module,exports){
+},{"react":239,"react-router":60}],250:[function(require,module,exports){
 var React = require('react');
 
 var PortFolio = React.createClass({displayName: "PortFolio",
@@ -53619,7 +53638,7 @@ var PortFolio = React.createClass({displayName: "PortFolio",
 
 module.exports = PortFolio;
 
-},{"react":239}],250:[function(require,module,exports){
+},{"react":239}],251:[function(require,module,exports){
 var React = require('react');
 var EventsApi = require('./EventsApi');
 var update = require('react-addons-update');
@@ -53676,7 +53695,19 @@ var Pricing = React.createClass({displayName: "Pricing",
 
     },
 
+    resubmit :function() {
+        this.setState({newData:null})
 
+
+    },
+
+    GoBack :function() {
+        this.setState({
+            data:this.state.newData,
+            newData:null
+        })
+
+    },
     Save: function (e) {
 
 
@@ -53696,7 +53727,6 @@ var Pricing = React.createClass({displayName: "Pricing",
 
             var Id = value.substr(n + 1);
         }
-
 
 
        // console.log(this.state.data);
@@ -53771,7 +53801,7 @@ var Pricing = React.createClass({displayName: "Pricing",
       if (this.state.newData!=null) {
 
           return(
-              React.createElement(PriceConfirm, {data: this.state.newData})
+              React.createElement(PriceConfirm, {GoBack: this.GoBack, resubmit: this.resubmit, data: this.state.newData})
 
 
           );
@@ -53793,9 +53823,16 @@ var Pricing = React.createClass({displayName: "Pricing",
 
 module.exports = Pricing;
 
-},{"./EventsApi":246,"./PriceConfirm":251,"./PriceForm":252,"react":239,"react-addons-update":34}],251:[function(require,module,exports){
+},{"./EventsApi":247,"./PriceConfirm":252,"./PriceForm":253,"react":239,"react-addons-update":34}],252:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
+var Back = require('./BackButton');
+var Link = Router.Link;
+
+
+var History = Router.History;
+
+
 
 var PriceConfirm = React.createClass({displayName: "PriceConfirm",
 
@@ -53839,16 +53876,7 @@ var PriceConfirm = React.createClass({displayName: "PriceConfirm",
                         ), 
                         React.createElement("div", {className: "color blue"}, 
                         React.createElement("div", {className: "col-md-8"}, 
-                            React.createElement("div", {className: "row"}, 
-                                React.createElement("div", {className: "col-md-12"}, 
-                                    React.createElement("span", {className: "label label-primary"}, " Repos"), 
-                                    React.createElement("span", {className: "label label-success"}, "Gists"), 
-                                    React.createElement("span", {className: "label label-info"}, "Followers"), 
-                                    React.createElement("span", {className: "label label-"}, "Following")
 
-
-                                )
-                            ), 
                             React.createElement("hr", null), 
                             React.createElement("div", {className: "row"}, 
 
@@ -53863,7 +53891,10 @@ var PriceConfirm = React.createClass({displayName: "PriceConfirm",
                                 )
                             ), 
                             React.createElement("br", null), 
-                            React.createElement("a", {className: "btn btn-primary", target: "_blank", href: ""}, " Visit Profile ")
+
+                            React.createElement("a", {className: "btn btn-primary", onClick: this.props.GoBack}, " Confirm"), 
+                            React.createElement("a", {className: "btn btn-primary", onClick: this.props.resubmit, target: "", href: ""}, " Confirm"), 
+                            React.createElement("a", {className: "btn btn-primary", target: "_blank", href: ""}, " Confirm")
                         ))
                     )
 
@@ -53884,7 +53915,7 @@ var PriceConfirm = React.createClass({displayName: "PriceConfirm",
 
 module.exports = PriceConfirm;
 
-},{"react":239,"react-router":60}],252:[function(require,module,exports){
+},{"./BackButton":242,"react":239,"react-router":60}],253:[function(require,module,exports){
 var React = require('react');
 
 
@@ -54021,7 +54052,7 @@ if (this.state.priceConfirm) {
 
 module.exports=PriceForm;
 
-},{"react":239}],253:[function(require,module,exports){
+},{"react":239}],254:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -54096,7 +54127,7 @@ var TrackDisplay = React.createClass({displayName: "TrackDisplay",
     });
 module.exports =TrackDisplay;
 
-},{"react":239,"react-router":60}],254:[function(require,module,exports){
+},{"react":239,"react-router":60}],255:[function(require,module,exports){
 var React = require('react');
 var Home = require('../components/homepage');
 
@@ -54132,7 +54163,7 @@ var App = React.createClass({displayName: "App",
 });
 module.exports =App;
 
-},{"../components/Header":248,"../components/Price":250,"../components/homepage":257,"jquery":25,"react":239,"react-router":60}],255:[function(require,module,exports){
+},{"../components/Header":249,"../components/Price":251,"../components/homepage":258,"jquery":25,"react":239,"react-router":60}],256:[function(require,module,exports){
 var React = require('react');
 
 var Ana = React.createClass({displayName: "Ana",
@@ -54266,7 +54297,7 @@ React.createElement("div", {id: "about", className: "color yellow"},
 
 module.exports = Ana;
 
-},{"react":239}],256:[function(require,module,exports){
+},{"react":239}],257:[function(require,module,exports){
 var React = require('react');
 var Header = require('./Header');
 var Home = require('./Price');
@@ -54482,7 +54513,7 @@ var Events = React.createClass({displayName: "Events",
 
 module.exports = Events;
 
-},{"./Admin":241,"./EventList":245,"./EventsApi":246,"./Header":248,"./Price":250,"react":239,"react-router":60}],257:[function(require,module,exports){
+},{"./Admin":241,"./EventList":246,"./EventsApi":247,"./Header":249,"./Price":251,"react":239,"react-router":60}],258:[function(require,module,exports){
 var React = require('react');
 
 var Home = React.createClass({displayName: "Home",
@@ -54598,7 +54629,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"react":239}],258:[function(require,module,exports){
+},{"react":239}],259:[function(require,module,exports){
 var React = require('react');
 
 var Contact = React.createClass({displayName: "Contact",
@@ -54720,7 +54751,7 @@ var Contact = React.createClass({displayName: "Contact",
 
 module.exports = Contact;
 
-},{"react":239}],259:[function(require,module,exports){
+},{"react":239}],260:[function(require,module,exports){
 
 
 
@@ -54819,7 +54850,7 @@ var SpotSearch = React.createClass({displayName: "SpotSearch",
 });
 module.exports=SpotSearch;
 
-},{"./EditForm":244,"./EventsApi":246,"./TrackDisplay":253,"./spotifyForm":260,"react":239,"react-router":60,"toastr":240}],260:[function(require,module,exports){
+},{"./EditForm":245,"./EventsApi":247,"./TrackDisplay":254,"./spotifyForm":261,"react":239,"react-router":60,"toastr":240}],261:[function(require,module,exports){
 var React = require('react');
 
 
@@ -54891,7 +54922,7 @@ console.log(this.props.ArtistData);
 
 module.exports=spotifyForm;
 
-},{"react":239}],261:[function(require,module,exports){
+},{"react":239}],262:[function(require,module,exports){
 var React = require('react');
 
 var Team = React.createClass({displayName: "Team",
@@ -55048,7 +55079,7 @@ React.createElement("div", {className: "row-fluid"},
 
 module.exports = Team;
 
-},{"react":239}],262:[function(require,module,exports){
+},{"react":239}],263:[function(require,module,exports){
 $ = require('jquery');
 //alert("testing linting")
 //test = 1;
@@ -55077,7 +55108,7 @@ var Contact = require('./components/out');
 var Auth = require('./components/Admin');
 
 
-Router.run(routes, Router.HistoryLocation, function (Handler) {
+Router.run(routes,   Router.HistoryLocation, function (Handler) {
     Reactdom.render(React.createElement(Handler, null), document.getElementById('app'));
 
 
@@ -55093,7 +55124,7 @@ Router.run(routes, Router.HistoryLocation, function (Handler) {
  Reactdom.render(<Team/>,document.getElementById('Team'));
  Reactdom.render(<Contact/>,document.getElementById('DjContact')); */
 
-},{"./components/Admin":241,"./components/PortFolio":249,"./components/Price":250,"./components/app":254,"./components/bout":255,"./components/events":256,"./components/homepage":257,"./components/out":258,"./components/team":261,"./routes":263,"jquery":25,"react":239,"react-dom":35,"react-router":60}],263:[function(require,module,exports){
+},{"./components/Admin":241,"./components/PortFolio":250,"./components/Price":251,"./components/app":255,"./components/bout":256,"./components/events":257,"./components/homepage":258,"./components/out":259,"./components/team":262,"./routes":264,"jquery":25,"react":239,"react-dom":35,"react-router":60}],264:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 
@@ -55107,7 +55138,7 @@ var routes = (
         React.createElement(DefaultRoute, {handler: require('./components/homepage')}), 
             React.createElement(Route, {name: "header", handler: require('./components/Header')}), 
         React.createElement(Route, {name: "Home", handler: require('./components/homepage')}), 
-        React.createElement(Route, {name: "Price", handler: require('./components/Price')}), 
+        React.createElement(Route, {name: "Price", path: "Price", handler: require('./components/Price')}), 
         React.createElement(Route, {path: "EventsData/:EventId", name: "EventsData", handler: require('./components/EventsData')}), 
         React.createElement(Route, {name: "PortFolio", handler: require('./components/PortFolio')}), 
         React.createElement(Route, {name: "AboutUs", handler: require('./components/bout')}), 
@@ -55127,4 +55158,4 @@ var routes = (
 );
 module.exports = routes;
 
-},{"./components/Admin":241,"./components/Edit":242,"./components/EditEvent":243,"./components/EventsData":247,"./components/Header":248,"./components/PortFolio":249,"./components/Price":250,"./components/PriceConfirm":251,"./components/app":254,"./components/bout":255,"./components/events":256,"./components/homepage":257,"./components/out":258,"./components/spotSearch":259,"./components/team":261,"react":239,"react-router":60}]},{},[262]);
+},{"./components/Admin":241,"./components/Edit":243,"./components/EditEvent":244,"./components/EventsData":248,"./components/Header":249,"./components/PortFolio":250,"./components/Price":251,"./components/PriceConfirm":252,"./components/app":255,"./components/bout":256,"./components/events":257,"./components/homepage":258,"./components/out":259,"./components/spotSearch":260,"./components/team":262,"react":239,"react-router":60}]},{},[263]);

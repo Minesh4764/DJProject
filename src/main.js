@@ -26,7 +26,7 @@ var Contact = require('./components/out');
 var Auth = require('./components/Admin');
 
 
-Router.run(routes, Router.HistoryLocation, function (Handler) {
+Router.run(routes,   Router.HistoryLocation, function (Handler) {
     Reactdom.render(<Handler/>, document.getElementById('app'));
 
 

@@ -54,7 +54,19 @@ var Pricing = React.createClass({
 
     },
 
+    resubmit :function() {
+        this.setState({newData:null})
 
+
+    },
+
+    GoBack :function() {
+        this.setState({
+            data:this.state.newData,
+            newData:null
+        })
+
+    },
     Save: function (e) {
 
 
@@ -74,7 +86,6 @@ var Pricing = React.createClass({
 
             var Id = value.substr(n + 1);
         }
-
 
 
        // console.log(this.state.data);
@@ -149,7 +160,7 @@ var Pricing = React.createClass({
       if (this.state.newData!=null) {
 
           return(
-              <PriceConfirm data = {this.state.newData} />
+              <PriceConfirm GoBack={this.GoBack} resubmit ={this.resubmit} data = {this.state.newData} />
 
 
           );
